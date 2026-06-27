@@ -12,7 +12,7 @@ La versión aplicada en el repositorio se controla desde:
 docs/00_version_actual.md
 ```
 
-Versión de este paquete: `BS-20260627-125439-PET` — 27/06/2026 12:54:39 (America/Lima).
+Versión de este paquete: `BS-20260627-131127-PET` — 27/06/2026 13:11:27 (America/Lima).
 
 ## Incluye
 
@@ -21,11 +21,11 @@ Versión de este paquete: `BS-20260627-125439-PET` — 27/06/2026 12:54:39 (Amer
 - Sesión protegida y cierre de sesión.
 - Dashboard con datos demo distintos para cada perfil.
 - Matriz de permisos y rutas protegidas en servidor.
-- Catálogos demo de aseguradoras, seguros, monedas y estados operativos.
-- Expedientes demo: crear, filtrar, listar, abrir ficha y actualizar estado.
+- Catálogos demo de aseguradoras, tipos de seguro, monedas y situaciones.
+- Expedientes demo flexibles: crear, listar, filtrar, abrir ficha y actualizar situación.
+- Expedientes que pueden existir sin cotizaciones, seguros, pólizas o pagos.
+- Base preparada para cotizaciones opcionales por plantillas configurables.
 - Notificaciones amigables de éxito, error, advertencia e información.
-- Gerente con vista global; ejecutivo con expedientes asignados.
-- Menú lateral generado según el rol autenticado.
 - Diseño responsive sin dependencias externas.
 
 ## Credenciales de prueba
@@ -48,18 +48,10 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
 - Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
-- Notificaciones: [`docs/funcionalidades/notificaciones_y_mensajes.md`](docs/funcionalidades/notificaciones_y_mensajes.md)
+- Modelo de expediente y cotización: [`docs/funcionalidades/modelo_expediente_y_cotizacion.md`](docs/funcionalidades/modelo_expediente_y_cotizacion.md)
 
 ## Nota
 
-Esta maqueta no almacena información de negocio de forma permanente. Las acciones de Catálogos y Expedientes se guardan únicamente en el navegador y muestran una notificación que confirma ese alcance.
+Esta maqueta no almacena información de negocio de forma permanente. Los cambios realizados desde Catálogos y Expedientes se guardan solamente en el navegador actual mediante `localStorage`.
 
-## Publicación en Hostinger
-
-La maqueta no usa dominios, subdominios ni una `BASE_URL` configurada. Puede instalarse en una subcarpeta como:
-
-```text
-public_html/maqueta/
-```
-
-No subas el ZIP como archivo de ejecución. Extrae su contenido y verifica que `index.php`, `dashboard.php`, `catalogos.php`, `expedientes.php`, `modulo.php`, `assets/`, `api/`, `config/` y `views/` queden directamente dentro de la carpeta pública elegida.
+No subas el ZIP como archivo de ejecución. Extrae su contenido dentro de la raíz del repositorio y verifica que se reemplacen los archivos indicados.

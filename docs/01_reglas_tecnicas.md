@@ -14,24 +14,6 @@
 3. Antes de generar una nueva entrega, se debe revisar el código de versión existente en GitHub para confirmar si el repositorio remoto está sincronizado.
 4. El historial de cambios debe incluir la misma fecha y hora de entrega.
 
-## Rutas y publicación
-
-1. No usar dominios, subdominios ni `BASE_URL` codificados.
-2. Las rutas internas deben generarse con `appRelativeUrl()` cuando se navega entre archivos PHP.
-3. Los recursos estáticos deben mantenerse relativos a la ubicación del archivo.
-4. La aplicación debe funcionar en una subcarpeta como `public_html/maqueta/` sin cambios de código.
-
-## PHP, sesiones y permisos
-
-1. Todo archivo PHP debe iniciar con `declare(strict_types=1);`.
-2. La zona horaria oficial es `America/Lima`.
-3. Las páginas privadas deben incluir `config/bootstrap.php` y ejecutar `requireAuth()` antes de generar HTML.
-4. Toda sesión iniciada debe regenerar su identificador con `session_regenerate_id(true)`.
-5. Las vistas privadas y el cierre de sesión deben enviar cabeceras que eviten mostrar contenido privado desde la caché del navegador.
-6. La cookie de sesión debe limitarse a la carpeta de instalación del proyecto.
-7. Los módulos y sus permisos deben declararse únicamente en `config/modules.php`.
-8. Un módulo debe validar permiso en servidor mediante `requireModuleAccess()`. Ocultar un enlace no es una validación de seguridad.
-
 ## Mensajes y notificaciones
 
 1. Toda acción que modifique datos demo debe confirmar claramente el resultado.
@@ -43,32 +25,18 @@
 7. No usar `window.alert()` para nuevas funcionalidades; usar `window.BrokerNotify`.
 8. Las acciones destructivas o que reviertan información deben pedir confirmación antes de ejecutarse.
 
-## Catálogos demo
+## Expedientes y cotizaciones
 
-1. Los datos maestros demo se definen únicamente en `config/demo_catalogs.php`.
-2. Solo el rol `gerente` puede usar las acciones demo de agregar, editar, activar o desactivar.
-3. Los cambios de catálogos demo se guardan en `localStorage`; no modifican archivos PHP, servidor ni base de datos.
-4. El rol `ejecutivo` tiene acceso de consulta a Catálogos.
-5. Los perfiles cliente no deben poder abrir `catalogos.php`.
-6. Antes de migrar a MySQL, se debe validar el nombre, código, estado y detalle requeridos para cada catálogo.
-
-## Expedientes demo
-
-1. La fuente inicial se mantiene en `config/demo_expedients.php`.
-2. El módulo se abre solo mediante `requireModuleAccess('expedientes')`.
-3. Gerente puede ver todos los expedientes demo y asignar un responsable al crear.
-4. Ejecutivo ve y actualiza únicamente expedientes cuyo `responsible_user_id` coincide con su sesión.
-5. Los cambios demo se guardan con `localStorage`; no representan persistencia real ni comparten datos entre dispositivos.
-6. El código automático usa el formato `EXP-AAAA-NNNN`.
-7. Los estados se cargan desde el catálogo `estados_expediente`; no deben escribirse como listas duplicadas en una pantalla.
-8. Antes de migrar a MySQL, se debe validar la ficha mínima: cliente, gestión, seguro, aseguradora, moneda, responsable, estado, fecha y descripción.
-
-## Navegación y usabilidad
-
-1. En escritorio, el menú lateral debe mantenerse visible dentro del alto de la ventana, incluso cuando el contenido principal sea extenso.
-2. El cierre de sesión debe estar disponible desde la barra superior y desde el menú lateral.
-3. En móvil, el menú lateral se abre como panel fijo y el cierre de sesión de la barra superior debe conservar un nombre accesible mediante `aria-label`.
-4. Las tablas anchas deben poder desplazarse horizontalmente en móvil sin romper la interfaz.
+1. Un expediente es un contenedor de trabajo; no es un tipo de gestión, cotización, seguro, póliza ni pago.
+2. Crear un expediente solo exige la entidad o cliente y el responsable; asunto y descripción son opcionales.
+3. Un expediente puede existir, quedar en espera, cerrarse o cancelarse sin cotizaciones ni seguros.
+4. Las situaciones de expediente son referencias flexibles; no representan una secuencia obligatoria.
+5. Tipos de seguro, aseguradoras, primas, monedas, cuotas, coberturas y mensajes no pertenecen al expediente raíz.
+6. Una cotización será opcional y pertenecerá a un expediente.
+7. Una cotización podrá contener una o varias alternativas y cada alternativa podrá asociar tipos de seguro, aseguradoras y datos propios.
+8. Los formularios de cotización deben derivar de plantillas configurables con ítems personalizados; no se deben codificar campos específicos para un solo seguro.
+9. Las advertencias, mensajes, notas, deducibles y condiciones deberán poder asociarse a la plantilla, la cotización o una alternativa, según corresponda.
+10. Los cambios demo se guardan con `localStorage`; no representan persistencia real ni se comparten entre dispositivos.
 
 ## Datos demo y evolución
 

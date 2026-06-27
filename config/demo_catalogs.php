@@ -5,7 +5,8 @@ declare(strict_types=1);
  * Catálogos demo de BROKER SEGUROS.
  *
  * Esta fuente temporal permite validar los catálogos que necesitarán los
- * expedientes, pólizas, pagos y siniestros antes de diseñar tablas MySQL.
+ * expedientes, cotizaciones, pólizas, pagos y siniestros antes de diseñar
+ * tablas MySQL.
  *
  * Cada elemento usa la misma estructura:
  * - id: identificador demo estable.
@@ -19,7 +20,7 @@ return [
         'id' => 'aseguradoras',
         'label' => 'Aseguradoras',
         'icon' => '▣',
-        'description' => 'Empresas aseguradoras disponibles para cotizaciones, expedientes y pólizas.',
+        'description' => 'Empresas aseguradoras disponibles para cotizaciones y pólizas.',
         'items' => [
             ['id' => 'ase-001', 'code' => 'ASE-001', 'name' => 'Pacífico Seguros', 'detail' => 'Aseguradora general', 'status' => 'Activo'],
             ['id' => 'ase-002', 'code' => 'ASE-002', 'name' => 'Rímac Seguros', 'detail' => 'Aseguradora general', 'status' => 'Activo'],
@@ -32,7 +33,7 @@ return [
         'id' => 'tipos_seguro',
         'label' => 'Tipos de seguro',
         'icon' => '◈',
-        'description' => 'Tipos de seguro que luego podrán vincularse a expedientes, requisitos y pólizas.',
+        'description' => 'Tipos de seguro que podrán vincularse a las alternativas de una cotización y a pólizas futuras.',
         'items' => [
             ['id' => 'seg-001', 'code' => 'CAR', 'name' => 'Todo Riesgo Construcción', 'detail' => 'Construcción y montaje', 'status' => 'Activo'],
             ['id' => 'seg-002', 'code' => 'SCTR', 'name' => 'SCTR Salud y Pensión', 'detail' => 'Seguro complementario de trabajo de riesgo', 'status' => 'Activo'],
@@ -54,15 +55,15 @@ return [
     ],
     'estados_expediente' => [
         'id' => 'estados_expediente',
-        'label' => 'Estados de expediente',
+        'label' => 'Situaciones de expediente',
         'icon' => '▤',
-        'description' => 'Estados de trabajo para el futuro módulo de expedientes o casos.',
+        'description' => 'Situaciones generales y flexibles de un expediente. No representan pasos obligatorios ni un flujo forzado.',
         'items' => [
-            ['id' => 'exp-001', 'code' => 'BOR', 'name' => 'Borrador', 'detail' => 'Registro iniciado sin envío', 'status' => 'Activo'],
-            ['id' => 'exp-002', 'code' => 'GES', 'name' => 'En gestión', 'detail' => 'Atención activa por ejecutivo', 'status' => 'Activo'],
-            ['id' => 'exp-003', 'code' => 'DOC', 'name' => 'Pendiente de documentos', 'detail' => 'Faltan requisitos o evidencias', 'status' => 'Activo'],
-            ['id' => 'exp-004', 'code' => 'CER', 'name' => 'Cerrado', 'detail' => 'Gestión finalizada', 'status' => 'Activo'],
-            ['id' => 'exp-005', 'code' => 'CAN', 'name' => 'Cancelado', 'detail' => 'Gestión anulada o desistida', 'status' => 'Activo'],
+            ['id' => 'exp-001', 'code' => 'ABI', 'name' => 'Abierto', 'detail' => 'Caso registrado y disponible para continuar cuando corresponda', 'status' => 'Activo'],
+            ['id' => 'exp-002', 'code' => 'SEG', 'name' => 'En seguimiento', 'detail' => 'Existe una acción o coordinación en curso', 'status' => 'Activo'],
+            ['id' => 'exp-003', 'code' => 'ESP', 'name' => 'En espera', 'detail' => 'A la espera de información, respuesta o decisión', 'status' => 'Activo'],
+            ['id' => 'exp-004', 'code' => 'CER', 'name' => 'Cerrado', 'detail' => 'Caso finalizado sin importar si hubo cotización, póliza o pago', 'status' => 'Activo'],
+            ['id' => 'exp-005', 'code' => 'CAN', 'name' => 'Cancelado', 'detail' => 'Caso desistido, descartado o anulado', 'status' => 'Activo'],
         ],
     ],
     'estados_poliza' => [

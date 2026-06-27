@@ -76,7 +76,7 @@ if ($catalogDataJson === false) {
                 <div>
                     <p class="eyebrow">NÚCLEO OPERATIVO</p>
                     <h2>Expedientes demo</h2>
-                    <p>Registra y controla gestiones de cotización, emisión, renovación, endoso o regularización antes de crear pólizas y pagos.</p>
+                    <p>Un expediente reúne una necesidad del cliente y puede existir sin cotización, seguro, póliza, pago o documento. Las cotizaciones serán opcionales y podrán usar plantillas configurables.</p>
                 </div>
                 <span class="module-access-badge"><?= $canViewAllExpedients ? 'Vista global de gerencia' : 'Mis expedientes asignados' ?></span>
             </article>
@@ -90,29 +90,29 @@ if ($catalogDataJson === false) {
                         <small id="summary-total-note">Cargando registros</small>
                     </article>
                     <article class="expedient-summary-card summary-warning">
-                        <span class="expedient-summary-icon">◷</span>
-                        <p>Pendientes de documentos</p>
-                        <strong id="summary-documents">0</strong>
-                        <small>Requieren seguimiento</small>
+                        <span class="expedient-summary-icon">○</span>
+                        <p>Sin cotización</p>
+                        <strong id="summary-without-quotes">0</strong>
+                        <small>Casos que pueden continuar o cerrar así</small>
                     </article>
                     <article class="expedient-summary-card summary-primary">
-                        <span class="expedient-summary-icon">↻</span>
-                        <p>Renovaciones activas</p>
-                        <strong id="summary-renewals">0</strong>
-                        <small>En gestión o borrador</small>
+                        <span class="expedient-summary-icon">◈</span>
+                        <p>Con cotizaciones</p>
+                        <strong id="summary-with-quotes">0</strong>
+                        <small>Se habilitarán con plantillas futuras</small>
                     </article>
                     <article class="expedient-summary-card summary-success">
                         <span class="expedient-summary-icon">✓</span>
-                        <p>Gestiones cerradas</p>
+                        <p>Expedientes cerrados</p>
                         <strong id="summary-closed">0</strong>
-                        <small>Resultados finalizados</small>
+                        <small>Con o sin contratación</small>
                     </article>
                 </div>
 
                 <section class="expedients-panel">
                     <div class="expedients-panel-heading">
                         <div>
-                            <p class="eyebrow">CONTROL DE GESTIONES</p>
+                            <p class="eyebrow">CONTROL DE EXPEDIENTES</p>
                             <h2>Listado de expedientes</h2>
                             <p id="expedients-context-text">Cargando expedientes disponibles para tu perfil.</p>
                         </div>
@@ -122,26 +122,12 @@ if ($catalogDataJson === false) {
                     <div class="expedient-filters" aria-label="Filtros de expedientes">
                         <label class="filter-search">
                             <span>Buscar</span>
-                            <input id="filter-search" type="search" placeholder="Código, cliente o descripción">
+                            <input id="filter-search" type="search" placeholder="Código, cliente, asunto o descripción">
                         </label>
 
                         <label>
-                            <span>Estado</span>
+                            <span>Situación</span>
                             <select id="filter-state">
-                                <option value="">Todos</option>
-                            </select>
-                        </label>
-
-                        <label>
-                            <span>Tipo de seguro</span>
-                            <select id="filter-insurance">
-                                <option value="">Todos</option>
-                            </select>
-                        </label>
-
-                        <label>
-                            <span>Aseguradora</span>
-                            <select id="filter-insurer">
                                 <option value="">Todas</option>
                             </select>
                         </label>
@@ -164,10 +150,10 @@ if ($catalogDataJson === false) {
                             <tr>
                                 <th scope="col">Código</th>
                                 <th scope="col">Cliente</th>
-                                <th scope="col">Gestión</th>
-                                <th scope="col">Seguro / Aseguradora</th>
+                                <th scope="col">Asunto inicial</th>
                                 <th scope="col">Responsable</th>
-                                <th scope="col">Estado</th>
+                                <th scope="col">Situación</th>
+                                <th scope="col">Cotizaciones</th>
                                 <th scope="col">Actualización</th>
                                 <th scope="col">Acción</th>
                             </tr>
@@ -191,59 +177,46 @@ if ($catalogDataJson === false) {
     <form id="expedient-form" method="dialog">
         <div class="expedient-dialog-heading">
             <div>
-                <p class="eyebrow">NUEVA GESTIÓN</p>
+                <p class="eyebrow">NUEVO EXPEDIENTE</p>
                 <h2 id="expedient-form-title">Crear expediente</h2>
             </div>
             <button id="expedient-form-close" class="expedient-dialog-close" type="button" aria-label="Cerrar">×</button>
         </div>
 
+        <p class="expedient-form-help">Solo debes registrar la entidad y el responsable. El asunto y la descripción son opcionales. Las cotizaciones, seguros, pagos y datos por plantilla se agregarán después solo cuando correspondan.</p>
+
         <div class="expedient-form-grid">
             <label>
-                <span>Cliente o entidad</span>
+                <span>Cliente o entidad <b aria-hidden="true">*</b></span>
                 <select id="expedient-client" required></select>
             </label>
 
             <label>
-                <span>Tipo de gestión</span>
-                <select id="expedient-management-type" required></select>
-            </label>
-
-            <label>
-                <span>Tipo de seguro</span>
-                <select id="expedient-insurance-type" required></select>
-            </label>
-
-            <label>
-                <span>Aseguradora</span>
-                <select id="expedient-insurer" required></select>
-            </label>
-
-            <label>
-                <span>Moneda</span>
-                <select id="expedient-currency" required></select>
-            </label>
-
-            <label>
-                <span>Estado inicial</span>
-                <select id="expedient-state" required></select>
+                <span>Situación inicial</span>
+                <select id="expedient-state"></select>
             </label>
 
             <?php if ($canViewAllExpedients): ?>
                 <label>
-                    <span>Ejecutivo responsable</span>
+                    <span>Ejecutivo responsable <b aria-hidden="true">*</b></span>
                     <select id="expedient-responsible" required></select>
                 </label>
             <?php else: ?>
                 <input id="expedient-responsible" type="hidden" value="<?= e((string) $user['id']) ?>">
             <?php endif; ?>
+
+            <label>
+                <span>Asunto o necesidad inicial</span>
+                <input id="expedient-title" type="text" maxlength="140" placeholder="Ejemplo: Consulta inicial del cliente">
+            </label>
         </div>
 
         <label class="expedient-description-field">
             <span>Descripción inicial</span>
-            <textarea id="expedient-description" rows="4" maxlength="800" placeholder="Describe la necesidad del cliente, antecedentes o siguiente acción." required></textarea>
+            <textarea id="expedient-description" rows="4" maxlength="800" placeholder="Registra el contexto disponible. Puede completarse después."></textarea>
         </label>
 
-        <p class="expedient-code-note">El código se generará automáticamente al guardar. Ejemplo: EXP-2026-0006.</p>
+        <p class="expedient-code-note">El código se generará automáticamente al guardar. No se exigirá cotización, seguro, pago ni póliza para crear o cerrar el expediente.</p>
 
         <div class="expedient-dialog-actions">
             <button id="expedient-form-cancel" class="expedient-secondary-button" type="button">Cancelar</button>

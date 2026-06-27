@@ -38,17 +38,81 @@
 
   const clone = (value) => JSON.parse(JSON.stringify(value));
 
+  function notify(type, message, options = {}) {
+    window.BrokerNotify?.[type]?.(message, options);
+  }
+
+  function migrateExpedientSituations(source) {
+    const catalog = source?.estados_expediente;
+    const legacyMap = {
+      'Borrador': {
+        code: 'ABI',
+        name: 'Abierto',
+        detail: 'Caso registrado y disponible para continuar cuando corresponda',
+      },
+      'En gestión': {
+        code: 'SEG',
+        name: 'En seguimiento',
+        detail: 'Existe una acción o coordinación en curso',
+      },
+      'Pendiente de documentos': {
+        code: 'ESP',
+        name: 'En espera',
+        detail: 'A la espera de información, respuesta o decisión',
+      },
+    };
+
+    if (!catalog || !Array.isArray(catalog.items)) {
+      return false;
+    }
+
+    let changed = false;
+    const names = new Set();
+
+    catalog.items = catalog.items.reduce((items, item) => {
+      const replacement = legacyMap[String(item.name || '')];
+
+      if (replacement) {
+        changed = true;
+        item = { ...item, ...replacement };
+      }
+
+      const key = String(item.name || '').toLocaleLowerCase('es-PE');
+      if (names.has(key)) {
+        changed = true;
+        return items;
+      }
+
+      names.add(key);
+      items.push(item);
+      return items;
+    }, []);
+
+    if (changed) {
+      catalog.label = 'Situaciones de expediente';
+      catalog.description = 'Situaciones generales y flexibles de un expediente. No representan pasos obligatorios ni un flujo forzado.';
+    }
+
+    return changed;
+  }
+
   function getCatalogs() {
     try {
       const cached = localStorage.getItem(storageKey);
       if (cached) {
         const parsed = JSON.parse(cached);
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          if (migrateExpedientSituations(parsed)) {
+            localStorage.setItem(storageKey, JSON.stringify(parsed));
+          }
+
           return parsed;
         }
       }
     } catch (error) {
-      // Se usan los datos demo iniciales.
+      notify('warning', 'No se pudieron recuperar cambios anteriores de Catálogos. Se cargaron los datos demo base.', {
+        title: 'Caché de catálogos no disponible',
+      });
     }
 
     return clone(defaults);
@@ -64,7 +128,16 @@
   }
 
   function saveCatalogs() {
-    localStorage.setItem(storageKey, JSON.stringify(catalogs));
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(catalogs));
+      return true;
+    } catch (error) {
+      notify('error', 'No se pudo guardar el cambio en este navegador. Libera espacio del sitio o intenta nuevamente.', {
+        title: 'Error de almacenamiento',
+        duration: 0,
+      });
+      return false;
+    }
   }
 
   function currentCatalog() {
@@ -242,6 +315,9 @@
     const itemId = inputId.value.trim();
 
     if (!code || !name) {
+      notify('warning', 'Completa como mínimo el código y el nombre antes de guardar.', {
+        title: 'Faltan datos por completar',
+      });
       return;
     }
 
@@ -251,19 +327,28 @@
     ));
 
     if (duplicate) {
-      window.alert('El código ya existe dentro de este catálogo.');
+      notify('error', `El código ${code} ya existe dentro de ${catalog.label}. Usa otro código para continuar.`, {
+        title: 'Código duplicado',
+        duration: 9000,
+      });
       return;
     }
 
+    const action = itemId ? 'actualizó' : 'agregó';
+
     if (itemId) {
       const item = catalog.items.find((candidate) => candidate.id === itemId);
-      if (!item) return;
+      if (!item) {
+        notify('error', 'No se encontró el elemento que intentabas editar. Actualiza la página e inténtalo nuevamente.', {
+          title: 'Elemento no disponible',
+        });
+        return;
+      }
 
       item.code = code;
       item.name = name;
       item.detail = detail;
       item.status = status;
-      logCatalogAction(`Editó ${catalog.label}: ${name}`);
     } else {
       catalog.items.push({
         id: createDemoId(catalog.id),
@@ -272,12 +357,22 @@
         detail,
         status,
       });
-      logCatalogAction(`Agregó ${catalog.label}: ${name}`);
     }
 
-    saveCatalogs();
+    if (!saveCatalogs()) {
+      return;
+    }
+
+    logCatalogAction(`${itemId ? 'Editó' : 'Agregó'} ${catalog.label}: ${name}`);
     closeDialog();
     render();
+    notify('success', `Se ${action} ${name}. El cambio quedó guardado temporalmente en este navegador.`, {
+      title: itemId ? 'Catálogo actualizado' : 'Elemento agregado',
+    });
+    notify('info', 'Los Catálogos demo aún no usan base de datos ni se comparten con otros equipos.', {
+      title: 'Recordatorio de maqueta',
+      duration: 7200,
+    });
   }
 
   function toggleItem(itemId) {
@@ -286,9 +381,17 @@
     if (!catalog || !item) return;
 
     item.status = String(item.status).toLowerCase() === 'activo' ? 'Inactivo' : 'Activo';
-    saveCatalogs();
+
+    if (!saveCatalogs()) {
+      item.status = item.status === 'Activo' ? 'Inactivo' : 'Activo';
+      return;
+    }
+
     logCatalogAction(`${item.status === 'Activo' ? 'Activó' : 'Desactivó'} ${catalog.label}: ${item.name}`);
     render();
+    notify('success', `Se ${item.status === 'Activo' ? 'activó' : 'desactivó'} ${item.name}. El cambio quedó guardado temporalmente en este navegador.`, {
+      title: 'Estado actualizado',
+    });
   }
 
   function restoreDefaults() {
@@ -298,11 +401,25 @@
 
     if (!confirmed) return;
 
-    localStorage.removeItem(storageKey);
-    catalogs = clone(defaults);
-    currentCatalogId = Object.keys(catalogs)[0] || '';
-    logCatalogAction('Restauró los catálogos demo');
-    render();
+    try {
+      localStorage.removeItem(storageKey);
+      catalogs = clone(defaults);
+      currentCatalogId = Object.keys(catalogs)[0] || '';
+      logCatalogAction('Restauró los catálogos demo');
+      render();
+      notify('success', 'Los catálogos demo fueron restaurados correctamente.', {
+        title: 'Datos demo restaurados',
+      });
+      notify('info', 'Se eliminaron únicamente los cambios guardados en este navegador.', {
+        title: 'Recordatorio de maqueta',
+        duration: 7200,
+      });
+    } catch (error) {
+      notify('error', 'No se pudieron restaurar los datos demo en este navegador.', {
+        title: 'Error de almacenamiento',
+        duration: 0,
+      });
+    }
   }
 
   addButton?.addEventListener('click', openCreateDialog);

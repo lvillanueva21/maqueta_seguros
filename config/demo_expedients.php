@@ -4,9 +4,12 @@ declare(strict_types=1);
 /**
  * Datos demo del módulo Expedientes.
  *
- * Este archivo representa el núcleo operativo temporal antes de MySQL.
- * La información puede modificarse en la maqueta, pero los cambios del
- * navegador se guardan solo en localStorage.
+ * Un expediente es un contenedor de trabajo para una necesidad del cliente.
+ * Puede existir sin cotización, seguro, póliza, pago o documento.
+ *
+ * Las cotizaciones se agregarán después como entidades opcionales y múltiples
+ * mediante plantillas configurables. Por eso el expediente solo almacena
+ * inicialmente `quotes` como una lista vacía o con cotizaciones vinculadas.
  */
 return [
     'clients' => [
@@ -66,14 +69,6 @@ return [
             'active' => true,
         ],
     ],
-    'management_types' => [
-        'Cotización',
-        'Emisión',
-        'Renovación',
-        'Endoso',
-        'Consulta',
-        'Regularización',
-    ],
     'items' => [
         [
             'id' => 'exp-demo-001',
@@ -82,16 +77,14 @@ return [
             'client_name' => 'Constructora Norte S.A.C.',
             'client_document' => 'RUC 20123456789',
             'entity_type' => 'Empresa',
-            'management_type' => 'Renovación',
-            'insurance_type' => 'Todo Riesgo Construcción',
-            'insurer' => 'Pacífico Seguros',
-            'currency' => 'PEN',
-            'state' => 'En gestión',
+            'title' => 'Solicitud inicial para proyecto vial',
+            'state' => 'En seguimiento',
             'responsible_user_id' => '2',
             'responsible_name' => 'María Torres',
             'opened_at' => '2026-06-23',
             'updated_at' => '2026-06-27 09:30:00',
-            'description' => 'Renovación de cobertura CAR para obra vial. Pendiente de confirmar condiciones comerciales.',
+            'description' => 'El cliente solicitó evaluar alternativas de protección para una obra vial. Aún no se ha registrado ninguna cotización.',
+            'quotes' => [],
         ],
         [
             'id' => 'exp-demo-002',
@@ -100,16 +93,14 @@ return [
             'client_name' => 'Ingeniería Andina S.A.C.',
             'client_document' => 'RUC 20456789123',
             'entity_type' => 'Empresa',
-            'management_type' => 'Cotización',
-            'insurance_type' => 'Equipo Contratista',
-            'insurer' => 'Mapfre Perú',
-            'currency' => 'USD',
-            'state' => 'Pendiente de documentos',
+            'title' => 'Consulta sobre cobertura de equipos',
+            'state' => 'En espera',
             'responsible_user_id' => '2',
             'responsible_name' => 'María Torres',
             'opened_at' => '2026-06-25',
             'updated_at' => '2026-06-27 10:15:00',
-            'description' => 'Cotización de equipo contratista. Falta relación valorizada de equipos y ubicación de la obra.',
+            'description' => 'Caso abierto para centralizar la consulta del cliente. Se espera información adicional; todavía no tiene cotizaciones ni seguros vinculados.',
+            'quotes' => [],
         ],
         [
             'id' => 'exp-demo-003',
@@ -118,16 +109,14 @@ return [
             'client_name' => 'Consorcio Vías del Norte',
             'client_document' => 'RUC 20698765432',
             'entity_type' => 'Consorcio',
-            'management_type' => 'Emisión',
-            'insurance_type' => 'SCTR Salud y Pensión',
-            'insurer' => 'La Positiva',
-            'currency' => 'PEN',
-            'state' => 'En gestión',
+            'title' => 'Revisión general de necesidades del consorcio',
+            'state' => 'Abierto',
             'responsible_user_id' => 'exec-003',
             'responsible_name' => 'Jorge Ramírez',
             'opened_at' => '2026-06-20',
             'updated_at' => '2026-06-26 16:40:00',
-            'description' => 'Emisión de cobertura SCTR para personal declarado por el consorcio.',
+            'description' => 'Expediente creado para registrar la conversación inicial y definir posteriormente si corresponde cotizar uno o varios seguros.',
+            'quotes' => [],
         ],
         [
             'id' => 'exp-demo-004',
@@ -136,16 +125,14 @@ return [
             'client_name' => 'Transportes El Sol S.A.C.',
             'client_document' => 'RUC 20511843721',
             'entity_type' => 'Empresa',
-            'management_type' => 'Endoso',
-            'insurance_type' => 'Responsabilidad Civil',
-            'insurer' => 'Rímac Seguros',
-            'currency' => 'PEN',
-            'state' => 'Borrador',
+            'title' => 'Actualización de información de flota',
+            'state' => 'Abierto',
             'responsible_user_id' => 'exec-004',
             'responsible_name' => 'Ana Pérez',
             'opened_at' => '2026-06-27',
             'updated_at' => '2026-06-27 08:20:00',
-            'description' => 'Solicitud de endoso para actualización de unidad vehicular declarada.',
+            'description' => 'Registro inicial de una necesidad del cliente. No se ha definido aún qué cotización, seguro o trámite podría corresponder.',
+            'quotes' => [],
         ],
         [
             'id' => 'exp-demo-005',
@@ -154,16 +141,14 @@ return [
             'client_name' => 'Comercial Valle Norte E.I.R.L.',
             'client_document' => 'RUC 20601856342',
             'entity_type' => 'Empresa',
-            'management_type' => 'Regularización',
-            'insurance_type' => 'Vida Ley',
-            'insurer' => 'Interseguro',
-            'currency' => 'PEN',
+            'title' => 'Consulta cerrada sin contratación',
             'state' => 'Cerrado',
             'responsible_user_id' => '2',
             'responsible_name' => 'María Torres',
             'opened_at' => '2026-06-11',
             'updated_at' => '2026-06-24 14:05:00',
-            'description' => 'Regularización de datos de asegurados. Gestión concluida con confirmación del cliente.',
+            'description' => 'La consulta fue atendida y cerrada sin requerir una cotización, seguro, póliza ni pago.',
+            'quotes' => [],
         ],
     ],
 ];

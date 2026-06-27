@@ -1,4 +1,4 @@
-/* Expedientes demo */
+/* Expedientes demo: contenedor flexible y sin flujo obligatorio */
 .expedients-app {
   margin-top: 20px;
 }
@@ -88,7 +88,7 @@
 }
 
 .expedients-panel-heading p:last-child {
-  max-width: 620px;
+  max-width: 650px;
   margin: 9px 0 0;
   color: var(--muted);
   font-size: .84rem;
@@ -130,7 +130,7 @@
   margin-top: 20px;
   padding: 15px;
   display: grid;
-  grid-template-columns: minmax(220px, 1.7fr) repeat(3, minmax(130px, 1fr)) auto;
+  grid-template-columns: minmax(240px, 1.8fr) repeat(2, minmax(150px, 1fr)) auto;
   gap: 11px;
   border: 1px solid #edf1f5;
   border-radius: 12px;
@@ -182,7 +182,7 @@
 
 .expedient-table {
   width: 100%;
-  min-width: 1080px;
+  min-width: 1060px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -238,18 +238,17 @@
   font-size: .68rem;
 }
 
-.expedient-insurance {
+.expedient-title {
   display: block;
-  min-width: 155px;
+  min-width: 175px;
   color: #344054;
   font-weight: 700;
 }
 
-.expedient-insurer {
-  display: block;
-  margin-top: 4px;
-  color: #667085;
-  font-size: .69rem;
+.expedient-title-empty {
+  color: #98a2b3;
+  font-style: italic;
+  font-weight: 500;
 }
 
 .expedient-state {
@@ -270,30 +269,30 @@
   border-radius: 50%;
 }
 
-.state-borrador {
-  color: #667085;
+.state-abierto {
+  color: #475467;
   background: #f2f4f7;
 }
 
-.state-borrador::before {
+.state-abierto::before {
   background: #98a2b3;
 }
 
-.state-en-gestion {
+.state-en-seguimiento {
   color: #175cd3;
   background: #eff4ff;
 }
 
-.state-en-gestion::before {
+.state-en-seguimiento::before {
   background: #2e90fa;
 }
 
-.state-pendiente-de-documentos {
+.state-en-espera {
   color: #b54708;
   background: #fffaeb;
 }
 
-.state-pendiente-de-documentos::before {
+.state-en-espera::before {
   background: #f79009;
 }
 
@@ -313,6 +312,25 @@
 
 .state-cancelado::before {
   background: #f04438;
+}
+
+.expedient-quote-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #667085;
+  font-size: .73rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.expedient-quote-count.has-quotes {
+  color: #175cd3;
+}
+
+.expedient-quote-count::before {
+  content: "◈";
+  color: #b54708;
 }
 
 .expedient-row-button {
@@ -347,7 +365,7 @@
 }
 
 .expedient-detail-dialog {
-  width: min(820px, calc(100% - 32px));
+  width: min(840px, calc(100% - 32px));
 }
 
 .expedient-dialog::backdrop {
@@ -384,6 +402,17 @@
   line-height: 1;
 }
 
+.expedient-form-help {
+  margin: -4px 0 18px;
+  padding: 12px 13px;
+  border: 1px solid #dbe7ff;
+  border-radius: 10px;
+  color: #175cd3;
+  background: #eff4ff;
+  font-size: .79rem;
+  line-height: 1.5;
+}
+
 .expedient-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -403,7 +432,12 @@
   font-weight: 800;
 }
 
+.expedient-form-grid b {
+  color: #b42318;
+}
+
 .expedient-form-grid select,
+.expedient-form-grid input,
 .expedient-description-field textarea,
 .expedient-detail-state select {
   width: 100%;
@@ -425,6 +459,7 @@
 }
 
 .expedient-form-grid select:focus,
+.expedient-form-grid input:focus,
 .expedient-description-field textarea:focus,
 .expedient-detail-state select:focus {
   border-color: #155eef;
@@ -463,6 +498,13 @@
   font-weight: 800;
 }
 
+.expedient-detail-title {
+  margin: 7px 0 0;
+  color: #1d2939;
+  font-size: 1.1rem;
+  letter-spacing: -.02em;
+}
+
 .expedient-detail-description {
   margin: 18px 0 0;
   padding: 14px;
@@ -498,25 +540,48 @@
   font-weight: 700;
 }
 
+.expedient-quotes-placeholder,
 .expedient-detail-state {
   margin-top: 20px;
   padding: 16px;
-  border: 1px solid #cbdcff;
   border-radius: 12px;
-  background: #f8fbff;
 }
 
+.expedient-quotes-placeholder {
+  border: 1px dashed #c3d2e2;
+  background: #fbfdff;
+}
+
+.expedient-quotes-placeholder h3,
 .expedient-detail-state h3 {
   margin: 0;
   color: #1d2939;
   font-size: .96rem;
 }
 
+.expedient-quotes-placeholder p,
 .expedient-detail-state p {
-  margin: 7px 0 12px;
+  margin: 7px 0 0;
   color: #667085;
   font-size: .78rem;
-  line-height: 1.45;
+  line-height: 1.5;
+}
+
+.expedient-quote-placeholder-status {
+  margin-top: 13px !important;
+  padding: 10px 11px;
+  border-radius: 9px;
+  color: #475467 !important;
+  background: #f2f4f7;
+}
+
+.expedient-detail-state {
+  border: 1px solid #cbdcff;
+  background: #f8fbff;
+}
+
+.expedient-detail-state select {
+  margin-top: 12px;
 }
 
 .expedient-detail-state-actions {

@@ -52,7 +52,6 @@
 
       notification.dataset.removing = 'true';
       notification.classList.add('is-leaving');
-
       window.setTimeout(() => notification.remove(), 180);
     }
 
@@ -116,185 +115,23 @@
     nativeAlert(message);
   };
 
-  function safeStorageValue(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (error) {
-      notifications.error(
-        'El navegador no permitió leer el almacenamiento temporal. Tus cambios podrían no mantenerse al recargar.',
-        { title: 'Almacenamiento no disponible', duration: 0 }
-      );
-      return null;
+  let lastInvalidNotificationAt = 0;
+  document.addEventListener('invalid', (event) => {
+    const field = event.target;
+    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+      return;
     }
-  }
 
-  function parseStorageValue(value, fallback) {
-    try {
-      return value ? JSON.parse(value) : fallback;
-    } catch (error) {
-      return fallback;
+    const now = Date.now();
+    if (now - lastInvalidNotificationAt < 900) {
+      return;
     }
-  }
 
-  function notifyIfStorageChanged({ key, before, successMessage, fallbackMessage }) {
-    window.setTimeout(() => {
-      const after = safeStorageValue(key);
-
-      if (after === before) {
-        return;
-      }
-
-      notifications.success(successMessage, {
-        title: 'Guardado temporalmente',
-      });
-
-      if (fallbackMessage) {
-        notifications.info(fallbackMessage, {
-          title: 'Recordatorio de maqueta',
-          duration: 7200,
-        });
-      }
-    }, 0);
-  }
-
-  function installFeedbackHooks() {
-    let lastInvalidNotificationAt = 0;
-
-    document.addEventListener('invalid', (event) => {
-      const field = event.target;
-      if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
-        return;
-      }
-
-      const now = Date.now();
-      if (now - lastInvalidNotificationAt < 900) {
-        return;
-      }
-
-      lastInvalidNotificationAt = now;
-      notifications.warning('Completa los campos obligatorios marcados antes de guardar.', {
-        title: 'Faltan datos por completar',
-      });
-    }, true);
-
-    document.addEventListener('submit', (event) => {
-      const form = event.target;
-
-      if (!(form instanceof HTMLFormElement)) {
-        return;
-      }
-
-      if (form.id === 'catalog-item-form') {
-        const inputId = form.querySelector('#catalog-item-id');
-        const inputName = form.querySelector('#catalog-item-name');
-        const isEditing = Boolean(inputId?.value?.trim());
-        const itemName = inputName?.value?.trim() || 'el elemento';
-        const before = safeStorageValue('broker_seguros_demo_catalogs_v1');
-
-        notifyIfStorageChanged({
-          key: 'broker_seguros_demo_catalogs_v1',
-          before,
-          successMessage: isEditing
-            ? `Se actualizó ${itemName}. El cambio quedó guardado temporalmente en este navegador.`
-            : `Se agregó ${itemName}. El cambio quedó guardado temporalmente en este navegador.`,
-          fallbackMessage: 'Los catálogos demo aún no usan base de datos ni se comparten con otros equipos.',
-        });
-      }
-
-      if (form.id === 'expedient-form') {
-        const before = safeStorageValue('broker_seguros_demo_expedients_v1');
-
-        window.setTimeout(() => {
-          const after = safeStorageValue('broker_seguros_demo_expedients_v1');
-
-          if (after === before) {
-            return;
-          }
-
-          const previousItems = parseStorageValue(before, []);
-          const currentItems = parseStorageValue(after, []);
-          const previousIds = new Set(Array.isArray(previousItems) ? previousItems.map((item) => item.id) : []);
-          const created = Array.isArray(currentItems)
-            ? currentItems.find((item) => !previousIds.has(item.id))
-            : null;
-
-          const code = created?.code ? ` ${created.code}` : '';
-          notifications.success(
-            `El expediente${code} fue creado y guardado temporalmente en este navegador.`,
-            { title: 'Expediente creado' }
-          );
-          notifications.info(
-            'Aún no se ha registrado en una base de datos ni se comparte con otros usuarios.',
-            { title: 'Recordatorio de maqueta', duration: 7200 }
-          );
-        }, 0);
-      }
-    }, true);
-
-    document.addEventListener('click', (event) => {
-      const target = event.target instanceof Element ? event.target.closest('button, a') : null;
-
-      if (!target) {
-        return;
-      }
-
-      if (target.matches('[data-action="toggle"][data-item-id]')) {
-        const before = safeStorageValue('broker_seguros_demo_catalogs_v1');
-        const row = target.closest('tr');
-        const itemName = row?.children?.[1]?.textContent?.trim() || 'el elemento';
-        const actionText = target.textContent?.trim().toLocaleLowerCase('es-PE') === 'activar'
-          ? 'activó'
-          : 'desactivó';
-
-        notifyIfStorageChanged({
-          key: 'broker_seguros_demo_catalogs_v1',
-          before,
-          successMessage: `Se ${actionText} ${itemName}. El cambio quedó guardado temporalmente en este navegador.`,
-          fallbackMessage: 'Este cambio solo existe en la maqueta local de este navegador.',
-        });
-      }
-
-      if (target.id === 'restore-catalogs') {
-        const before = safeStorageValue('broker_seguros_demo_catalogs_v1');
-
-        notifyIfStorageChanged({
-          key: 'broker_seguros_demo_catalogs_v1',
-          before,
-          successMessage: 'Los catálogos demo fueron restaurados correctamente.',
-          fallbackMessage: 'Se eliminaron únicamente los cambios guardados en este navegador.',
-        });
-      }
-
-      if (target.id === 'save-expedient-state') {
-        const before = safeStorageValue('broker_seguros_demo_expedients_v1');
-        const selectedState = document.getElementById('detail-expedient-state')?.value || 'el nuevo estado';
-        const code = target.closest('.expedient-dialog-content')
-          ?.querySelector('.expedient-detail-code')
-          ?.textContent
-          ?.trim() || 'el expediente';
-
-        notifyIfStorageChanged({
-          key: 'broker_seguros_demo_expedients_v1',
-          before,
-          successMessage: `Se actualizó ${code} a “${selectedState}”. El cambio quedó guardado temporalmente en este navegador.`,
-          fallbackMessage: 'El estado todavía no se guarda en una base de datos.',
-        });
-      }
-    }, true);
-
-    window.addEventListener('error', (event) => {
-      const message = String(event.message || '');
-
-      if (message.includes('QuotaExceededError') || message.includes('localStorage')) {
-        notifications.error(
-          'No se pudo guardar el cambio en este navegador. Libera espacio del sitio o intenta nuevamente.',
-          { title: 'Error de almacenamiento', duration: 0 }
-        );
-      }
+    lastInvalidNotificationAt = now;
+    notifications.warning('Completa los campos obligatorios marcados antes de guardar.', {
+      title: 'Faltan datos por completar',
     });
-  }
-
-  installFeedbackHooks();
+  }, true);
 
   const cacheList = document.getElementById('cache-list');
   const sidebar = document.getElementById('sidebar');

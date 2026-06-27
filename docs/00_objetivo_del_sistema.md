@@ -8,20 +8,24 @@ La primera etapa es una maqueta funcional sin base de datos. Su propósito es va
 
 > El repositorio puede llamarse `maqueta_seguros`, pero el nombre oficial visible del producto es **BROKER SEGUROS**.
 
+## Modelo operativo validado
+
+Un **expediente** es el contenedor principal de una necesidad, consulta o caso de un cliente.
+
+No existe un flujo obligatorio. Un expediente puede:
+
+- crearse con cliente o entidad y responsable;
+- permanecer solo como registro de una consulta;
+- recibir una o varias cotizaciones;
+- no llegar nunca a tener una cotización;
+- cerrarse sin seguro, póliza, pago o documento;
+- incorporar datos adicionales en cualquier momento.
+
+Las **cotizaciones** serán entidades opcionales que pertenecen a un expediente. Cada cotización podrá usar una plantilla con ítems personalizados, uno o varios tipos de seguro, alternativas de aseguradoras, primas, cuotas, advertencias, mensajes y notas.
+
 ## Objetivo actual
 
-Contar con una base estable de autenticación demo, contexto de usuario, dashboard diferenciado, permisos, catálogos y un primer núcleo operativo de expedientes antes de definir MySQL.
-
-El sistema debe poder responder, sin una base de datos todavía:
-
-- quién ingresó;
-- qué rol tiene;
-- si representa a una persona, empresa o consorcio;
-- qué módulos puede ver y abrir;
-- qué datos maestros estarán disponibles en formularios futuros;
-- qué expedientes puede ver o gestionar;
-- qué indicadores y alertas necesita en Inicio;
-- cuándo empezó su sesión.
+Validar la estructura mínima de expediente y preparar el sistema para agregar cotizaciones configurables sin fijar prematuramente los campos de cada tipo de seguro.
 
 ## Alcance actual
 
@@ -29,11 +33,10 @@ El sistema debe poder responder, sin una base de datos todavía:
 - Perfiles demo: gerente, ejecutivo, empresa cliente y consorcio.
 - Dashboard con indicadores, alertas y tablas demo según el perfil.
 - Catálogo central de módulos y permisos por rol.
-- Rutas protegidas desde PHP y página controlada de acceso no autorizado.
-- Catálogos demo para aseguradoras, seguros, monedas y estados operativos.
-- Expedientes demo: creación, listado, filtros, ficha y cambio de estado.
-- Gerente con vista global y asignación de responsables.
-- Ejecutivo con vista limitada a sus expedientes asignados.
+- Catálogos demo para aseguradoras, seguros, monedas y situaciones operativas.
+- Expedientes demo como contenedor flexible.
+- Situaciones de expediente sin secuencia forzada.
+- Notificaciones de éxito, advertencia, información y error.
 - Sin base de datos ni almacenamiento permanente de negocio.
 
 ## Criterio de avance

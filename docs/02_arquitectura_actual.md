@@ -1,40 +1,69 @@
 # Arquitectura actual
 
 ```text
-assets/js/app.js
-├── menú móvil y registro temporal de navegación
-├── carga de acciones recientes
-├── window.BrokerNotify
-└── detección de acciones guardadas en Catálogos y Expedientes
-
-assets/css/notifications.css
-└── estilos globales de éxito, error, advertencia e información
-
-config/bootstrap.php
-├── rutas relativas
-├── sesiones y autenticación
-└── permisos de módulos
-
-config/demo_catalogs.php
-└── catálogos demo
-
 config/demo_expedients.php
-└── clientes, responsables y expedientes demo
-
-catalogos.php
-└── gestión temporal de datos maestros
+├── clientes y entidades demo
+├── ejecutivos demo
+└── expedientes como contenedores con quotes[]
 
 expedientes.php
-└── creación, listado, ficha y estado de expedientes demo
+├── requireModuleAccess('expedientes')
+├── creación mínima: entidad, responsable, situación opcional
+├── listado y filtros de expediente
+├── ficha sin campos obligatorios de seguro
+└── marcador para cotizaciones futuras
 
-docs/
-└── reglas, pruebas, historial y versión de cada entrega
+assets/js/expedientes.js
+├── localStorage v2
+├── migración de datos v1 al modelo corregido
+├── código EXP-AAAA-NNNN
+├── conteo de cotizaciones opcionales
+├── filtros por situación y responsable
+└── cambio flexible de situación
+
+config/demo_catalogs.php
+└── situaciones de expediente sin flujo obligatorio
+
+assets/js/catalogos.js
+└── migración de situaciones antiguas guardadas en caché
+
+assets/js/app.js
+└── sistema global window.BrokerNotify
+
+assets/js/catalogos.js
+└── notificaciones explícitas de guardado, error y restauración
 ```
 
-## Sistema de notificaciones
+## Contrato de datos de expediente
 
-`assets/js/app.js` crea `window.BrokerNotify`, una interfaz global para comunicar éxito, error, advertencia e información. También carga automáticamente `assets/css/notifications.css`.
+```text
+Expediente
+- id
+- code
+- client_id / client_name
+- responsable
+- title
+- state
+- opened_at / updated_at
+- description
+- quotes[] (opcional)
+```
 
-La capa de notificaciones observa las acciones de Catálogos y Expedientes para confirmar guardados temporales, cambios de estado, restauraciones y validaciones incompletas.
+El expediente no contiene en su raíz: tipo de gestión, tipo de seguro, aseguradora, moneda, prima, cuotas, pagos ni póliza.
 
-Esta solución no sustituye la validación de servidor que existirá con MySQL; por ahora comunica el resultado de las acciones que se guardan en `localStorage`.
+## Próxima entidad: cotización
+
+Una cotización pertenecerá opcionalmente a un expediente y podrá tener:
+
+```text
+Cotización
+- id y código
+- expediente padre
+- plantilla aplicada
+- datos personalizados de la plantilla
+- alternativas[]
+- advertencias, mensajes y notas
+- estado propio
+```
+
+Cada alternativa podrá representar una propuesta de aseguradora, uno o varios seguros, primas, cuotas, vigencia, coberturas, deducibles y condiciones.

@@ -1,39 +1,39 @@
 # Historial de cambios
 
-## 27/06/2026 12:54:39 (America/Lima) — BS-20260627-125439-PET — Notificaciones globales y mensajes amigables
+## 27/06/2026 13:11:27 (America/Lima) — BS-20260627-131127-PET — Corrección de Expedientes y modelo de cotización
 
-### Implementado
+### Corregido
 
-- Nuevo estilo global `assets/css/notifications.css`.
-- Sistema `window.BrokerNotify` inicializado desde `assets/js/app.js`.
-- Mensajes de éxito, error, advertencia e información con cierre manual.
-- Confirmación de creación de expedientes y actualización de estados.
-- Confirmación de alta, edición, activación, desactivación y restauración de catálogos.
-- Mensajes amigables cuando faltan campos obligatorios.
-- Reemplazo visual de alertas de error de Catálogos por notificaciones.
-- Aviso explícito de que los datos aún se guardan solo en el navegador.
-- Actualización de documentación, pruebas y versión trazable.
+- Se eliminó el campo incorrecto **Tipo de gestión**.
+- Se retiraron del expediente raíz los campos Tipo de seguro, Aseguradora y Moneda.
+- Se reemplazó el supuesto flujo de gestión por un expediente flexible que puede existir sin cotización ni seguro.
+- Se cambiaron los estados por situaciones generales: Abierto, En seguimiento, En espera, Cerrado y Cancelado.
+- Se eliminó cualquier relación obligatoria entre expediente y cotización.
+- Se agregó `quotes[]` como base opcional para cotizaciones futuras.
+- Se ajustó la tabla, los filtros, resumen y ficha de expediente.
+- Se incorporó migración local desde los datos guardados de Expedientes v1 y de las situaciones antiguas de Catálogos.
+- Se corregió la integración de notificaciones para que Catálogos y Expedientes comuniquen directamente sus propios éxitos y fallos.
 
-### Decisión técnica
+### Decisión de arquitectura
 
-La primera versión se integró desde `app.js` para que los módulos existentes y los próximos puedan reutilizar `window.BrokerNotify` sin duplicar librerías ni depender de servicios externos.
+Las cotizaciones serán entidades hijas opcionales de un expediente y se construirán desde plantillas configurables. Una plantilla podrá definir ítems personalizados, alternativas de aseguradoras, tipos de seguro, advertencias, mensajes, notas, coberturas, deducibles y condiciones sin forzar esos datos en todos los expedientes.
 
 ### Pendiente
 
-- Ejecutar pruebas NOT-01 a NOT-10.
-- Línea de tiempo, observaciones y próxima acción de Expedientes.
-- Persistencia con MySQL y notificaciones basadas en respuesta de servidor.
+- Ejecutar pruebas EXP-COR-01 a EXP-COR-10.
+- Diseñar el módulo de plantillas de cotización.
+- Crear cotizaciones demo opcionales dentro de un expediente.
+- Persistencia con MySQL.
+
+## 27/06/2026 12:54:39 (America/Lima) — BS-20260627-125439-PET — Notificaciones globales
+
+### Implementado
+
+- Toasts de éxito, error, advertencia e información.
+- Confirmaciones de acciones temporales.
 
 ## 27/06/2026 12:39:37 (America/Lima) — BS-20260627-123937-PET — Expedientes demo v1
 
-### Implementado
+### Nota histórica
 
-- Módulo protegido Expedientes.
-- Creación, listado, filtros, ficha y cambio temporal de estado.
-- Visibilidad por gerente o ejecutivo responsable.
-
-## 27/06/2026 12:28:26 (America/Lima) — BS-20260627-122826-PET — Catálogos demo básicos
-
-### Implementado
-
-- Catálogos demo para gerente y ejecutivo.
+Esta primera versión fue reemplazada funcionalmente por la corrección actual porque trataba el expediente como un tipo de gestión y exigía campos que deben pertenecer a cotizaciones opcionales.
