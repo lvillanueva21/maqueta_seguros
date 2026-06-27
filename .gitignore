@@ -1,0 +1,6 @@
+# Sesiones locales de PHP
+/sessions/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
