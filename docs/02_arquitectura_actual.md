@@ -2,30 +2,31 @@
 
 ```text
 config/bootstrap.php
-|-- sesion, cabeceras no-cache, rutas relativas y permisos
-`-- requireModuleAccess() protege rutas reales de modulo
+|-- sesión, cabeceras no-cache, rutas relativas y permisos
+`-- requireModuleAccess() protege rutas reales de módulo
 
 config/modules.php
-`-- catalogo temporal de modulos, roles permitidos y descripciones
+`-- catálogo temporal de módulos, roles permitidos y descripciones
 
 config/demo_catalogs.php
-`-- datos maestros demo, incluidas situaciones flexibles de expediente
+`-- datos maestros demo y situaciones flexibles de expediente
 
 config/demo_expedients.php
-|-- clientes y entidades demo
-|-- ejecutivos demo
-`-- expedientes como contenedores con quotes[]
+|-- empresas y consorcios demo
+|-- contactos de gestión demo
+`-- expedientes flexibles con quotes[]
 
 assets/js/cache-migrations.js
-|-- migracion de catalogos locales antiguos
-|-- migracion de expedientes v1 a v2
+|-- migración de catálogos locales antiguos
+|-- migración de expedientes v1/v2 a v3
+|-- caché local de contactos
 |-- helpers de fecha/hora America/Lima
 `-- lectura/escritura compartida de localStorage
 
 assets/js/app.js
 |-- window.BrokerNotify
-|-- deduplicacion breve de toasts
-|-- confirmacion por toast para acciones reversibles
+|-- deduplicación breve de toasts
+|-- confirmación por toast
 `-- registro temporal de acciones
 
 catalogos.php + assets/js/catalogos.js
@@ -34,34 +35,50 @@ catalogos.php + assets/js/catalogos.js
 
 expedientes.php + assets/js/expedientes.js
 |-- requireModuleAccess('expedientes')
-|-- creacion minima: entidad y responsable
-|-- asunto y descripcion opcionales
-|-- listado y filtros por situacion/responsable
-|-- ficha sin campos obligatorios de seguro
-`-- quotes[] reservado para cotizaciones futuras opcionales
+|-- gerente y ejecutivo: consulta y trabajo compartido
+|-- creación: contacto, nombre y detalle obligatorios
+|-- cliente opcional
+|-- registro rápido de contacto
+|-- ficha para actualizar datos básicos
+`-- quotes[] reservado para cotizaciones futuras
 ```
 
-## Contrato de expediente
+## Contrato de expediente v3
 
 ```text
 Expediente
 - id
 - code
-- client_id / client_name
-- responsible_user_id / responsible_name
 - title
+- description
+- contact_id / contact_name / contact_mobile
+- client_id / client_name / client_document / entity_type
 - state
 - opened_at / updated_at
-- description
 - quotes[]
+- legacy_assigned_executive_* (solo migración, no visible)
 ```
 
-El expediente no contiene en su raiz: tipo de gestion, tipo de seguro, aseguradora, moneda, prima, cuotas, pagos, voucher, documento ni poliza.
+## Contrato de contacto de gestión
+
+```text
+Contacto
+- id
+- full_name
+- mobile
+- email
+- document_type / document
+- label
+- relationships[]
+- active
+```
+
+Cada elemento de `relationships[]` puede vincular el contacto a una empresa o consorcio y describir su relación.
 
 ## Seguridad y permisos
 
-Los permisos actuales controlan interfaz y rutas PHP de la maqueta. La informacion guardada en `localStorage` no reemplaza autorizacion real de servidor. Cuando exista MySQL, todos los permisos y filtros deberan validarse en backend.
+Los permisos actuales controlan interfaz y rutas PHP de la maqueta. `localStorage` no reemplaza autorización real. Cuando exista MySQL, todas las validaciones deberán ejecutarse también en backend.
 
-## Proxima entidad
+## Próximas entidades
 
-Una cotizacion sera una entidad hija opcional del expediente. Podra usar plantillas configurables, varios seguros, alternativas y campos personalizados, pero ese modulo no forma parte de esta estabilizacion.
+Empresas y Consorcios deberán formalizarse como módulos. Después se implementarán tipos de seguro, aseguradoras, cotizaciones, pólizas, timeline y documentos.

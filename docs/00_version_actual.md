@@ -1,47 +1,47 @@
-# Version actual entregada
+# Versión actual entregada
 
-- **Codigo de version:** `BS-20260627-135448-PET`
-- **Fecha y hora de entrega:** 27/06/2026 13:54:48 (America/Lima)
-- **Zona horaria:** Peru - America/Lima
-- **Bloque funcional:** Correccion de trazabilidad GitHub y cierre seguro de confirmaciones con `BrokerNotify`.
-- **Estado de esta version:** Preparada para subir a GitHub `main`. Hostinger debe verificarse por separado despues de publicar.
+- **Código de versión:** `BS-20260627-164101-PET`
+- **Fecha y hora de entrega:** 27/06/2026 16:41:01 (America/Lima)
+- **Zona horaria:** Perú - America/Lima
+- **Bloque funcional:** Corrección del núcleo de Expedientes: Contactos de gestión, cliente opcional y eliminación de asignación interna de ejecutivo.
+- **Estado de esta versión:** Paquete preparado localmente. Debe integrarse, probarse y subirse manualmente a GitHub `main`. Hostinger se verifica por separado.
 
-## Version anterior estabilizada
+## Base remota revisada antes de generar esta versión
 
-La version `BS-20260627-133302-PET` ya fue subida a GitHub `main` mediante el commit `4121efce53e1879ebb5a15ae52446c0507e4ed7b`.
+- Repositorio: `lvillanueva21/maqueta_seguros`
+- Rama: `main`
+- Commit base: `9b8533ac209cfd15cf96a68a11d3a32e1a782476`
+- Versión remota encontrada: `BS-20260627-135448-PET`
+- `expedientes.php` base: `c470777be0fc25542d09b4e5c8f45db063bef840`
+- `assets/js/expedientes.js` base: `5457ad097798b5f563b1a6aa50722d924cb3cb4f`
+- `assets/js/cache-migrations.js` base: `61061c35f21efdb2896823952b61cd8a028e5f28`
+- `config/demo_expedients.php` base: `0518450949853f85120dc442b9c65ca22f490041`
 
-Hostinger todavia debe verificarse por separado, porque GitHub y el hosting no se sincronizan automaticamente.
+## Correcciones incluidas
 
-## Base del repositorio revisada antes de generar esta version
-
-- `docs/00_version_actual.md` - SHA base `0dd0cb36882523fe96f4150ae2750b67223bf2be`
-- `assets/js/expedientes.js` - SHA base `478c6fb872797c54927ed604f08b93d246f03155`
-- `assets/js/catalogos.js` - SHA base `7fc6122c07aa9db6603448a192af3f74c76ce2ea`
-- `config/modules.php` - SHA base `1606cb503a9b7c9b9c4a74307616e132d7632340`
-- `assets/js/app.js` - revisado para resolver `BrokerNotify.confirm()` al cerrar el toast.
-
-## Problemas corregidos
-
-- Migracion centralizada de situaciones antiguas de Catalogos.
-- Migracion local de `broker_seguros_demo_expedients_v1` hacia `broker_seguros_demo_expedients_v2`.
-- Expedientes puede abrir primero y aun asi migrar catalogos locales obsoletos.
-- Fechas y codigo `EXP-AAAA-NNNN` usan referencia de Lima desde JavaScript compartido.
-- Se evita mostrar fechas `YYYY-MM-DD` con desplazamiento por UTC.
-- Se redujeron toasts duplicados para una misma accion.
-- Restaurar Catalogos usa confirmacion de `window.BrokerNotify`, no `window.confirm()`.
-- La descripcion del modulo Expedientes ya no lo define como cotizacion, emision, renovacion, endoso ni regularizacion.
-- `BrokerNotify.confirm()` resuelve `false` cuando el usuario cierra el toast con la `x`, igual que al pulsar Cancelar.
+1. Se elimina el concepto incorrecto de `Ejecutivo responsable`.
+2. Se incorpora `Contacto de gestión` como persona natural separada de cliente y usuario interno.
+3. Crear expediente exige contacto de gestión, nombre y descripción.
+4. Cliente o entidad queda opcional al inicio y se muestra como pendiente cuando aún no existe.
+5. Gerente y ejecutivo consultan y trabajan sobre todos los expedientes de la maqueta.
+6. Se agrega registro rápido de contacto con nombre y celular obligatorios.
+7. El contacto puede vincularse opcionalmente a una empresa o consorcio demo.
+8. Se habilita actualizar contacto, cliente, situación, nombre y detalle desde la ficha.
+9. La caché de expedientes migra de v1/v2 a `broker_seguros_demo_expedients_v3`.
+10. Los antiguos campos de ejecutivo se preservan solo como referencia técnica de migración y no se convierten en contactos.
 
 ## Limitaciones conocidas
 
-- `localStorage` no es seguridad real entre usuarios que comparten el mismo navegador.
-- La concurrencia entre dos pestanas se mitiga recargando datos antes de generar codigo, pero solo MySQL puede garantizar unicidad real.
-- Los permisos actuales controlan interfaz y rutas PHP de la maqueta. Cuando exista MySQL, permisos y filtros deben validarse en backend.
+- Los contactos y expedientes se guardan solo en el navegador actual mediante `localStorage`.
+- La relación de un contacto con varias entidades está preparada en datos, pero la interfaz rápida permite registrar solo un vínculo inicial.
+- Aún no existe el módulo completo de Empresas, Consorcios, Contactos ni Pólizas.
+- Antes de registrar una póliza futura, el sistema deberá exigir cliente definido.
+- La autorización real y las reglas por usuario deberán validarse en backend cuando exista MySQL.
 
-## Como verificar GitHub y Hostinger luego del push manual
+## Comprobación posterior al push
 
-1. Hacer `git push` manualmente cuando la revision local sea aprobada.
-2. Abrir este archivo en GitHub y confirmar que el codigo sea `BS-20260627-135448-PET`.
-3. Publicar en Hostinger y abrir la maqueta desplegada.
-4. Verificar que `docs/00_version_actual.md` en Hostinger muestre el mismo codigo.
-5. Si GitHub o Hostinger muestran otro codigo, esa ubicacion todavia no tiene esta version.
+1. Subir los archivos del paquete al repositorio local.
+2. Confirmar que `docs/00_version_actual.md` muestre `BS-20260627-164101-PET`.
+3. Hacer commit y push a GitHub `main`.
+4. Confirmar en GitHub que el archivo muestre el mismo código.
+5. Verificar en Hostinger que el archivo desplegado también muestre `BS-20260627-164101-PET`.

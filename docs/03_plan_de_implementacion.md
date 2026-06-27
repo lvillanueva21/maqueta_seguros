@@ -5,40 +5,44 @@
 - [x] Maqueta visual inicial.
 - [x] Login demo por DNI, CE y RUC.
 - [x] Contexto de sesión centralizado.
-- [x] Dashboard con datos demo controlados por perfil.
+- [x] Dashboard con datos demo por perfil.
 - [x] Matriz inicial de permisos y rutas controladas por servidor.
 - [x] Catálogos demo básicos.
-- [x] Expedientes demo corregidos como contenedores flexibles.
 - [x] Notificaciones globales y mensajes amigables.
-- [x] Migraciones compartidas de cache local para Catalogos y Expedientes.
+- [x] Migraciones compartidas de caché local.
 - [x] Fechas JavaScript alineadas a America/Lima.
-- [x] Documentación viva y versión de entrega trazable.
-- [ ] Validacion visual completa pendiente en navegador real.
+- [x] Expediente flexible sin flujo obligatorio.
+- [x] Contacto de gestión separado de usuario interno.
+- [x] Cliente opcional al inicio del expediente.
+- [ ] Validación visual completa pendiente en navegador real.
+- [ ] Módulos reales con MySQL.
 
 ## Siguiente bloque recomendado
 
-### Fase 6: Plantillas configurables de cotizacion - diseno base
+### Fase 6: Empresas y Consorcios — base flexible
 
-Antes de crear cotizaciones completas, se debe construir la configuración que definirá sus campos.
+Alcance:
 
-Alcance mínimo:
-
-- crear una plantilla de cotización;
-- definir ítems personalizados por plantilla;
-- tipos de ítem iniciales: texto, número, fecha, selección, booleano y texto largo;
-- definir ayuda, advertencias, mensajes y notas por plantilla;
-- dejar preparada la relación opcional entre expediente y cotización;
-- no obligar a que un expediente tenga cotización;
-- no incluir todavía emisión, póliza, pagos ni vouchers.
+- registrar empresas con datos parciales;
+- registrar consorcios con dos o más empresas;
+- soportar consorcio con RUC propio;
+- soportar consorcio con operador tributario;
+- permitir contactos vinculados a una o varias entidades;
+- reemplazar gradualmente los datos demo de cliente por registros administrables;
+- no implementar todavía pólizas ni requisitos obligatorios.
 
 ## Fases posteriores
 
-1. Cotización demo basada en una plantilla.
-2. Alternativas de aseguradora y seguros dentro de una cotización.
-3. Requisitos, documentos, observaciones y línea de tiempo del expediente.
-4. Diseño de tablas MySQL según los datos ya validados.
-5. Pólizas, pagos y vouchers vinculados cuando corresponda.
+1. Catálogo completo de tipos de seguro y aseguradoras.
+2. Cotizaciones flexibles y vencimiento por fecha límite.
+3. Registro básico de pólizas con datos opcionales y cliente obligatorio.
+4. Timeline y gestión documental.
+5. Requisitos y formatos reutilizables.
+6. Pagos, vouchers, garantías y siniestros.
+7. Constructor de ítems configurables.
+8. Vista cliente por RUC.
+9. OCR/PDF y QR.
 
 ## Regla de avance
 
-No iniciar una fase mientras la anterior tenga errores funcionales o pruebas de humo pendientes. La estabilizacion de migraciones, permisos y fechas debe quedar revisada antes de crear plantillas o cotizaciones completas.
+No iniciar una fase mientras la anterior tenga fallas funcionales críticas. No agregar campos específicos de seguros a la raíz del expediente.

@@ -12,19 +12,27 @@ La versión aplicada en el repositorio se controla desde:
 docs/00_version_actual.md
 ```
 
-Versión de este paquete: `BS-20260627-131127-PET` — 27/06/2026 13:11:27 (America/Lima).
+Versión base revisada: `BS-20260627-135448-PET` — 27/06/2026 13:54:48 (America/Lima).
+
+Este paquete local prepara la corrección `Contacto de gestión + Expediente v3`:
+
+```text
+BS-20260627-164101-PET
+27/06/2026 16:41:01 (America/Lima)
+```
 
 ## Incluye
 
-- Login por DNI, CE o RUC.
+- Login demo por DNI, CE o RUC.
 - Cuatro accesos de prueba: gerente, ejecutivo, empresa y consorcio.
 - Sesión protegida y cierre de sesión.
 - Dashboard con datos demo distintos para cada perfil.
 - Matriz de permisos y rutas protegidas en servidor.
 - Catálogos demo de aseguradoras, tipos de seguro, monedas y situaciones.
-- Expedientes demo flexibles: crear, listar, filtrar, abrir ficha y actualizar situación.
+- Expedientes flexibles: crear, listar, filtrar, abrir ficha y actualizar datos básicos.
+- Contactos de gestión: persona natural con celular obligatorio y vínculo opcional a empresa o consorcio.
+- Cliente o entidad opcional al inicio del expediente.
 - Expedientes que pueden existir sin cotizaciones, seguros, pólizas o pagos.
-- Base preparada para cotizaciones opcionales por plantillas configurables.
 - Notificaciones amigables de éxito, error, advertencia e información.
 - Diseño responsive sin dependencias externas.
 
@@ -48,10 +56,8 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
 - Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
-- Modelo de expediente y cotización: [`docs/funcionalidades/modelo_expediente_y_cotizacion.md`](docs/funcionalidades/modelo_expediente_y_cotizacion.md)
+- Contactos y Expedientes v2: [`docs/funcionalidades/contactos_y_expedientes_v2.md`](docs/funcionalidades/contactos_y_expedientes_v2.md)
 
 ## Nota
 
-Esta maqueta no almacena información de negocio de forma permanente. Los cambios realizados desde Catálogos y Expedientes se guardan solamente en el navegador actual mediante `localStorage`.
-
-No subas el ZIP como archivo de ejecución. Extrae su contenido dentro de la raíz del repositorio y verifica que se reemplacen los archivos indicados.
+Esta maqueta no almacena información de negocio de forma permanente. Los cambios realizados desde Catálogos, Contactos y Expedientes se guardan solamente en el navegador actual mediante `localStorage`.
