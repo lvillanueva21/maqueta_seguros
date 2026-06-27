@@ -1,45 +1,37 @@
 # Arquitectura actual
 
 ```text
-config/bootstrap.php
-|-- sesión, cabeceras no-cache, rutas relativas y permisos
-`-- requireModuleAccess() protege rutas reales de módulo
-
-config/demo_clients.php
-|-- empresas demo
-|-- consorcios demo
-`-- contactos de gestión demo
+Expedientes (localStorage)
+└── policies[]
+    ├── datos de póliza
+    ├── copia histórica del cliente
+    ├── estado y desactivación
+    └── metadatos del PDF principal
 
 assets/js/cache-migrations.js
-|-- migración de catálogos locales antiguos
-|-- migración de entidades, contactos y expedientes
-|-- helpers de fecha/hora America/Lima
-`-- lectura/escritura compartida de localStorage
+├── migra entidades, contactos, expedientes y políticas
+└── carga assets/js/polizas.js solo en Expedientes
 
-assets/js/app.js
-|-- window.BrokerNotify
-|-- host global sin modal
-|-- host interno cuando hay <dialog> abierto
-|-- confirmación y deduplicación de notificaciones
-`-- historial temporal de acciones
+assets/js/polizas.js
+├── sección Pólizas dentro de la ficha de expediente
+├── validación de vigencia
+├── barra de carga por XMLHttpRequest
+├── reemplazo seguro de PDF
+└── desactivación con motivo
 
-assets/css/notifications.css
-`-- estilos de mensajes globales e internos
+api/upload_policy_pdf.php
+└── recibe y valida PDF, crea carpetas y guarda archivo físico
 
-assets/css/modal-ui.css
-`-- capa común de campos y bloques dinámicos en modales
+api/delete_policy_pdf.php
+└── elimina el PDF anterior solo dentro de almacen/polizas
 
-clientes.php + assets/js/clientes.js
-|-- Empresas, Consorcios y Contactos
-`-- desactivación con motivo
+api/view_policy_pdf.php
+└── entrega PDF protegido a gerente y ejecutivo
 
-expedientes.php + assets/js/expedientes.js
-|-- expediente flexible
-|-- contacto de gestión obligatorio
-|-- cliente opcional
-`-- cotizaciones futuras opcionales
+almacen/
+└── polizas/{tipo}/{año}/{mes}/{día}/{codigo}_{aleatorio}.pdf
 ```
 
-## Regla de capas
+## Nota de transición
 
-Los `<dialog>` nativos se muestran en la capa superior del navegador. Por eso un toast normal del documento puede quedar detrás. La arquitectura actual inserta el aviso dentro del `<dialog>` cuando existe uno abierto.
+Actualmente el PDF está en servidor y la relación archivo-póliza está en `localStorage`. Por ello no se comparte entre navegadores ni equipos hasta migrar a MySQL.

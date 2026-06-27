@@ -2,7 +2,7 @@
   const body = document.body;
   const userId = body.dataset.user || 'anonymous';
   const localActionKey = `broker_seguros_demo_actions_${userId}`;
-  const assetVersion = 'BS-20260627-180106-PET';
+  const assetVersion = 'BS-20260627-183503-PET';
 
   function installStyleFile(relativePath, marker) {
     if (document.querySelector(`link[${marker}]`)) {

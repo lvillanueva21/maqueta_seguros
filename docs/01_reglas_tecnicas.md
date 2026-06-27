@@ -1,42 +1,48 @@
 # Reglas técnicas
 
-## Marca y textos visibles
+## Marca, rutas y zona horaria
 
-1. El nombre oficial visible del sistema es **BROKER SEGUROS**.
-2. El nombre del repositorio no define el nombre de la aplicación.
-3. Los textos de marca deben obtenerse de `APP_NAME` y `APP_SHORT_NAME` en `config/bootstrap.php`.
+1. El nombre oficial visible es **BROKER SEGUROS**.
+2. Las rutas internas usan referencias relativas; no se fija dominio ni base URL.
+3. PHP se configura en `America/Lima`.
+4. Fechas y horas demo de JavaScript se generan con `Intl` en `America/Lima`.
+5. Los campos `datetime-local` de pólizas se interpretan y guardan como fecha/hora Lima, sin conversión automática de zona del navegador.
 
-## Versionado y trazabilidad
+## Versionado
 
 1. Toda entrega actualiza `docs/00_version_actual.md` y `docs/05_historial_de_cambios.md`.
-2. La versión usa el formato `BS-YYYYMMDD-HHMMSS-PET`.
-3. La fecha y hora obligatorias usan `America/Lima`.
-4. Antes de generar cambios se revisa la versión vigente en GitHub.
-5. El estado documental debe distinguir: paquete local, GitHub actualizado y Hostinger verificado.
+2. Formato: `BS-YYYYMMDD-HHMMSS-PET`.
+3. La hora de la entrega corresponde a `America/Lima`.
 
-## Mensajes, modales y formularios
+## Pólizas
 
-1. Toda acción que modifique datos demo confirma claramente el resultado.
-2. Sin MySQL, el mensaje debe indicar que el cambio se guarda solo en el navegador.
-3. Los mensajes usan `window.BrokerNotify`.
-4. Con un `<dialog>` abierto, la notificación se inserta dentro del modal activo, nunca detrás de este.
-5. Sin modal activo, la notificación se muestra de forma global.
-6. Las acciones que cierran el modal antes de comunicar el resultado muestran el mensaje global después del cierre.
-7. No usar `window.alert()` ni `window.confirm()` para funcionalidades nuevas.
-8. Los formularios y bloques insertados dinámicamente deben usar la capa común `assets/css/modal-ui.css`.
-9. Inputs, selects, textarea, checkbox, ayudas, tablas repetibles y acciones de modal deben conservar el mismo aspecto visual.
+1. Una póliza pertenece a un expediente.
+2. El expediente puede tener cero, una o varias pólizas.
+3. No se exige cotización previa.
+4. Para registrar una póliza el expediente debe tener Cliente o entidad definido.
+5. Son obligatorios: título, tipo de seguro, aseguradora, inicio y fin de vigencia.
+6. Fin de vigencia debe ser posterior al inicio; el guardado se bloquea si no se cumple.
+7. Estado inicial: `En emisión`.
+8. Se genera un código interno `POL-YYYY-NNNN`; no se usan códigos externos en este bloque.
+9. La póliza conserva una copia histórica del cliente del expediente.
+10. Suma asegurada y moneda son opcionales.
+11. No se implementan beneficiarios, prima, cuotas, requisitos, formatos, garantías, endosos ni renovación relacionada.
 
-## Contactos, clientes y expedientes
+## PDFs de póliza
 
-1. Un contacto de gestión es una persona natural; no es cliente ni usuario interno.
-2. Crear expediente exige contacto de gestión, nombre y descripción.
-3. El contacto mínimo requiere nombre completo y celular.
-4. Un contacto puede estar sin entidad o relacionarse con una o varias empresas o consorcios.
-5. El cliente solo puede ser empresa o consorcio.
-6. Cliente o entidad es opcional al crear expediente y se muestra como pendiente cuando falta.
-7. Antes de registrar una póliza futura, el expediente deberá tener cliente definido.
-8. Un expediente representa un solo proceso asegurador y no mezcla seguros independientes.
-9. Un expediente puede existir, mantenerse en espera, cerrarse o cancelarse sin cotización, seguro, póliza, pago o documento.
-10. No existe asignación obligatoria de expedientes a ejecutivos.
-11. Gerentes y ejecutivos ven y trabajan sobre todos los expedientes en esta maqueta.
-12. Los cambios demo se guardan en `localStorage`; no representan persistencia real ni seguridad de servidor.
+1. Un PDF principal opcional por póliza.
+2. La ausencia de PDF muestra una advertencia visible.
+3. No existe límite impuesto por la aplicación; siguen aplicando límites físicos de PHP/Hostinger.
+4. Si el servidor rechaza una carga, el sistema debe explicar el motivo.
+5. El archivo se valida como PDF por extensión, firma y tipo MIME.
+6. Nunca se usa el nombre original como nombre físico.
+7. El archivo se guarda en `almacen/polizas/{tipo}/{año}/{mes}/{día}`.
+8. Al reemplazar un PDF se sube primero el nuevo; solo luego se elimina físicamente el anterior.
+9. `almacen` no permite acceso directo. El PDF se visualiza mediante `api/view_policy_pdf.php`, protegido para gerente y ejecutivo.
+10. Una póliza desactivada permanece disponible a gerente y ejecutivo; queda preparada para ocultarse a clientes futuros.
+
+## Persistencia demo
+
+1. Los metadatos de pólizas viven en `localStorage` del navegador.
+2. El PDF físico se guarda en el servidor.
+3. Esta separación es temporal: antes de producción, metadatos y vínculos deben migrarse a MySQL.
