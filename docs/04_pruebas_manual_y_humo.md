@@ -15,6 +15,21 @@ https://cicsount.pe/maqueta/
 | VER-01 | Abrir `docs/00_version_actual.md` en GitHub luego del push | Debe aparecer el código de versión de la última entrega aplicada. |
 | VER-02 | Comparar el código de versión con el ZIP recibido | Ambos deben coincidir exactamente. |
 
+## Casos de notificaciones y mensajes
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| NOT-01 | Crear un expediente demo válido | Toast de éxito indicando el código generado y que se guardó temporalmente en este navegador. |
+| NOT-02 | Cambiar el estado de un expediente | Toast de éxito indicando el código, nuevo estado y naturaleza temporal del cambio. |
+| NOT-03 | Guardar un catálogo nuevo o editado | Toast de éxito indicando el elemento modificado y el almacenamiento temporal. |
+| NOT-04 | Activar o desactivar un catálogo | Toast de éxito indicando la acción realizada. |
+| NOT-05 | Restaurar los catálogos demo y confirmar | Toast de éxito indicando que se eliminaron solo cambios locales. |
+| NOT-06 | Intentar guardar formulario con campos obligatorios vacíos | Advertencia amigable y validación nativa en los campos faltantes. |
+| NOT-07 | Duplicar un código de catálogo | Mensaje de error amigable, sin alerta emergente clásica del navegador. |
+| NOT-08 | Cerrar manualmente un toast | El mensaje desaparece. |
+| NOT-09 | Esperar un toast de éxito | Desaparece automáticamente. |
+| NOT-10 | Probar desde móvil | Los mensajes no deben tapar toda la pantalla y deben poder cerrarse. |
+
 ## Casos de Expedientes demo
 
 | ID | Prueba | Resultado esperado |
@@ -23,23 +38,9 @@ https://cicsount.pe/maqueta/
 | EXP-02 | Ingresar como ejecutivo y abrir Expedientes | Ve únicamente expedientes asignados a María Torres. |
 | EXP-03 | Como gerente, crear expediente y elegir responsable | Se genera un código `EXP-AAAA-NNNN`, aparece en el listado y respeta el responsable elegido. |
 | EXP-04 | Como ejecutivo, crear expediente | El responsable se asigna automáticamente al ejecutivo autenticado. |
-| EXP-05 | Crear expediente con campos obligatorios vacíos | El formulario no debe guardar y debe solicitar completar la información requerida. |
-| EXP-06 | Filtrar por estado, tipo de seguro, aseguradora y texto | El listado debe mostrar solo expedientes coincidentes. |
-| EXP-07 | Abrir ficha de expediente | Deben mostrarse cliente, seguro, aseguradora, moneda, responsable, fechas y descripción. |
-| EXP-08 | Cambiar estado desde la ficha | El estado y fecha de actualización deben cambiar en el listado y persistir al recargar. |
-| EXP-09 | Como ejecutivo, abrir la ficha de un expediente no asignado mediante manipulación de URL | No existe URL de ficha directa; la pantalla no debe listar ni permitir abrir expedientes ajenos. |
-| EXP-10 | Como empresa o consorcio, abrir `expedientes.php` | Debe mostrarse Acceso no autorizado. |
-| EXP-11 | Abrir `expedientes.php` sin sesión | Debe redirigir al login. |
-| EXP-12 | Probar en móvil | Filtros deben acomodarse y la tabla debe permitir desplazamiento horizontal. |
-| EXP-13 | Volver a Inicio luego de crear o cambiar estado | Acciones en caché debe registrar la acción temporal. |
-
-## Casos de Catálogos demo
-
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| CAT-01 | Ingresar como gerente y abrir Catálogos | Se muestran los siete grupos de datos maestros. |
-| CAT-02 | Como ejecutivo, abrir Catálogos | Puede consultar sin botones de edición. |
-| CAT-03 | Como cliente, abrir `catalogos.php` | Se muestra Acceso no autorizado. |
+| EXP-05 | Filtrar por estado, tipo de seguro, aseguradora y texto | El listado debe mostrar solo expedientes coincidentes. |
+| EXP-06 | Abrir ficha y cambiar estado | El estado y fecha de actualización cambian y persisten al recargar. |
+| EXP-07 | Como empresa o consorcio, abrir `expedientes.php` | Debe mostrarse Acceso no autorizado. |
 
 ## Evidencia mínima
 

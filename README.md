@@ -12,7 +12,7 @@ La versión aplicada en el repositorio se controla desde:
 docs/00_version_actual.md
 ```
 
-Versión de este paquete: `BS-20260627-123937-PET` — 27/06/2026 12:39:37 (America/Lima).
+Versión de este paquete: `BS-20260627-125439-PET` — 27/06/2026 12:54:39 (America/Lima).
 
 ## Incluye
 
@@ -23,6 +23,7 @@ Versión de este paquete: `BS-20260627-123937-PET` — 27/06/2026 12:39:37 (Amer
 - Matriz de permisos y rutas protegidas en servidor.
 - Catálogos demo de aseguradoras, seguros, monedas y estados operativos.
 - Expedientes demo: crear, filtrar, listar, abrir ficha y actualizar estado.
+- Notificaciones amigables de éxito, error, advertencia e información.
 - Gerente con vista global; ejecutivo con expedientes asignados.
 - Menú lateral generado según el rol autenticado.
 - Diseño responsive sin dependencias externas.
@@ -47,27 +48,11 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
 - Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
-- Expedientes: [`docs/funcionalidades/expedientes_demo_v1.md`](docs/funcionalidades/expedientes_demo_v1.md)
-
-## Ejecución local
-
-Requiere PHP 8.1 o superior.
-
-```bash
-php -S localhost:8000
-```
-
-Luego abre:
-
-```text
-http://localhost:8000
-```
+- Notificaciones: [`docs/funcionalidades/notificaciones_y_mensajes.md`](docs/funcionalidades/notificaciones_y_mensajes.md)
 
 ## Nota
 
-Esta maqueta no almacena información de negocio de forma permanente. Los indicadores, permisos, catálogos y expedientes son datos de validación funcional.
-
-Los cambios hechos desde Catálogos y Expedientes se guardan únicamente en el navegador. No representan información real ni se comparten con otros equipos.
+Esta maqueta no almacena información de negocio de forma permanente. Las acciones de Catálogos y Expedientes se guardan únicamente en el navegador y muestran una notificación que confirma ese alcance.
 
 ## Publicación en Hostinger
 

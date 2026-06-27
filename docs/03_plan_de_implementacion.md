@@ -11,8 +11,9 @@
 - [x] Matriz inicial de permisos y rutas controladas por servidor.
 - [x] Catálogos demo básicos.
 - [x] Expedientes demo v1: crear, listar, filtrar, ver ficha y cambiar estado.
+- [x] Notificaciones globales y mensajes amigables.
 - [x] Documentación viva y versión de entrega trazable.
-- [ ] Pruebas manuales pendientes del módulo Expedientes.
+- [ ] Pruebas manuales pendientes de notificaciones y Expedientes.
 
 ## Siguiente bloque recomendado
 
@@ -23,12 +24,12 @@ Sin crear todavía base de datos, validar qué eventos deben quedar registrados 
 Alcance mínimo:
 
 - línea de tiempo automática de creación y cambio de estado;
-- registro de observaciones manuales;
+- observaciones manuales;
 - próxima acción y fecha objetivo;
 - responsable de la acción;
 - sección de requisitos y documentos pendientes simulados;
 - historial visible dentro de la ficha;
-- seguimiento separado por expediente.
+- notificación de éxito o error por cada cambio.
 
 ## Fases posteriores
 

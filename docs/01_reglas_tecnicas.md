@@ -32,6 +32,17 @@
 7. Los módulos y sus permisos deben declararse únicamente en `config/modules.php`.
 8. Un módulo debe validar permiso en servidor mediante `requireModuleAccess()`. Ocultar un enlace no es una validación de seguridad.
 
+## Mensajes y notificaciones
+
+1. Toda acción que modifique datos demo debe confirmar claramente el resultado.
+2. El mensaje debe indicar qué se modificó y que, mientras no exista MySQL, queda guardado solo en el navegador.
+3. Los mensajes se centralizan en `window.BrokerNotify`, disponible desde `assets/js/app.js`.
+4. Tipos permitidos: éxito, error, advertencia e información.
+5. Los errores y advertencias deben poder cerrarse manualmente y permanecer más tiempo que los mensajes de éxito.
+6. Las validaciones de campos obligatorios deben mostrar un mensaje amigable además de la marca del navegador.
+7. No usar `window.alert()` para nuevas funcionalidades; usar `window.BrokerNotify`.
+8. Las acciones destructivas o que reviertan información deben pedir confirmación antes de ejecutarse.
+
 ## Catálogos demo
 
 1. Los datos maestros demo se definen únicamente en `config/demo_catalogs.php`.
