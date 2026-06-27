@@ -20,22 +20,28 @@ config/modules.php
 config/demo_catalogs.php
 └── datos maestros demo de aseguradoras, seguros, monedas y estados
 
+config/demo_expedients.php
+├── clientes y entidades demo
+├── ejecutivos demo
+├── tipos de gestión
+└── expedientes iniciales
+
+expedientes.php
+├── requireModuleAccess('expedientes')
+├── gerente: vista global y asignación de responsable
+├── ejecutivo: vista de expedientes asignados
+├── creación, filtros y ficha
+└── cambio de estado temporal
+
+assets/js/expedientes.js
+├── carga de datos demo y catálogos
+├── localStorage de expedientes
+├── generación de código EXP-AAAA-NNNN
+├── filtros por estado, seguro, aseguradora y responsable
+└── actualización de estado
+
 catalogos.php
-├── requireModuleAccess('catalogos')
-├── gerente: edición temporal en navegador
-└── ejecutivo: consulta de datos maestros
-
-assets/js/catalogos.js
-├── carga de catálogos demo
-├── persistencia local de cambios temporales
-├── agregar, editar y activar/desactivar para gerente
-└── restauración de datos demo
-
-config/demo_users.php
-└── catálogo temporal de cuatro usuarios demo
-
-config/demo_dashboard_data.php
-└── indicadores, alertas y tablas demo por usuario
+└── catálogos demo y configuración operativa
 
 views/partials/
 ├── sidebar.php
@@ -57,6 +63,8 @@ acceso_denegado.php
 
 `config/modules.php` contiene la matriz temporal de permisos. El menú y `requireModuleAccess()` usan esta misma fuente para evitar diferencias entre lo que se ve y lo que se permite abrir.
 
-## Fuente de catálogos
+## Fuente de expedientes
 
-`config/demo_catalogs.php` es la fuente inicial de datos maestros. Los cambios realizados por gerente en la maqueta viven solo en el navegador, por lo que una restauración, limpieza de caché o cambio de navegador recupera los datos base.
+`config/demo_expedients.php` contiene el conjunto inicial de clientes, responsables y expedientes. Las modificaciones de la maqueta viven solo en el navegador mediante `localStorage`.
+
+Cuando se incorpore MySQL, los datos se separarán en entidades normalizadas, al menos: clientes, usuarios responsables, expedientes y su historial de estados.

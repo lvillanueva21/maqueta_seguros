@@ -41,6 +41,17 @@
 5. Los perfiles cliente no deben poder abrir `catalogos.php`.
 6. Antes de migrar a MySQL, se debe validar el nombre, código, estado y detalle requeridos para cada catálogo.
 
+## Expedientes demo
+
+1. La fuente inicial se mantiene en `config/demo_expedients.php`.
+2. El módulo se abre solo mediante `requireModuleAccess('expedientes')`.
+3. Gerente puede ver todos los expedientes demo y asignar un responsable al crear.
+4. Ejecutivo ve y actualiza únicamente expedientes cuyo `responsible_user_id` coincide con su sesión.
+5. Los cambios demo se guardan con `localStorage`; no representan persistencia real ni comparten datos entre dispositivos.
+6. El código automático usa el formato `EXP-AAAA-NNNN`.
+7. Los estados se cargan desde el catálogo `estados_expediente`; no deben escribirse como listas duplicadas en una pantalla.
+8. Antes de migrar a MySQL, se debe validar la ficha mínima: cliente, gestión, seguro, aseguradora, moneda, responsable, estado, fecha y descripción.
+
 ## Navegación y usabilidad
 
 1. En escritorio, el menú lateral debe mantenerse visible dentro del alto de la ventana, incluso cuando el contenido principal sea extenso.

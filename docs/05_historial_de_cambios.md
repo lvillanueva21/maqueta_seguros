@@ -1,42 +1,42 @@
 # Historial de cambios
 
+## 27/06/2026 12:39:37 (America/Lima) — BS-20260627-123937-PET — Expedientes demo v1
+
+### Implementado
+
+- Nuevo módulo protegido `expedientes.php`.
+- Catálogo de módulo y permisos actualizado con Expedientes para gerente y ejecutivo.
+- Fuente inicial `config/demo_expedients.php` con clientes, responsables, tipos de gestión y expedientes demo.
+- Creación temporal de expedientes con código automático `EXP-AAAA-NNNN`.
+- Listado, búsqueda y filtros por estado, tipo de seguro, aseguradora y responsable.
+- Ficha de expediente con datos clave y cambio de estado.
+- Gerente con vista global y selector de ejecutivo responsable.
+- Ejecutivo con vista limitada a expedientes asignados a su usuario.
+- Persistencia temporal por navegador mediante `localStorage`.
+- Documentación, arquitectura, plan, pruebas y versión actualizados.
+
+### Decisión técnica
+
+Expedientes es el núcleo previo a pólizas, pagos y documentos. Los cambios se mantienen locales durante la etapa de maqueta para validar campos y flujo sin definir aún las tablas finales de MySQL.
+
+### Pendiente
+
+- Ejecutar pruebas EXP-01 a EXP-13.
+- Detalle ampliado, línea de tiempo y observaciones por expediente.
+- Persistencia con MySQL.
+
 ## 27/06/2026 12:28:26 (America/Lima) — BS-20260627-122826-PET — Catálogos demo básicos
 
 ### Implementado
 
 - Fuente central `config/demo_catalogs.php`.
 - Ruta funcional `catalogos.php` protegida por permisos.
-- Siete grupos demo: aseguradoras, tipos de seguro, monedas, estados de expediente, póliza, pago y siniestro.
-- Gerente: acciones demo de agregar, editar, activar, desactivar y restaurar.
-- Ejecutivo: consulta sin acciones de edición.
-- Cambios demo persistentes solo en el navegador mediante `localStorage`.
-- Redirección del módulo Catálogos desde `moduleUrl()` hacia la nueva ruta funcional.
-- Actualización de documentación, plan, pruebas y versión trazable.
-
-### Decisión técnica
-
-Los cambios de Catálogos no alteran la configuración PHP ni se comparten entre dispositivos. Esta fase sirve para validar cuáles campos y estados serán persistidos cuando exista MySQL.
-
-### Pendiente
-
-- Ejecutar pruebas CAT-01 a CAT-10.
-- Expedientes demo: crear, listar, filtrar, ver detalle y cambiar estado.
-- Persistencia con MySQL.
+- Catálogos de aseguradoras, tipos de seguro, monedas y estados.
+- Gerente con edición temporal; ejecutivo con consulta.
 
 ## 27/06/2026 12:20:47 (America/Lima) — BS-20260627-1220-PET — Matriz de permisos y rutas controladas
 
 ### Implementado
 
-- Archivo central `config/modules.php` con módulos, roles permitidos, etiquetas e íconos.
-- Funciones de permisos en `config/bootstrap.php`.
-- Menú lateral generado desde la misma matriz utilizada para validar permisos.
-- Rutas `modulo.php` y `acceso_denegado.php`.
-- Validación de acceso por PHP.
-- Componentes reutilizables de navegación.
-
-## 27/06/2026 12:20:47 (America/Lima) — Marca BROKER SEGUROS y cierre de sesión accesible
-
-### Implementado
-
-- Nombre visible oficial actualizado a **BROKER SEGUROS**.
-- Menú lateral fijo e ícono de cierre de sesión superior.
+- Catálogo central de módulos y validación de permisos por PHP.
+- Menú generado desde permisos y página de acceso denegado.

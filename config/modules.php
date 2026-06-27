@@ -40,12 +40,20 @@ return [
         'description' => 'Consulta y gestión futura de personas, empresas y consorcios.',
         'scope' => 'Gestión operativa',
     ],
+    'expedientes' => [
+        'id' => 'expedientes',
+        'label' => 'Expedientes',
+        'icon' => '▧',
+        'roles' => ['gerente', 'ejecutivo'],
+        'description' => 'Registro y seguimiento de cotizaciones, emisiones, renovaciones, endosos y regularizaciones.',
+        'scope' => 'Núcleo operativo',
+    ],
     'seguros' => [
         'id' => 'seguros',
         'label' => 'Seguros',
         'icon' => '▣',
         'roles' => ['gerente', 'ejecutivo'],
-        'description' => 'Gestión futura de expedientes, pólizas, renovaciones y coberturas.',
+        'description' => 'Gestión futura de pólizas, renovaciones y coberturas emitidas.',
         'scope' => 'Gestión operativa',
     ],
     'cobranzas' => [

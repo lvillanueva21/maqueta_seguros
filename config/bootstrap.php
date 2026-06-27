@@ -217,8 +217,13 @@ function moduleUrl(string $moduleId): string
         return appRelativeUrl('dashboard.php');
     }
 
-    if ($moduleId === 'catalogos') {
-        return appRelativeUrl('catalogos.php');
+    $customRoutes = [
+        'catalogos' => 'catalogos.php',
+        'expedientes' => 'expedientes.php',
+    ];
+
+    if (isset($customRoutes[$moduleId])) {
+        return appRelativeUrl($customRoutes[$moduleId]);
     }
 
     return appRelativeUrl('modulo.php?modulo=' . rawurlencode($moduleId));

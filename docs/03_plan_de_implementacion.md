@@ -10,29 +10,29 @@
 - [x] Marca oficial BROKER SEGUROS centralizada.
 - [x] Matriz inicial de permisos y rutas controladas por servidor.
 - [x] Catálogos demo básicos.
+- [x] Expedientes demo v1: crear, listar, filtrar, ver ficha y cambiar estado.
 - [x] Documentación viva y versión de entrega trazable.
-- [ ] Pruebas manuales pendientes del módulo Catálogos.
+- [ ] Pruebas manuales pendientes del módulo Expedientes.
 
 ## Siguiente bloque recomendado
 
-### Fase 5: Expedientes demo — primera versión operativa
+### Fase 6: Detalle ampliado y línea de tiempo del expediente
 
-Construir el primer núcleo de negocio sin MySQL usando almacenamiento local del navegador.
+Sin crear todavía base de datos, validar qué eventos deben quedar registrados durante una gestión.
 
 Alcance mínimo:
 
-- crear expediente;
-- asociar cliente, tipo de seguro, aseguradora, moneda y ejecutivo;
-- generar código demo automático;
-- listar expedientes con filtros;
-- abrir una ficha simple;
-- cambiar estado usando los estados de expediente;
-- guardar los cambios temporalmente en el navegador;
-- aplicar permisos: gerente y ejecutivo pueden gestionarlos; cliente solo podrá ver sus solicitudes cuando se agregue su vista.
+- línea de tiempo automática de creación y cambio de estado;
+- registro de observaciones manuales;
+- próxima acción y fecha objetivo;
+- responsable de la acción;
+- sección de requisitos y documentos pendientes simulados;
+- historial visible dentro de la ficha;
+- seguimiento separado por expediente.
 
 ## Fases posteriores
 
-1. Detalle ampliado y línea de tiempo del expediente.
+1. Clientes demo vinculables y ficha de cliente.
 2. Diseño de tablas MySQL según los datos ya validados.
 3. Reemplazo progresivo de datos demo por MySQL.
 4. Pólizas, pagos, documentos y siniestros vinculados a expedientes.

@@ -10,7 +10,7 @@ La primera etapa es una maqueta funcional sin base de datos. Su propósito es va
 
 ## Objetivo actual
 
-Contar con una base estable de autenticación demo, contexto de usuario, dashboard diferenciado, permisos de módulos y catálogos básicos para validar el flujo antes de definir MySQL.
+Contar con una base estable de autenticación demo, contexto de usuario, dashboard diferenciado, permisos, catálogos y un primer núcleo operativo de expedientes antes de definir MySQL.
 
 El sistema debe poder responder, sin una base de datos todavía:
 
@@ -19,6 +19,7 @@ El sistema debe poder responder, sin una base de datos todavía:
 - si representa a una persona, empresa o consorcio;
 - qué módulos puede ver y abrir;
 - qué datos maestros estarán disponibles en formularios futuros;
+- qué expedientes puede ver o gestionar;
 - qué indicadores y alertas necesita en Inicio;
 - cuándo empezó su sesión.
 
@@ -30,8 +31,9 @@ El sistema debe poder responder, sin una base de datos todavía:
 - Catálogo central de módulos y permisos por rol.
 - Rutas protegidas desde PHP y página controlada de acceso no autorizado.
 - Catálogos demo para aseguradoras, seguros, monedas y estados operativos.
-- Edición temporal de catálogos para gerente mediante almacenamiento local del navegador.
-- Consulta de catálogos para ejecutivo.
+- Expedientes demo: creación, listado, filtros, ficha y cambio de estado.
+- Gerente con vista global y asignación de responsables.
+- Ejecutivo con vista limitada a sus expedientes asignados.
 - Sin base de datos ni almacenamiento permanente de negocio.
 
 ## Criterio de avance
