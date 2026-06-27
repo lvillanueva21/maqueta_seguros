@@ -1,6 +1,8 @@
-# LIVP Seguros — Maqueta funcional inicial
+# BROKER SEGUROS — Maqueta funcional inicial
 
 Primer prototipo web en **PHP, JavaScript y CSS**, sin base de datos.
+
+> El repositorio conserva el nombre `maqueta_seguros`, pero el nombre oficial visible del sistema es **BROKER SEGUROS**.
 
 ## Incluye
 
@@ -8,7 +10,8 @@ Primer prototipo web en **PHP, JavaScript y CSS**, sin base de datos.
 - Cuatro accesos de prueba: gerente, ejecutivo, empresa y consorcio.
 - Sesión protegida y cierre de sesión.
 - Dashboard con datos demo distintos para cada perfil.
-- Menú lateral según el perfil mostrado en la maqueta de referencia.
+- Menú lateral fijo en escritorio y accesible en móvil.
+- Botón de cierre de sesión en la barra superior.
 - Módulos no implementados con vista **“En construcción”**.
 - Caché temporal de navegación con:
   - `$_SESSION` de PHP durante la sesión actual.
@@ -52,32 +55,6 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
 - Dashboard: [`docs/funcionalidades/dashboard_inicio.md`](docs/funcionalidades/dashboard_inicio.md)
 
-## Estructura
-
-```text
-.
-├── api/
-│   ├── cache_action.php
-│   └── cache_actions.php
-├── assets/
-│   ├── css/
-│   │   ├── app.css
-│   │   └── dashboard.css
-│   └── js/
-│       ├── app.js
-│       └── login.js
-├── config/
-│   ├── bootstrap.php
-│   ├── demo_dashboard_data.php
-│   └── demo_users.php
-├── docs/
-│   └── funcionalidades/
-├── dashboard.php
-├── index.php
-├── logout.php
-└── README.md
-```
-
 ## Nota
 
 Esta maqueta no almacena información de negocio de forma permanente. Al reiniciar el navegador o cerrar sesión, los datos de sesión se eliminan. La navegación reciente puede mantenerse localmente en el navegador por `localStorage`.
@@ -89,7 +66,7 @@ Los indicadores y tablas del Inicio salen de `config/demo_dashboard_data.php`. S
 La maqueta no usa dominios, subdominios ni una `BASE_URL` configurada. Sus enlaces y recursos usan rutas relativas, por lo que puede instalarse en cualquiera de estas ubicaciones:
 
 - Raíz de un subdominio: sube el contenido de esta carpeta al directorio raíz asignado al subdominio.
-- Subcarpeta: por ejemplo, `public_html/livp-seguros/`, para abrirla en `tudominio.com/livp-seguros/`.
+- Subcarpeta: por ejemplo, `public_html/maqueta/`, para abrirla en `tudominio.com/maqueta/`.
 
 No subas el ZIP como archivo de ejecución. Extrae su contenido y verifica que `index.php`, `dashboard.php`, `assets/`, `api/` y `config/` queden directamente dentro de la carpeta pública elegida.
 

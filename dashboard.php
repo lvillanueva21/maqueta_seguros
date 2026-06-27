@@ -26,7 +26,7 @@ $companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LIVP Seguros | <?= e($user['role_label']) ?></title>
+    <title><?= e(APP_NAME) ?> | <?= e($user['role_label']) ?></title>
     <link rel="stylesheet" href="assets/css/app.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
@@ -34,9 +34,9 @@ $companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['
 <div class="app-shell">
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-top">
-            <a class="sidebar-brand" href="dashboard.php" aria-label="LIVP Seguros, Inicio">
-                <span class="brand-mini">L</span>
-                <span>LIVP <b>Seguros</b></span>
+            <a class="sidebar-brand" href="dashboard.php" aria-label="<?= e(APP_NAME) ?>, Inicio">
+                <span class="brand-mini">B</span>
+                <span><?= e(APP_SHORT_NAME) ?> <b>SEGUROS</b></span>
             </a>
             <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Cerrar menú">×</button>
         </div>
@@ -79,12 +79,22 @@ $companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['
         <header class="topbar">
             <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menú">☰</button>
             <div>
-                <p class="topbar-system">LIVP SEGUROS</p>
+                <p class="topbar-system"><?= e(APP_NAME) ?></p>
                 <h1 id="page-title">Inicio</h1>
             </div>
-            <div class="topbar-right">
-                <span class="live-dot"></span>
-                <span>Sesión activa</span>
+            <div class="topbar-actions">
+                <div class="topbar-session">
+                    <span class="live-dot" aria-hidden="true"></span>
+                    <span>Sesión activa</span>
+                </div>
+                <a href="logout.php" class="topbar-logout" aria-label="Cerrar sesión" title="Cerrar sesión">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M14 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path>
+                        <path d="M10 17l5-5-5-5"></path>
+                        <path d="M15 12H3"></path>
+                    </svg>
+                    <span class="topbar-logout-label">Cerrar sesión</span>
+                </a>
             </div>
         </header>
 

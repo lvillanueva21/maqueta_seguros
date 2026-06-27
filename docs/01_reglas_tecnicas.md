@@ -1,5 +1,12 @@
 # Reglas técnicas
 
+## Marca y textos visibles
+
+1. El nombre oficial visible del sistema es **BROKER SEGUROS**.
+2. El nombre del repositorio no define el nombre de la aplicación.
+3. Los textos de marca deben obtenerse de las constantes `APP_NAME` y `APP_SHORT_NAME` declaradas en `config/bootstrap.php`.
+4. No volver a escribir nombres de marca distintos directamente en pantallas nuevas.
+
 ## Rutas y publicación
 
 1. No usar dominios, subdominios ni `BASE_URL` codificados.
@@ -15,6 +22,13 @@
 4. Toda sesión iniciada debe regenerar su identificador con `session_regenerate_id(true)`.
 5. Las vistas privadas y el cierre de sesión deben enviar cabeceras que eviten mostrar contenido privado desde la caché del navegador.
 6. La cookie de sesión debe limitarse a la carpeta de instalación del proyecto.
+
+## Navegación y usabilidad
+
+1. En escritorio, el menú lateral debe mantenerse visible dentro del alto de la ventana, incluso cuando el contenido principal sea extenso.
+2. El cierre de sesión debe estar disponible desde la barra superior y desde el menú lateral.
+3. En móvil, el menú lateral se abre como panel fijo y el cierre de sesión de la barra superior debe conservar un nombre accesible mediante `aria-label`.
+4. Las tablas anchas deben poder desplazarse horizontalmente en móvil sin romper la interfaz.
 
 ## Datos demo y evolución
 

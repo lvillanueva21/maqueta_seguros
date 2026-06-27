@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+const APP_NAME = 'BROKER SEGUROS';
+const APP_SHORT_NAME = 'BROKER';
+
 date_default_timezone_set('America/Lima');
 
 /**
@@ -54,7 +57,7 @@ function sessionCookiePathForProject(): string
     return '/';
 }
 
-session_name('livp_demo_session');
+session_name('broker_seguros_demo_session');
 session_set_cookie_params([
     'lifetime' => 0,
     'path' => sessionCookiePathForProject(),

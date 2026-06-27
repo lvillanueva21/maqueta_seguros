@@ -7,6 +7,7 @@ index.php
 └── redirige a dashboard.php
 
 config/bootstrap.php
+├── constantes de marca: BROKER SEGUROS
 ├── rutas relativas
 ├── configuración de cookie y sesión
 ├── autenticación y protección de vistas
@@ -25,7 +26,13 @@ dashboard.php
 ├── menú por rol
 ├── indicadores y alertas de Inicio
 ├── tablas de seguimiento
+├── cierre de sesión en la barra superior
 └── vistas temporales de módulos
+
+assets/css/app.css
+├── estilos globales
+├── navegación lateral fija en escritorio
+└── adaptación móvil
 
 assets/css/dashboard.css
 └── estilos específicos del Inicio con datos demo

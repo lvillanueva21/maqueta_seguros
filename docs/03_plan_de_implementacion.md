@@ -7,22 +7,25 @@
 - [x] Contexto de sesión centralizado.
 - [x] Dashboard por perfil.
 - [x] Dashboard con datos demo controlados por perfil.
+- [x] Navegación lateral fija y cierre de sesión siempre accesible.
+- [x] Marca oficial BROKER SEGUROS centralizada.
 - [x] Protección de páginas privadas y cierre de sesión.
 - [x] Documentación viva inicial.
 
 ## Siguiente bloque recomendado
 
-### Fase 3: menú y permisos de módulos
+### Fase 3: matriz de permisos y acceso controlado a módulos
 
-Definir una matriz inicial de permisos y hacer que los módulos en construcción respeten el perfil autenticado desde servidor, no solo ocultando opciones visualmente.
+Antes de construir expedientes, clientes o pólizas, se debe separar la navegación visual de los permisos reales.
 
 Resultado mínimo esperado:
 
-- gerente ve módulos globales;
-- ejecutivo ve módulos operativos;
-- empresa y consorcio ven únicamente opciones de consulta;
-- acceso directo a un módulo no permitido muestra una página controlada;
-- las reglas quedan centralizadas para reutilizarlas cuando los módulos sean reales.
+- catálogo único de módulos del sistema;
+- definición de qué roles pueden acceder a cada módulo;
+- menú generado desde esa definición;
+- una página controlada de acceso no autorizado;
+- validación en servidor al abrir cada módulo, no solo ocultamiento visual;
+- documentación de la matriz de permisos y sus pruebas.
 
 ## Fases posteriores
 

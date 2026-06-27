@@ -44,15 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LIVP Seguros | Maqueta funcional</title>
+    <title><?= e(APP_NAME) ?> | Maqueta funcional</title>
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body class="login-body">
 <main class="login-shell">
     <section class="login-branding">
-        <div class="brand-mark">L</div>
+        <div class="brand-mark">B</div>
         <p class="eyebrow">MAQUETA FUNCIONAL · SIN BASE DE DATOS</p>
-        <h1>LIVP<br>Seguros</h1>
+        <h1>BROKER<br>SEGUROS</h1>
         <p class="brand-description">Primer prototipo para validar el acceso, las vistas por rol y la navegación del sistema.</p>
         <div class="brand-notes">
             <span>PHP + sesiones</span>

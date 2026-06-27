@@ -2,9 +2,11 @@
 
 ## Visión inicial
 
-LIVP Seguros será un sistema web para gestionar de forma gradual información y operaciones relacionadas con seguros intermediados.
+**BROKER SEGUROS** será un sistema web para gestionar de forma gradual información y operaciones relacionadas con seguros intermediados.
 
 La primera etapa es una maqueta funcional sin base de datos. Su propósito es validar interfaces, perfiles, navegación, reglas de acceso y flujos antes de diseñar tablas definitivas.
+
+> El repositorio puede llamarse `maqueta_seguros`, pero el nombre oficial visible del producto es **BROKER SEGUROS**.
 
 ## Objetivo actual
 

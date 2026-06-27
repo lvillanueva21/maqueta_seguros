@@ -17,10 +17,20 @@ https://cicsount.pe/maqueta/
 | SES-03 | Ingresar como empresa | Dashboard de cliente, tipo de cuenta Empresa. |
 | SES-04 | Ingresar como consorcio | Tipo de cuenta Consorcio y lista de dos empresas participantes. |
 | SES-05 | Abrir `dashboard.php` sin login | Redirección al login. |
-| SES-06 | Cerrar sesión y abrir `dashboard.php` | Redirección al login. |
-| SES-07 | Cerrar sesión y usar Atrás | No debe mostrarse el dashboard como contenido vigente; al recargar debe volver al login. |
-| SES-08 | Usar una contraseña incorrecta | Mensaje controlado sin error PHP. |
-| SES-09 | Probar desde la subcarpeta publicada | Login, dashboard, recursos CSS y JavaScript deben cargar correctamente. |
+| SES-06 | Cerrar sesión desde la barra superior | Redirección al login y eliminación de sesión. |
+| SES-07 | Cerrar sesión desde el menú lateral | Redirección al login y eliminación de sesión. |
+| SES-08 | Cerrar sesión y usar Atrás | No debe mostrarse el dashboard como contenido vigente; al recargar debe volver al login. |
+| SES-09 | Usar una contraseña incorrecta | Mensaje controlado sin error PHP. |
+| SES-10 | Probar desde la subcarpeta publicada | Login, dashboard, recursos CSS y JavaScript deben cargar correctamente. |
+
+## Casos de navegación y marca
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| NAV-01 | Abrir un dashboard con mucho contenido y desplazarse hacia abajo | El menú lateral se mantiene visible; el enlace Cerrar sesión queda disponible en la parte inferior de la barra lateral. |
+| NAV-02 | Pulsar el ícono de cierre en la esquina superior derecha | Se cierra la sesión sin requerir bajar por la página. |
+| NAV-03 | Reducir la pantalla a móvil | El botón superior muestra el ícono de salida y el menú lateral se abre como panel. |
+| MAR-01 | Revisar login, menú y barra superior | Debe mostrarse BROKER SEGUROS; no debe aparecer LIVP Seguros en textos visibles. |
 
 ## Casos de dashboard demo
 

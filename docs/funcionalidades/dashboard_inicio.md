@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Validar qué información necesita ver cada perfil al ingresar al sistema, sin usar todavía una base de datos.
+Validar qué información necesita ver cada perfil al ingresar a **BROKER SEGUROS**, sin usar todavía una base de datos.
 
 ## Fuente de datos
 
@@ -42,6 +42,13 @@ Cada bloque se identifica con el `id` del usuario demo. El controlador `dashboar
 - Tarjetas resumen por empresa.
 - Gestiones consolidadas separadas por participante.
 
+## Usabilidad y navegación
+
+- El menú lateral permanece visible en escritorio aun cuando Inicio tenga mucho contenido.
+- El menú lateral puede desplazarse internamente si no entra completo en el alto de pantalla.
+- El usuario puede cerrar sesión desde el menú lateral o desde la barra superior.
+- En móvil, la barra superior conserva el ícono de salida aunque se oculte su etiqueta visual.
+
 ## Reglas
 
 1. Los datos son demostrativos y no representan información real.
@@ -54,6 +61,7 @@ Cada bloque se identifica con el `id` del usuario demo. El controlador `dashboar
 
 - Acceder con los cuatro perfiles y verificar que el contenido sea distinto.
 - Confirmar que el consorcio identifique sus dos empresas.
+- Desplazarse hasta el final de un Inicio extenso: el cierre de sesión debe seguir disponible en la barra lateral y en la barra superior.
 - Recargar la página y verificar que no haya errores.
 - Probar la visualización móvil.
 - Navegar a un módulo en construcción y volver a Inicio.
