@@ -241,6 +241,7 @@ if ($catalogDataJson === false) {
 
 <script id="expedient-default-data" type="application/json"><?= $clientDataJson ?></script>
 <script id="expedient-catalog-data" type="application/json"><?= $catalogDataJson ?></script>
+<script src="assets/js/cache-migrations.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/expedientes.js"></script>
 </body>

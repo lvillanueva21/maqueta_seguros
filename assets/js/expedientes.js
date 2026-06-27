@@ -10,9 +10,7 @@
   const currentUserId = String(document.body.dataset.user || '');
   const currentUserName = String(document.body.dataset.userName || 'Ejecutivo');
   const canViewAll = document.body.dataset.viewAllExpedients === '1';
-  const storageKey = 'broker_seguros_demo_expedients_v2';
-  const legacyStorageKey = 'broker_seguros_demo_expedients_v1';
-  const catalogStorageKey = 'broker_seguros_demo_catalogs_v1';
+  const storageKey = window.BrokerDemo?.keys?.expedients || 'broker_seguros_demo_expedients_v2';
 
   const summaryTotal = document.getElementById('summary-total');
   const summaryTotalNote = document.getElementById('summary-total-note');
@@ -69,89 +67,21 @@
 
   const defaultData = readJson(rawExpedientData, {});
   const defaultCatalogData = readJson(rawCatalogData, {});
-  const cachedCatalogData = readStorage(catalogStorageKey);
-  const catalogData = cachedCatalogData && typeof cachedCatalogData === 'object' && !Array.isArray(cachedCatalogData)
-    ? cachedCatalogData
+  const catalogData = window.BrokerDemo?.loadCatalogs
+    ? window.BrokerDemo.loadCatalogs(defaultCatalogData).catalogs
     : defaultCatalogData;
 
-  function normalizeState(value) {
-    const mapping = {
-      'Borrador': 'Abierto',
-      'En gestión': 'En seguimiento',
-      'Pendiente de documentos': 'En espera',
-    };
-
-    return mapping[String(value || '').trim()] || String(value || '').trim() || 'Abierto';
-  }
-
-  function normalizeExpedient(item, index) {
-    const quotes = Array.isArray(item?.quotes) ? item.quotes : [];
-    const legacyTitle = item?.title
-      || (item?.management_type ? `Registro anterior: ${item.management_type}` : '')
-      || 'Sin asunto definido';
-
-    return {
-      id: String(item?.id || `exp-migrated-${index + 1}`),
-      code: String(item?.code || `EXP-2026-${String(index + 1).padStart(4, '0')}`),
-      client_id: String(item?.client_id || ''),
-      client_name: String(item?.client_name || 'Entidad no definida'),
-      client_document: String(item?.client_document || ''),
-      entity_type: String(item?.entity_type || 'Entidad'),
-      title: String(legacyTitle),
-      state: normalizeState(item?.state),
-      responsible_user_id: String(item?.responsible_user_id || ''),
-      responsible_name: String(item?.responsible_name || 'No asignado'),
-      opened_at: String(item?.opened_at || currentDateTime().slice(0, 10)),
-      updated_at: String(item?.updated_at || currentDateTime()),
-      description: String(item?.description || ''),
-      quotes,
-    };
-  }
-
   function currentDateTime() {
-    const now = new Date();
-    const pad = (number) => String(number).padStart(2, '0');
-
-    return [
-      now.getFullYear(),
-      pad(now.getMonth() + 1),
-      pad(now.getDate()),
-    ].join('-') + ' ' + [
-      pad(now.getHours()),
-      pad(now.getMinutes()),
-      pad(now.getSeconds()),
-    ].join(':');
+    return window.BrokerDemo?.limaDateTime?.() || new Date().toISOString().slice(0, 19).replace('T', ' ');
   }
 
   function loadExpedients() {
-    const versionTwo = readStorage(storageKey);
-    if (Array.isArray(versionTwo)) {
-      return {
-        items: versionTwo.map(normalizeExpedient),
-        migrated: false,
-      };
-    }
-
-    const legacy = readStorage(legacyStorageKey);
-    if (Array.isArray(legacy)) {
-      const items = legacy.map(normalizeExpedient);
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(items));
-      } catch (error) {
-        notify('warning', 'Se adaptaron los expedientes anteriores para esta vista, pero el navegador no permitió guardar la migración local.', {
-          title: 'Migración temporal incompleta',
-          duration: 0,
-        });
-      }
-
-      return {
-        items,
-        migrated: true,
-      };
+    if (window.BrokerDemo?.loadExpedients) {
+      return window.BrokerDemo.loadExpedients(defaultData);
     }
 
     return {
-      items: clone(Array.isArray(defaultData.items) ? defaultData.items : []).map(normalizeExpedient),
+      items: clone(Array.isArray(defaultData.items) ? defaultData.items : []),
       migrated: false,
     };
   }
@@ -174,23 +104,8 @@
       .replace(/^-+|-+$/g, '');
   }
 
-  function toDate(value) {
-    if (!value) return null;
-    const normalized = String(value).replace(' ', 'T');
-    const date = new Date(normalized);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
   function formatDate(value, includeTime = false) {
-    const date = toDate(value);
-    if (!date) return 'No registrado';
-
-    return new Intl.DateTimeFormat('es-PE', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      ...(includeTime ? { hour: '2-digit', minute: '2-digit' } : {}),
-    }).format(date);
+    return window.BrokerDemo?.formatPeruDate?.(value, includeTime) || String(value || 'No registrado');
   }
 
   function activeCatalogItems(catalogId) {
@@ -412,7 +327,7 @@
   }
 
   function generateCode() {
-    const year = new Date().getFullYear();
+    const year = window.BrokerDemo?.limaYear?.() || new Date().getFullYear();
     const prefix = `EXP-${year}-`;
     const sequence = expedients
       .filter((item) => String(item.code || '').startsWith(prefix))
@@ -460,9 +375,25 @@
       return;
     }
 
+    const latest = window.BrokerDemo?.loadExpedients?.(defaultData).items;
+    if (Array.isArray(latest)) {
+      const byId = new Map(expedients.map((item) => [item.id, item]));
+      latest.forEach((item) => byId.set(item.id, item));
+      expedients = [...byId.values()];
+    }
+
+    const code = generateCode();
+    if (expedients.some((item) => item.code === code)) {
+      notify('error', `No se pudo generar un código único para ${code}. Recarga la página e intenta nuevamente para evitar duplicados entre pestañas.`, {
+        title: 'Código duplicado',
+        duration: 0,
+      });
+      return;
+    }
+
     const created = {
       id: `exp-local-${Date.now()}-${Math.random().toString(16).slice(2, 7)}`,
-      code: generateCode(),
+      code,
       client_id: client.id,
       client_name: client.name,
       client_document: `${client.document_type} ${client.document}`,
@@ -471,7 +402,7 @@
       state,
       responsible_user_id: String(responsible.user_id),
       responsible_name: responsible.name,
-      opened_at: currentDateTime().slice(0, 10),
+      opened_at: window.BrokerDemo?.limaDate?.() || currentDateTime().slice(0, 10),
       updated_at: currentDateTime(),
       description,
       quotes: [],
@@ -487,12 +418,8 @@
     logAction(`Creó expediente ${created.code}`);
     closeFormDialog();
     render();
-    notify('success', `El expediente ${created.code} fue creado y guardado temporalmente en este navegador. No requiere tener cotización ni seguro.`, {
+    notify('success', `El expediente ${created.code} fue creado y guardado temporalmente solo en este navegador mientras no exista MySQL. No requiere cotización ni seguro.`, {
       title: 'Expediente creado',
-    });
-    notify('info', 'La cotización será opcional y se agregará posteriormente mediante una plantilla. Aún no existe una base de datos.', {
-      title: 'Recordatorio de maqueta',
-      duration: 7200,
     });
     openDetail(created.id);
   }
@@ -572,7 +499,9 @@
       updateState(item.id, newState);
     });
 
-    detailDialog.showModal();
+    if (!detailDialog.open) {
+      detailDialog.showModal();
+    }
   }
 
   function updateState(expedientId, newState) {
@@ -602,7 +531,7 @@
 
     logAction(`Actualizó ${item.code}: ${previousState} → ${newState}`);
     render();
-    notify('success', `Se actualizó ${item.code} a “${newState}”. El cambio quedó guardado temporalmente en este navegador.`, {
+    notify('success', `Se actualizó ${item.code} a “${newState}”. El cambio quedó guardado temporalmente solo en este navegador mientras no exista MySQL.`, {
       title: 'Situación actualizada',
     });
     openDetail(item.id);
@@ -640,12 +569,4 @@
   createOptionsForForm();
   render();
 
-  if (loaded.migrated) {
-    window.setTimeout(() => {
-      notify('info', 'Tus expedientes anteriores fueron adaptados al nuevo modelo. Se conservaron como casos sin cotización vinculada.', {
-        title: 'Expedientes actualizados',
-        duration: 8500,
-      });
-    }, 250);
-  }
 })();

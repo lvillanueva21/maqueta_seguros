@@ -55,6 +55,9 @@
       window.setTimeout(() => notification.remove(), 180);
     }
 
+    let lastNotificationKey = '';
+    let lastNotificationAt = 0;
+
     function show(type, message, options = {}) {
       const safeType = ['success', 'error', 'warning', 'info'].includes(type) ? type : 'info';
       const defaults = {
@@ -64,21 +67,46 @@
         info: { title: 'Información', icon: 'i', duration: 5200 },
       };
       const settings = { ...defaults[safeType], ...options };
+      const notificationKey = `${safeType}|${settings.title}|${message}`;
+      const now = Date.now();
+
+      if (notificationKey === lastNotificationKey && now - lastNotificationAt < 900) {
+        return null;
+      }
+
+      lastNotificationKey = notificationKey;
+      lastNotificationAt = now;
+
       const notification = document.createElement('article');
 
       notification.className = `broker-notification broker-notification-${safeType}`;
       notification.setAttribute('role', safeType === 'error' ? 'alert' : 'status');
+      const actions = Array.isArray(settings.actions) && settings.actions.length
+        ? `<div class="broker-notification-actions">${settings.actions.map((action, index) => (
+          `<button class="broker-notification-action ${action.kind === 'danger' ? 'is-danger' : ''}" type="button" data-action-index="${index}">${escapeHtml(action.label)}</button>`
+        )).join('')}</div>`
+        : '';
+
       notification.innerHTML = `
         <span class="broker-notification-icon" aria-hidden="true">${escapeHtml(settings.icon)}</span>
         <div>
           <p class="broker-notification-title">${escapeHtml(settings.title)}</p>
           <p class="broker-notification-message">${escapeHtml(message)}</p>
+          ${actions}
         </div>
         <button class="broker-notification-close" type="button" aria-label="Cerrar mensaje">×</button>
       `;
 
       notification.querySelector('.broker-notification-close')?.addEventListener('click', () => {
         removeNotification(notification);
+      });
+
+      notification.querySelectorAll('[data-action-index]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const action = settings.actions?.[Number(button.dataset.actionIndex)];
+          action?.callback?.();
+          removeNotification(notification);
+        });
       });
 
       getHost().appendChild(notification);
@@ -96,6 +124,16 @@
       error: (message, options = {}) => show('error', message, options),
       warning: (message, options = {}) => show('warning', message, options),
       info: (message, options = {}) => show('info', message, options),
+      confirm: (message, options = {}) => new Promise((resolve) => {
+        show('warning', message, {
+          title: options.title || 'Confirma la acción',
+          duration: 0,
+          actions: [
+            { label: options.confirmLabel || 'Confirmar', kind: options.kind || 'danger', callback: () => resolve(true) },
+            { label: options.cancelLabel || 'Cancelar', callback: () => resolve(false) },
+          ],
+        });
+      }),
     };
   }
 
@@ -144,7 +182,7 @@
     return {
       action: String(entry.action || 'Acción registrada'),
       section: String(entry.section || 'inicio'),
-      at: String(entry.at || new Date().toLocaleString('es-PE')),
+      at: String(entry.at || window.BrokerDemo?.limaDateTime?.() || new Date().toLocaleString('es-PE')),
     };
   }
 
@@ -167,15 +205,12 @@
   function formatDate(value) {
     if (!value) return 'Ahora';
 
-    const date = new Date(value.replace(' ', 'T'));
-    if (Number.isNaN(date.getTime())) return value;
+    const formatted = window.BrokerDemo?.formatPeruDate?.(value, true);
+    if (formatted && formatted !== 'No registrado') {
+      return formatted.replace(/\/\d{4},/, '');
+    }
 
-    return new Intl.DateTimeFormat('es-PE', {
-      day: '2-digit',
-      month: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
+    return value;
   }
 
   function escapeHtml(value) {
@@ -242,7 +277,7 @@
     const entry = {
       action,
       section,
-      at: new Date().toISOString(),
+      at: window.BrokerDemo?.limaDateTime?.() || new Date().toISOString(),
     };
 
     saveLocalAction(entry);

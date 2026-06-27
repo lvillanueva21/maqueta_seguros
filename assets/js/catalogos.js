@@ -42,77 +42,9 @@
     window.BrokerNotify?.[type]?.(message, options);
   }
 
-  function migrateExpedientSituations(source) {
-    const catalog = source?.estados_expediente;
-    const legacyMap = {
-      'Borrador': {
-        code: 'ABI',
-        name: 'Abierto',
-        detail: 'Caso registrado y disponible para continuar cuando corresponda',
-      },
-      'En gestión': {
-        code: 'SEG',
-        name: 'En seguimiento',
-        detail: 'Existe una acción o coordinación en curso',
-      },
-      'Pendiente de documentos': {
-        code: 'ESP',
-        name: 'En espera',
-        detail: 'A la espera de información, respuesta o decisión',
-      },
-    };
-
-    if (!catalog || !Array.isArray(catalog.items)) {
-      return false;
-    }
-
-    let changed = false;
-    const names = new Set();
-
-    catalog.items = catalog.items.reduce((items, item) => {
-      const replacement = legacyMap[String(item.name || '')];
-
-      if (replacement) {
-        changed = true;
-        item = { ...item, ...replacement };
-      }
-
-      const key = String(item.name || '').toLocaleLowerCase('es-PE');
-      if (names.has(key)) {
-        changed = true;
-        return items;
-      }
-
-      names.add(key);
-      items.push(item);
-      return items;
-    }, []);
-
-    if (changed) {
-      catalog.label = 'Situaciones de expediente';
-      catalog.description = 'Situaciones generales y flexibles de un expediente. No representan pasos obligatorios ni un flujo forzado.';
-    }
-
-    return changed;
-  }
-
   function getCatalogs() {
-    try {
-      const cached = localStorage.getItem(storageKey);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-          if (migrateExpedientSituations(parsed)) {
-            localStorage.setItem(storageKey, JSON.stringify(parsed));
-          }
-
-          return parsed;
-        }
-      }
-    } catch (error) {
-      notify('warning', 'No se pudieron recuperar cambios anteriores de Catálogos. Se cargaron los datos demo base.', {
-        title: 'Caché de catálogos no disponible',
-      });
+    if (window.BrokerDemo?.loadCatalogs) {
+      return window.BrokerDemo.loadCatalogs(defaults).catalogs;
     }
 
     return clone(defaults);
@@ -366,12 +298,8 @@
     logCatalogAction(`${itemId ? 'Editó' : 'Agregó'} ${catalog.label}: ${name}`);
     closeDialog();
     render();
-    notify('success', `Se ${action} ${name}. El cambio quedó guardado temporalmente en este navegador.`, {
+    notify('success', `Se ${action} ${name}. El cambio quedó guardado temporalmente solo en este navegador mientras no exista MySQL.`, {
       title: itemId ? 'Catálogo actualizado' : 'Elemento agregado',
-    });
-    notify('info', 'Los Catálogos demo aún no usan base de datos ni se comparten con otros equipos.', {
-      title: 'Recordatorio de maqueta',
-      duration: 7200,
     });
   }
 
@@ -389,14 +317,19 @@
 
     logCatalogAction(`${item.status === 'Activo' ? 'Activó' : 'Desactivó'} ${catalog.label}: ${item.name}`);
     render();
-    notify('success', `Se ${item.status === 'Activo' ? 'activó' : 'desactivó'} ${item.name}. El cambio quedó guardado temporalmente en este navegador.`, {
+    notify('success', `Se ${item.status === 'Activo' ? 'activó' : 'desactivó'} ${item.name}. El cambio quedó guardado temporalmente solo en este navegador mientras no exista MySQL.`, {
       title: 'Estado actualizado',
     });
   }
 
-  function restoreDefaults() {
-    const confirmed = window.confirm(
-      'Se eliminarán todos los cambios demo guardados en este navegador. ¿Deseas restaurar los datos iniciales?'
+  async function restoreDefaults() {
+    const confirmed = await window.BrokerNotify?.confirm?.(
+      'Se eliminarán todos los cambios demo guardados solo en este navegador. ¿Deseas restaurar los datos iniciales?',
+      {
+        title: 'Restaurar catálogos demo',
+        confirmLabel: 'Restaurar',
+        cancelLabel: 'Cancelar',
+      }
     );
 
     if (!confirmed) return;
@@ -407,12 +340,8 @@
       currentCatalogId = Object.keys(catalogs)[0] || '';
       logCatalogAction('Restauró los catálogos demo');
       render();
-      notify('success', 'Los catálogos demo fueron restaurados correctamente.', {
+      notify('success', 'Los catálogos demo fueron restaurados correctamente. Se eliminaron únicamente los cambios guardados en este navegador.', {
         title: 'Datos demo restaurados',
-      });
-      notify('info', 'Se eliminaron únicamente los cambios guardados en este navegador.', {
-        title: 'Recordatorio de maqueta',
-        duration: 7200,
       });
     } catch (error) {
       notify('error', 'No se pudieron restaurar los datos demo en este navegador.', {

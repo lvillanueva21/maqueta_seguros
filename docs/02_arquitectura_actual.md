@@ -1,69 +1,67 @@
 # Arquitectura actual
 
 ```text
-config/demo_expedients.php
-├── clientes y entidades demo
-├── ejecutivos demo
-└── expedientes como contenedores con quotes[]
+config/bootstrap.php
+|-- sesion, cabeceras no-cache, rutas relativas y permisos
+`-- requireModuleAccess() protege rutas reales de modulo
 
-expedientes.php
-├── requireModuleAccess('expedientes')
-├── creación mínima: entidad, responsable, situación opcional
-├── listado y filtros de expediente
-├── ficha sin campos obligatorios de seguro
-└── marcador para cotizaciones futuras
-
-assets/js/expedientes.js
-├── localStorage v2
-├── migración de datos v1 al modelo corregido
-├── código EXP-AAAA-NNNN
-├── conteo de cotizaciones opcionales
-├── filtros por situación y responsable
-└── cambio flexible de situación
+config/modules.php
+`-- catalogo temporal de modulos, roles permitidos y descripciones
 
 config/demo_catalogs.php
-└── situaciones de expediente sin flujo obligatorio
+`-- datos maestros demo, incluidas situaciones flexibles de expediente
 
-assets/js/catalogos.js
-└── migración de situaciones antiguas guardadas en caché
+config/demo_expedients.php
+|-- clientes y entidades demo
+|-- ejecutivos demo
+`-- expedientes como contenedores con quotes[]
+
+assets/js/cache-migrations.js
+|-- migracion de catalogos locales antiguos
+|-- migracion de expedientes v1 a v2
+|-- helpers de fecha/hora America/Lima
+`-- lectura/escritura compartida de localStorage
 
 assets/js/app.js
-└── sistema global window.BrokerNotify
+|-- window.BrokerNotify
+|-- deduplicacion breve de toasts
+|-- confirmacion por toast para acciones reversibles
+`-- registro temporal de acciones
 
-assets/js/catalogos.js
-└── notificaciones explícitas de guardado, error y restauración
+catalogos.php + assets/js/catalogos.js
+|-- gerente: agrega, edita, activa, desactiva y restaura demo
+`-- ejecutivo: consulta
+
+expedientes.php + assets/js/expedientes.js
+|-- requireModuleAccess('expedientes')
+|-- creacion minima: entidad y responsable
+|-- asunto y descripcion opcionales
+|-- listado y filtros por situacion/responsable
+|-- ficha sin campos obligatorios de seguro
+`-- quotes[] reservado para cotizaciones futuras opcionales
 ```
 
-## Contrato de datos de expediente
+## Contrato de expediente
 
 ```text
 Expediente
 - id
 - code
 - client_id / client_name
-- responsable
+- responsible_user_id / responsible_name
 - title
 - state
 - opened_at / updated_at
 - description
-- quotes[] (opcional)
+- quotes[]
 ```
 
-El expediente no contiene en su raíz: tipo de gestión, tipo de seguro, aseguradora, moneda, prima, cuotas, pagos ni póliza.
+El expediente no contiene en su raiz: tipo de gestion, tipo de seguro, aseguradora, moneda, prima, cuotas, pagos, voucher, documento ni poliza.
 
-## Próxima entidad: cotización
+## Seguridad y permisos
 
-Una cotización pertenecerá opcionalmente a un expediente y podrá tener:
+Los permisos actuales controlan interfaz y rutas PHP de la maqueta. La informacion guardada en `localStorage` no reemplaza autorizacion real de servidor. Cuando exista MySQL, todos los permisos y filtros deberan validarse en backend.
 
-```text
-Cotización
-- id y código
-- expediente padre
-- plantilla aplicada
-- datos personalizados de la plantilla
-- alternativas[]
-- advertencias, mensajes y notas
-- estado propio
-```
+## Proxima entidad
 
-Cada alternativa podrá representar una propuesta de aseguradora, uno o varios seguros, primas, cuotas, vigencia, coberturas, deducibles y condiciones.
+Una cotizacion sera una entidad hija opcional del expediente. Podra usar plantillas configurables, varios seguros, alternativas y campos personalizados, pero ese modulo no forma parte de esta estabilizacion.

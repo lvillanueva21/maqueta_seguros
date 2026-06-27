@@ -1,52 +1,45 @@
 # Pruebas manuales y de humo
 
-## Ambiente publicado
-
-Ruta esperada cuando se instala en Hostinger:
-
-```text
-https://cicsount.pe/maqueta/
-```
-
-## Control de versión
+## Version
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| VER-01 | Abrir `docs/00_version_actual.md` en GitHub luego del push | Debe aparecer el código de versión de la última entrega aplicada. |
-| VER-02 | Comparar el código de versión con el ZIP recibido | Ambos deben coincidir exactamente. |
+| VER-01 | Abrir `docs/00_version_actual.md` en local, GitHub y Hostinger luego del push/publicacion manual | Debe aparecer `BS-20260627-133302-PET`. |
+| VER-02 | Comparar fecha y hora | Debe indicar 27/06/2026 13:33:02 (America/Lima). |
 
-## Corrección de Expedientes
-
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| EXP-COR-01 | Abrir Crear expediente | No debe aparecer Tipo de gestión, Tipo de seguro, Aseguradora ni Moneda. |
-| EXP-COR-02 | Crear solo con cliente o entidad y responsable | Debe crearse correctamente, aun sin asunto ni descripción. |
-| EXP-COR-03 | Crear expediente sin cotización | El listado debe mostrar 0 cotizaciones y la ficha debe indicar que es válido continuar o cerrar así. |
-| EXP-COR-04 | Revisar tabla de expedientes | Debe mostrar Asunto inicial, Situación y Cotizaciones; no Gestión ni Seguro/Aseguradora. |
-| EXP-COR-05 | Cambiar situación de Abierto a En espera o Cerrado | Debe permitirlo sin exigir pasos previos, cotización ni seguro. |
-| EXP-COR-06 | Crear como gerente y asignar a otro ejecutivo | Debe quedar visible para ese responsable según las reglas actuales. |
-| EXP-COR-07 | Ingresar como ejecutivo | Debe seguir viendo solo sus expedientes asignados. |
-| EXP-COR-08 | Usar datos anteriores guardados de Expedientes v1 o situaciones antiguas en Catálogos | Deben adaptarse al nuevo modelo sin desaparecer; se reemplazan Borrador, En gestión y Pendiente de documentos por las nuevas situaciones flexibles. |
-| EXP-COR-09 | Recargar luego de crear o cambiar situación | El expediente debe conservarse en este navegador mediante `localStorage`. |
-| EXP-COR-10 | Limpiar datos del sitio | Se recuperan los datos demo base al volver a entrar. |
-
-## Notificaciones
+## Expedientes estabilizados
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| NOT-01 | Crear expediente | Toast de éxito con código y aviso de guardado temporal. |
-| NOT-02 | Cambiar situación | Toast de éxito con código y nueva situación. |
-| NOT-03 | Guardar catálogo | Toast de éxito sin duplicarse. |
-| NOT-04 | Duplicar código de catálogo | Toast de error amigable, no alerta clásica. |
-| NOT-05 | Intentar guardar con campos obligatorios faltantes | Advertencia visible y validación nativa. |
+| EXP-AUD-01 | Abrir Expedientes con cache antigua sin abrir Catalogos primero | Se migran situaciones antiguas y no aparecen Borrador, En gestion ni Pendiente de documentos como situaciones de expediente. |
+| EXP-AUD-02 | Crear expediente solo con cliente y responsable | Se crea y persiste sin cotizacion, seguro, aseguradora ni moneda. |
+| EXP-AUD-03 | Cerrar un expediente sin cotizacion ni seguro | La situacion cambia a Cerrado y queda guardada en el navegador. |
+| EXP-AUD-04 | Como gerente, crear expediente y asignarlo a Maria Torres | El expediente queda visible en vista global y asignado a `responsible_user_id = 2`. |
+| EXP-AUD-05 | Como ejecutivo Maria Torres, abrir Expedientes | Solo ve expedientes asignados a su usuario. |
+| EXP-AUD-06 | Usar filtros de situacion y responsable | El listado se actualiza sin alterar datos. |
+| EXP-AUD-07 | Recargar con F5 despues de crear expediente | El expediente sigue visible en el mismo navegador. |
+| EXP-AUD-08 | Revisar fechas `YYYY-MM-DD` | No cambian de dia al mostrarse. |
+| EXP-AUD-09 | Revisar ficha y formulario | No muestran campos de cotizacion dentro del expediente raiz. |
+| EXP-AUD-10 | Crear o cambiar situacion | Aparece un solo toast claro por accion. |
 
-## Evidencia mínima
+## Catalogos estabilizados
 
-Por cada bloque implementado, registrar:
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| CAT-AUD-01 | Guardar un elemento | Toast de exito indica guardado temporal solo en navegador. |
+| CAT-AUD-02 | Intentar codigo duplicado | Muestra error amigable y no guarda duplicado. |
+| CAT-AUD-03 | Restaurar demo | Pide confirmacion previa con BrokerNotify y luego muestra mensaje final. |
+| CAT-AUD-04 | Simular error de localStorage | Muestra error persistente y comprensible. |
 
-- fecha;
-- perfil probado;
-- URL;
-- resultado;
-- error encontrado, si aplica;
-- captura cuando corresponda.
+## Permisos y cache privado
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| PERM-AUD-01 | Cliente abre `expedientes.php` | Redirige a acceso no autorizado. |
+| PERM-AUD-02 | Cliente abre `catalogos.php` | Redirige a acceso no autorizado. |
+| PERM-AUD-03 | Ejecutivo abre Reportes o Usuarios por URL | Redirige a acceso no autorizado. |
+| PERM-AUD-04 | Cerrar sesion y usar Atras/recargar | No debe mostrarse contenido privado desde cache. |
+
+## Limitacion deliberada
+
+Una ventana incognito no comparte `localStorage` con el navegador normal; por eso no deberia ver expedientes creados en la sesion normal. Esta prueba requiere navegador real.

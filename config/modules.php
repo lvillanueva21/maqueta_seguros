@@ -45,7 +45,7 @@ return [
         'label' => 'Expedientes',
         'icon' => '▧',
         'roles' => ['gerente', 'ejecutivo'],
-        'description' => 'Registro y seguimiento de cotizaciones, emisiones, renovaciones, endosos y regularizaciones.',
+        'description' => 'Registro y seguimiento flexible de necesidades o casos del cliente.',
         'scope' => 'Núcleo operativo',
     ],
     'seguros' => [

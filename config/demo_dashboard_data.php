@@ -59,7 +59,7 @@ return [
         'primary_table' => [
             'eyebrow' => 'CARTERA GENERAL',
             'title' => 'Cartera por aseguradora',
-            'description' => 'Resumen demo de la cartera vigente administrada por LIVP Seguros.',
+            'description' => 'Resumen demo de la cartera vigente administrada por BROKER SEGUROS.',
             'columns' => ['Aseguradora', 'Pólizas', 'Prima anual', 'Vencen en 30 días'],
             'rows' => [
                 ['Pacífico Seguros', '68', 'S/ 352,400', '4'],

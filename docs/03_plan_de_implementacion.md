@@ -10,12 +10,14 @@
 - [x] Catálogos demo básicos.
 - [x] Expedientes demo corregidos como contenedores flexibles.
 - [x] Notificaciones globales y mensajes amigables.
+- [x] Migraciones compartidas de cache local para Catalogos y Expedientes.
+- [x] Fechas JavaScript alineadas a America/Lima.
 - [x] Documentación viva y versión de entrega trazable.
-- [ ] Pruebas manuales pendientes de la corrección de Expedientes.
+- [ ] Validacion visual completa pendiente en navegador real.
 
 ## Siguiente bloque recomendado
 
-### Fase 6: Plantillas configurables de cotización — diseño base
+### Fase 6: Plantillas configurables de cotizacion - diseno base
 
 Antes de crear cotizaciones completas, se debe construir la configuración que definirá sus campos.
 
@@ -39,4 +41,4 @@ Alcance mínimo:
 
 ## Regla de avance
 
-No iniciar una fase mientras la anterior tenga errores funcionales o pruebas de humo pendientes.
+No iniciar una fase mientras la anterior tenga errores funcionales o pruebas de humo pendientes. La estabilizacion de migraciones, permisos y fechas debe quedar revisada antes de crear plantillas o cotizaciones completas.

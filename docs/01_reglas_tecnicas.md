@@ -24,6 +24,7 @@
 6. Las validaciones de campos obligatorios deben mostrar un mensaje amigable además de la marca del navegador.
 7. No usar `window.alert()` para nuevas funcionalidades; usar `window.BrokerNotify`.
 8. Las acciones destructivas o que reviertan información deben pedir confirmación antes de ejecutarse.
+9. Los modulos nuevos no deben usar `window.alert()` ni `window.confirm()` directamente; deben usar `window.BrokerNotify`.
 
 ## Expedientes y cotizaciones
 
@@ -37,6 +38,16 @@
 8. Los formularios de cotización deben derivar de plantillas configurables con ítems personalizados; no se deben codificar campos específicos para un solo seguro.
 9. Las advertencias, mensajes, notas, deducibles y condiciones deberán poder asociarse a la plantilla, la cotización o una alternativa, según corresponda.
 10. Los cambios demo se guardan con `localStorage`; no representan persistencia real ni se comparten entre dispositivos.
+11. La migracion de cache local debe estar centralizada en `assets/js/cache-migrations.js` para que no dependa del orden en que el usuario abra pantallas.
+
+## Permisos de maqueta
+
+1. Los permisos actuales controlan interfaz y rutas PHP de la maqueta.
+2. La informacion guardada en `localStorage` no reemplaza autorizacion real de servidor.
+3. Cuando exista MySQL, todos los permisos y filtros deberan validarse en backend.
+4. Gerente puede ver todos los expedientes y asignar responsable.
+5. Ejecutivo solo debe ver expedientes con su `responsible_user_id`.
+6. Cliente empresa y consorcio no deben abrir directamente `expedientes.php` ni `catalogos.php`.
 
 ## Datos demo y evolución
 

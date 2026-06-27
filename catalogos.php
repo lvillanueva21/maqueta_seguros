@@ -165,6 +165,7 @@ if ($catalogsJson === false) {
 <?php endif; ?>
 
 <script id="catalog-default-data" type="application/json"><?= $catalogsJson ?></script>
+<script src="assets/js/cache-migrations.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/catalogos.js"></script>
 </body>
