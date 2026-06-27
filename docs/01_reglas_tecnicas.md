@@ -32,6 +32,15 @@
 7. Los módulos y sus permisos deben declararse únicamente en `config/modules.php`.
 8. Un módulo debe validar permiso en servidor mediante `requireModuleAccess()`. Ocultar un enlace no es una validación de seguridad.
 
+## Catálogos demo
+
+1. Los datos maestros demo se definen únicamente en `config/demo_catalogs.php`.
+2. Solo el rol `gerente` puede usar las acciones demo de agregar, editar, activar o desactivar.
+3. Los cambios de catálogos demo se guardan en `localStorage`; no modifican archivos PHP, servidor ni base de datos.
+4. El rol `ejecutivo` tiene acceso de consulta a Catálogos.
+5. Los perfiles cliente no deben poder abrir `catalogos.php`.
+6. Antes de migrar a MySQL, se debe validar el nombre, código, estado y detalle requeridos para cada catálogo.
+
 ## Navegación y usabilidad
 
 1. En escritorio, el menú lateral debe mantenerse visible dentro del alto de la ventana, incluso cuando el contenido principal sea extenso.

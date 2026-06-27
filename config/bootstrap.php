@@ -6,10 +6,6 @@ const APP_SHORT_NAME = 'BROKER';
 
 date_default_timezone_set('America/Lima');
 
-/**
- * Devuelve el nombre del archivo actual relativo a la raíz del proyecto.
- * Ejemplos: "dashboard.php" o "api/cache_actions.php".
- */
 function currentProjectRelativeScript(): string
 {
     $projectRoot = realpath(__DIR__ . '/..') ?: dirname(__DIR__);
@@ -22,10 +18,6 @@ function currentProjectRelativeScript(): string
     return basename((string) ($_SERVER['SCRIPT_NAME'] ?? 'index.php'));
 }
 
-/**
- * Construye una ruta URL relativa hacia la raíz del proyecto sin depender
- * del dominio, subdominio ni del nombre de la carpeta donde fue publicado.
- */
 function appRelativeUrl(string $target = ''): string
 {
     $relativeScript = currentProjectRelativeScript();
@@ -38,10 +30,6 @@ function appRelativeUrl(string $target = ''): string
     return $prefix . ltrim($target, '/');
 }
 
-/**
- * Limita la cookie de sesión a la carpeta real de esta instalación.
- * Así dos copias del proyecto en subcarpetas distintas no comparten sesión.
- */
 function sessionCookiePathForProject(): string
 {
     $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
@@ -67,7 +55,6 @@ session_set_cookie_params([
 ]);
 session_start();
 
-/** Evita mostrar una vista privada desde la caché después de cerrar sesión. */
 function sendNoCacheHeaders(): void
 {
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -110,10 +97,6 @@ function currentUser(): ?array
     return isAuthenticated() ? $_SESSION['livp_user'] : null;
 }
 
-/**
- * Crea el contexto mínimo de la sesión demo. Más adelante esta función podrá
- * recibir datos desde MySQL sin cambiar los controladores ni las vistas.
- */
 function createUserSession(array $user): void
 {
     unset($user['password_hash']);
@@ -184,9 +167,6 @@ function requireAuth(): array
     return $_SESSION['livp_user'];
 }
 
-/**
- * Devuelve el catálogo central de módulos. Se carga una sola vez por solicitud.
- */
 function modulesCatalog(): array
 {
     static $modules = null;
@@ -214,10 +194,6 @@ function canAccessModule(string $role, string $moduleId): bool
     return in_array($role, $roles, true);
 }
 
-/**
- * Devuelve los módulos visibles para un rol. La misma fuente alimenta el menú
- * y las validaciones de acceso del servidor.
- */
 function modulesForRole(string $role): array
 {
     $allowedModules = [];
@@ -241,17 +217,13 @@ function moduleUrl(string $moduleId): string
         return appRelativeUrl('dashboard.php');
     }
 
+    if ($moduleId === 'catalogos') {
+        return appRelativeUrl('catalogos.php');
+    }
+
     return appRelativeUrl('modulo.php?modulo=' . rawurlencode($moduleId));
 }
 
-/**
- * Exige sesión y permiso para abrir un módulo real.
- *
- * Redirige a una página controlada cuando el módulo no existe o el rol no tiene
- * autorización. No depende de que el menú haya ocultado la opción.
- *
- * @return array{user: array, module: array}
- */
 function requireModuleAccess(string $moduleId): array
 {
     $user = requireAuth();
@@ -273,10 +245,6 @@ function requireModuleAccess(string $moduleId): array
     ];
 }
 
-/**
- * Compatibilidad temporal con pantallas anteriores.
- * Las nuevas pantallas deben usar modulesForRole().
- */
 function menuForRole(string $role): array
 {
     return modulesForRole($role);

@@ -12,7 +12,7 @@ La versión aplicada en el repositorio se controla desde:
 docs/00_version_actual.md
 ```
 
-Versión de este paquete: `BS-20260627-1220-PET` — 27/06/2026 12:20:47 (America/Lima).
+Versión de este paquete: `BS-20260627-122826-PET` — 27/06/2026 12:28:26 (America/Lima).
 
 ## Incluye
 
@@ -21,8 +21,9 @@ Versión de este paquete: `BS-20260627-1220-PET` — 27/06/2026 12:20:47 (Americ
 - Sesión protegida y cierre de sesión.
 - Dashboard con datos demo distintos para cada perfil.
 - Matriz de permisos y rutas protegidas en servidor.
+- Catálogos demo de aseguradoras, seguros, monedas y estados operativos.
+- Gerente con edición temporal de catálogos; ejecutivo con consulta.
 - Menú lateral generado según el rol autenticado.
-- Página controlada de acceso no autorizado.
 - Diseño responsive sin dependencias externas.
 
 ## Credenciales de prueba
@@ -45,7 +46,7 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
 - Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
-- Permisos y rutas: [`docs/funcionalidades/permisos_y_rutas.md`](docs/funcionalidades/permisos_y_rutas.md)
+- Catálogos: [`docs/funcionalidades/catalogos_demo.md`](docs/funcionalidades/catalogos_demo.md)
 
 ## Ejecución local
 
@@ -63,7 +64,9 @@ http://localhost:8000
 
 ## Nota
 
-Esta maqueta no almacena información de negocio de forma permanente. Los indicadores del Inicio y la matriz de permisos son datos de validación funcional; no representan información real ni se guardan en una base de datos.
+Esta maqueta no almacena información de negocio de forma permanente. Los indicadores, permisos y catálogos son datos de validación funcional.
+
+Los cambios hechos desde Catálogos se guardan únicamente en el navegador. No representan información real ni se comparten con otros equipos.
 
 ## Publicación en Hostinger
 
@@ -73,4 +76,4 @@ La maqueta no usa dominios, subdominios ni una `BASE_URL` configurada. Puede ins
 public_html/maqueta/
 ```
 
-No subas el ZIP como archivo de ejecución. Extrae su contenido y verifica que `index.php`, `dashboard.php`, `modulo.php`, `assets/`, `api/`, `config/` y `views/` queden directamente dentro de la carpeta pública elegida.
+No subas el ZIP como archivo de ejecución. Extrae su contenido y verifica que `index.php`, `dashboard.php`, `catalogos.php`, `modulo.php`, `assets/`, `api/`, `config/` y `views/` queden directamente dentro de la carpeta pública elegida.

@@ -15,6 +15,21 @@ https://cicsount.pe/maqueta/
 | VER-01 | Abrir `docs/00_version_actual.md` en GitHub luego del push | Debe aparecer el código de versión de la última entrega aplicada. |
 | VER-02 | Comparar el código de versión con el ZIP recibido | Ambos deben coincidir exactamente. |
 
+## Casos de Catálogos demo
+
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| CAT-01 | Ingresar como gerente y abrir Catálogos | Se muestran los siete grupos de datos maestros. |
+| CAT-02 | Seleccionar cada grupo | Cambian título, descripción y filas sin error de pantalla. |
+| CAT-03 | Como gerente, agregar una aseguradora demo | La nueva fila aparece y continúa después de recargar la página. |
+| CAT-04 | Como gerente, editar una fila demo | Código, nombre, detalle y estado se actualizan al guardar. |
+| CAT-05 | Como gerente, desactivar y activar una fila | El estado cambia entre Activo e Inactivo. |
+| CAT-06 | Como gerente, pulsar Restaurar demo | Se eliminan solo los cambios locales y vuelven los valores iniciales. |
+| CAT-07 | Ingresar como ejecutivo y abrir Catálogos | Puede consultar grupos y filas, pero no ve botones de agregar, editar, activar, desactivar ni restaurar. |
+| CAT-08 | Ingresar como empresa o consorcio y abrir `catalogos.php` | Se muestra Acceso no autorizado. |
+| CAT-09 | Usar Catálogos en móvil | Los grupos se acomodan; la tabla mantiene desplazamiento horizontal sin cortar datos. |
+| CAT-10 | Volver a Inicio después de editar un catálogo | En Acciones en caché debe aparecer el registro temporal de la acción. |
+
 ## Casos de permisos y rutas
 
 | ID | Prueba | Resultado esperado |
@@ -22,22 +37,8 @@ https://cicsount.pe/maqueta/
 | PERM-01 | Ingresar como gerente | Ve Inicio, Reportes, Usuarios, Clientes, Seguros, Cobranzas, Siniestros y Catálogos. |
 | PERM-02 | Ingresar como ejecutivo | Ve Inicio, Clientes, Seguros, Cobranzas, Siniestros y Catálogos; no ve Reportes ni Usuarios. |
 | PERM-03 | Ingresar como empresa o consorcio | Ve Inicio, Mis Seguros, Mis Pagos, Mis Siniestros y Mi Perfil. |
-| PERM-04 | Como gerente, abrir Reportes desde el menú | Abre `modulo.php?modulo=reportes` y muestra “Acceso habilitado”. |
-| PERM-05 | Como ejecutivo, abrir directamente `modulo.php?modulo=reportes` | Redirige a `acceso_denegado.php`; no muestra contenido del módulo. |
-| PERM-06 | Como cliente, abrir directamente `modulo.php?modulo=clientes` | Redirige a `acceso_denegado.php`; debe listar solo sus módulos permitidos. |
-| PERM-07 | Abrir `modulo.php?modulo=inexistente` con sesión activa | Muestra página controlada de ruta no disponible. |
-| PERM-08 | Abrir `modulo.php?modulo=seguros` sin sesión | Redirige al login. |
-| PERM-09 | Pulsar un módulo permitido y volver al Inicio | La navegación funciona con URL real y el menú marca el módulo activo. |
-| PERM-10 | Revisar Acciones en caché al volver al Inicio | Debe aparecer la navegación registrada de forma temporal. |
-
-## Casos de sesión y navegación
-
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| SES-01 | Cerrar sesión desde la barra superior | Redirección al login y eliminación de sesión. |
-| SES-02 | Cerrar sesión desde el menú lateral | Redirección al login y eliminación de sesión. |
-| NAV-01 | Abrir un dashboard con mucho contenido y desplazarse hacia abajo | El menú lateral se mantiene visible; el enlace Cerrar sesión queda disponible. |
-| NAV-02 | Reducir la pantalla a móvil | El menú lateral se abre como panel; el botón superior conserva el ícono de salida. |
+| PERM-04 | Como ejecutivo, abrir directamente `modulo.php?modulo=reportes` | Redirige a acceso no autorizado. |
+| PERM-05 | Abrir `modulo.php?modulo=seguros` sin sesión | Redirige al login. |
 
 ## Evidencia mínima
 

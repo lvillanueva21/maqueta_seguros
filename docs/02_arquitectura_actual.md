@@ -17,6 +17,20 @@ config/bootstrap.php
 config/modules.php
 └── única fuente de módulos, rutas lógicas y roles permitidos
 
+config/demo_catalogs.php
+└── datos maestros demo de aseguradoras, seguros, monedas y estados
+
+catalogos.php
+├── requireModuleAccess('catalogos')
+├── gerente: edición temporal en navegador
+└── ejecutivo: consulta de datos maestros
+
+assets/js/catalogos.js
+├── carga de catálogos demo
+├── persistencia local de cambios temporales
+├── agregar, editar y activar/desactivar para gerente
+└── restauración de datos demo
+
 config/demo_users.php
 └── catálogo temporal de cuatro usuarios demo
 
@@ -30,32 +44,19 @@ views/partials/
     └── barra superior y cierre de sesión
 
 dashboard.php
-├── requireAuth()
-├── carga datos demo según usuario
-├── Inicio permitido para todo perfil autenticado
-└── dashboard personalizado
+└── panel personalizado de Inicio
 
 modulo.php
-├── requireModuleAccess()
 └── ruta genérica protegida para módulos en preparación
 
 acceso_denegado.php
 └── respuesta controlada para rutas no permitidas o inexistentes
-
-assets/js/app.js
-├── navegación normal mediante enlaces
-├── registro temporal de navegación
-└── comportamiento del menú móvil
-
-api/
-└── conserva acciones de navegación durante la sesión
-
-logout.php
-└── destruye la sesión y redirige al login
 ```
 
 ## Fuente de permisos
 
 `config/modules.php` contiene la matriz temporal de permisos. El menú y `requireModuleAccess()` usan esta misma fuente para evitar diferencias entre lo que se ve y lo que se permite abrir.
 
-Cuando se implemente MySQL, esta matriz puede migrar a tablas de roles, permisos y módulos, manteniendo las funciones de acceso como contrato de aplicación.
+## Fuente de catálogos
+
+`config/demo_catalogs.php` es la fuente inicial de datos maestros. Los cambios realizados por gerente en la maqueta viven solo en el navegador, por lo que una restauración, limpieza de caché o cambio de navegador recupera los datos base.

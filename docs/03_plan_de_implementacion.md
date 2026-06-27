@@ -9,39 +9,33 @@
 - [x] Navegación lateral fija y cierre de sesión siempre accesible.
 - [x] Marca oficial BROKER SEGUROS centralizada.
 - [x] Matriz inicial de permisos y rutas controladas por servidor.
+- [x] Catálogos demo básicos.
 - [x] Documentación viva y versión de entrega trazable.
-- [ ] Pruebas manuales pendientes de la matriz de permisos.
+- [ ] Pruebas manuales pendientes del módulo Catálogos.
 
 ## Siguiente bloque recomendado
 
-### Fase 4: Catálogos demo básicos
+### Fase 5: Expedientes demo — primera versión operativa
 
-Antes de crear expedientes, definir en una sola fuente los datos maestros que usarán los formularios futuros:
+Construir el primer núcleo de negocio sin MySQL usando almacenamiento local del navegador.
 
-- aseguradoras;
-- tipos y familias de seguros;
-- monedas;
-- estados de expediente;
-- estados de póliza;
-- estados de pago;
-- estados de siniestro.
+Alcance mínimo:
 
-Resultado mínimo esperado:
-
-- página Catálogos accesible solo para gerente y ejecutivo;
-- lectura de catálogos demo desde configuración central;
-- vista de listas y estados;
-- gerente con acciones simuladas de crear/editar/activar;
-- ejecutivo con solo consulta;
-- rutas y permisos reutilizables para el siguiente módulo.
+- crear expediente;
+- asociar cliente, tipo de seguro, aseguradora, moneda y ejecutivo;
+- generar código demo automático;
+- listar expedientes con filtros;
+- abrir una ficha simple;
+- cambiar estado usando los estados de expediente;
+- guardar los cambios temporalmente en el navegador;
+- aplicar permisos: gerente y ejecutivo pueden gestionarlos; cliente solo podrá ver sus solicitudes cuando se agregue su vista.
 
 ## Fases posteriores
 
-1. Módulo mínimo de expedientes.
-2. Creación y listado de expedientes temporales.
-3. Detalle y cambio de estado.
-4. Diseño de tablas MySQL según los datos ya validados.
-5. Reemplazo progresivo de datos demo por MySQL.
+1. Detalle ampliado y línea de tiempo del expediente.
+2. Diseño de tablas MySQL según los datos ya validados.
+3. Reemplazo progresivo de datos demo por MySQL.
+4. Pólizas, pagos, documentos y siniestros vinculados a expedientes.
 
 ## Regla de avance
 
