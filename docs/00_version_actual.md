@@ -1,30 +1,28 @@
 # Versión actual entregada
 
-- **Código de versión:** `BS-20260627-173744-PET`
-- **Fecha y hora de entrega:** 27/06/2026 17:37:44 (America/Lima)
+- **Código de versión:** `BS-20260627-180106-PET`
+- **Fecha y hora de entrega:** 27/06/2026 18:01:06 (America/Lima)
 - **Zona horaria:** Perú - America/Lima
-- **Bloque funcional:** Clientes v1: Empresas, Consorcios y Contactos de gestión integrados a Expedientes.
+- **Bloque funcional:** Estabilización visual de modales y notificaciones contextuales.
 - **Estado de esta versión:** Paquete preparado localmente. Debe integrarse, probarse y subirse manualmente a GitHub `main`. Hostinger se verifica por separado.
 
 ## Base remota revisada antes de generar esta versión
 
 - Repositorio: `lvillanueva21/maqueta_seguros`
 - Rama: `main`
-- Versión remota encontrada: `BS-20260627-164101-PET`
-- Base funcional: Contactos de gestión + Expedientes v3.
+- Versión remota encontrada: `BS-20260627-173744-PET`
+- SHA de `docs/00_version_actual.md`: `3666973595df90d75c719e0a58d17c1a2d500904`
 
-## Incluye
+## Correcciones incluidas
 
-1. Módulo `Clientes` con pestañas Empresas, Consorcios y Contactos de gestión.
-2. Empresas con razón social o RUC, validación de RUC completo y unicidad global.
-3. Consorcios con RUC propio o operador tributario, mínimo dos participantes.
-4. Contactos con relaciones múltiples, etiqueta por vínculo y contacto principal.
-5. Modal rojo con motivo obligatorio para desactivar empresa, consorcio, contacto o participación.
-6. Integración dinámica de empresas/consorcios en Expedientes.
-7. Migración local de entidades demo y actualización de referencias antiguas `cli-*`.
+1. Cuando existe un modal abierto, los mensajes de éxito, error, advertencia e información aparecen dentro del modal activo.
+2. Cuando no existe modal, las notificaciones continúan en la esquina superior derecha.
+3. Las acciones que cierran el modal antes de notificar conservan el toast global.
+4. Las confirmaciones por notificación resuelven correctamente al confirmar, cancelar o cerrar con `×`.
+5. Se crea una capa común de estilos para inputs, selects, textarea, checkbox, bloques repetibles, ayudas y acciones dentro de modales.
+6. Se refuerzan los estilos de formularios generados dinámicamente en Clientes, Catálogos y Expedientes.
+7. Las hojas de notificaciones y modales se cargan con versión visible `BS-20260627-180106-PET` para reducir el riesgo de CSS antiguo en caché.
 
-## Limitaciones conocidas
+## Prueba visual pendiente
 
-- Los registros son locales al navegador; no se comparten entre equipos ni perfiles de navegador.
-- Usuarios cliente por RUC, pólizas, cotizaciones, documentos, pagos y timeline no forman parte de este bloque.
-- Las validaciones de RUC son de formato y dígito verificador; no consultan SUNAT.
+La sintaxis puede verificarse localmente, pero el comportamiento de capas `<dialog>` y el caché del navegador deben probarse en navegador real después de integrar.

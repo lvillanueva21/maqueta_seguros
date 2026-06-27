@@ -2,34 +2,28 @@
 
 ## Versión
 
-- `BS-20260627-173744-PET`
-- 27/06/2026 17:37:44 (America/Lima)
+| ID | Prueba | Resultado esperado |
+|---|---|---|
+| VER-01 | Abrir `docs/00_version_actual.md` luego del push | Debe aparecer `BS-20260627-180106-PET`. |
+| VER-02 | Revisar fecha y hora | Debe indicar 27/06/2026 18:01:06 (America/Lima). |
 
-## Clientes v1
+## Modales y notificaciones
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| CLI-01 | Crear empresa solo con razón social | Guarda empresa activa. |
-| CLI-02 | Crear empresa con RUC válido | Guarda solo si tiene 11 dígitos y dígito verificador válido. |
-| CLI-03 | Repetir RUC en empresa o consorcio | Bloquea y muestra error. |
-| CLI-04 | Crear consorcio con RUC propio | Exige denominación, RUC válido y dos empresas. |
-| CLI-05 | Crear consorcio con operador tributario | Exige dos empresas y exactamente un operador. |
-| CLI-06 | Intentar retirar integrante dejando uno | Bloquea la acción. |
-| CLI-07 | Crear contacto sin nombre o celular | Bloquea la acción. |
-| CLI-08 | Crear contacto con dos vínculos | Permite etiquetas distintas y principal por entidad. |
-| CLI-09 | Desactivar empresa, consorcio o contacto | Abre modal rojo y exige motivo. |
-| CLI-10 | Buscar y filtrar por activos/inactivos | Actualiza tabla sin alterar datos. |
+| MOD-01 | Abrir Crear expediente y dejar un campo obligatorio vacío | La advertencia aparece dentro del modal, debajo del encabezado; no detrás. |
+| MOD-02 | Registrar contacto rápido dentro de Crear expediente | El éxito aparece dentro del mismo modal y no se oculta. |
+| MOD-03 | Guardar un expediente que cierra el modal | El modal se cierra y el éxito aparece en la esquina superior derecha. |
+| MOD-04 | Abrir Crear empresa, dejar razón social y RUC vacíos | La advertencia aparece dentro del modal de Clientes. |
+| MOD-05 | Intentar RUC duplicado en Clientes | El error aparece dentro del modal de Clientes. |
+| MOD-06 | Desactivar Empresa, Contacto o Consorcio | El aviso o confirmación se mantiene visible y accionable dentro del modal activo. |
+| MOD-07 | Abrir Agregar elemento en Catálogos y dejar Código vacío | La advertencia aparece dentro del modal de Catálogos. |
+| MOD-08 | Cerrar un aviso de confirmación con `×` | Se cierra el aviso y no se ejecuta la acción. |
+| MOD-09 | Revisar modal de Clientes con vínculos o participantes | Inputs, selects, checkbox, botones y filas repetibles mantienen bordes, espaciado y foco consistentes. |
+| MOD-10 | Reducir navegador a 680px o menos | Los formularios y acciones se apilan sin cortes ni desbordes. |
+| MOD-11 | Recargar tras el despliegue | Los nuevos estilos de notificación y modal deben aparecer; si no, usar recarga forzada una sola vez. |
 
-## Expedientes integrados
+## Limitaciones deliberadas
 
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| EXP-ENT-01 | Crear expediente con contacto vinculado a una sola entidad | Sugiere cliente; usuario puede cambiar o limpiar. |
-| EXP-ENT-02 | Crear expediente con contacto de varios vínculos | No selecciona cliente automáticamente. |
-| EXP-ENT-03 | Crear expediente con entidad pendiente | Permite guardar con contacto, nombre y descripción. |
-| EXP-ENT-04 | Desactivar entidad usada en expediente | Conserva nombre histórico en expediente; no la ofrece para nuevas selecciones. |
-| EXP-ENT-05 | Recargar la página después de cambios | Datos permanecen en el mismo navegador. |
-
-## Límites
-
-Incógnito y otro navegador no comparten `localStorage`. No hay MySQL, SUNAT, usuarios cliente ni pólizas en esta versión.
+- Los cambios demo viven en `localStorage`.
+- No se puede certificar caché de Hostinger desde GitHub; la verificación final requiere navegador real.

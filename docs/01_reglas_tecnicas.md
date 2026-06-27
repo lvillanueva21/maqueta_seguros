@@ -1,31 +1,42 @@
 # Reglas técnicas
 
-## Versionado
+## Marca y textos visibles
 
-1. Toda entrega registra código, fecha, hora y `America/Lima` en `docs/00_version_actual.md`.
-2. Antes de generar cambios se revisa la versión de GitHub `main`.
-3. Debe diferenciarse paquete local, GitHub actualizado y Hostinger verificado.
+1. El nombre oficial visible del sistema es **BROKER SEGUROS**.
+2. El nombre del repositorio no define el nombre de la aplicación.
+3. Los textos de marca deben obtenerse de `APP_NAME` y `APP_SHORT_NAME` en `config/bootstrap.php`.
 
-## Clientes y entidades
+## Versionado y trazabilidad
 
-1. Una empresa requiere razón social o RUC.
-2. Cuando se indique RUC, debe tener 11 dígitos, dígito verificador válido y ser único entre empresas y consorcios con RUC propio.
-3. La razón social puede repetirse.
-4. Una entidad desactivada no se ofrece para nuevas relaciones, pero se conserva en antecedentes.
-5. Un consorcio exige nombre, modalidad y dos o más empresas participantes activas.
-6. Un consorcio con RUC propio no necesita operador tributario.
-7. Un consorcio sin RUC propio exige exactamente un operador tributario; su RUC es el RUC principal calculado.
-8. Un contacto requiere nombre completo y celular; puede tener múltiples vínculos y un principal por entidad.
-9. No se elimina información de negocio: se desactiva con motivo.
-10. Toda fecha demo usa `America/Lima`.
+1. Toda entrega actualiza `docs/00_version_actual.md` y `docs/05_historial_de_cambios.md`.
+2. La versión usa el formato `BS-YYYYMMDD-HHMMSS-PET`.
+3. La fecha y hora obligatorias usan `America/Lima`.
+4. Antes de generar cambios se revisa la versión vigente en GitHub.
+5. El estado documental debe distinguir: paquete local, GitHub actualizado y Hostinger verificado.
 
-## Expedientes
+## Mensajes, modales y formularios
 
-1. Contacto, nombre y descripción son obligatorios.
-2. Cliente sigue siendo opcional al inicio.
-3. Si un contacto tiene un único vínculo activo, se sugiere la entidad al crear expediente; se puede cambiar o dejar pendiente.
-4. Antes de una futura póliza se exigirá cliente definido.
+1. Toda acción que modifique datos demo confirma claramente el resultado.
+2. Sin MySQL, el mensaje debe indicar que el cambio se guarda solo en el navegador.
+3. Los mensajes usan `window.BrokerNotify`.
+4. Con un `<dialog>` abierto, la notificación se inserta dentro del modal activo, nunca detrás de este.
+5. Sin modal activo, la notificación se muestra de forma global.
+6. Las acciones que cierran el modal antes de comunicar el resultado muestran el mensaje global después del cierre.
+7. No usar `window.alert()` ni `window.confirm()` para funcionalidades nuevas.
+8. Los formularios y bloques insertados dinámicamente deben usar la capa común `assets/css/modal-ui.css`.
+9. Inputs, selects, textarea, checkbox, ayudas, tablas repetibles y acciones de modal deben conservar el mismo aspecto visual.
 
-## Persistencia
+## Contactos, clientes y expedientes
 
-La maqueta usa `localStorage`; MySQL será obligatorio para persistencia, concurrencia y autorización real.
+1. Un contacto de gestión es una persona natural; no es cliente ni usuario interno.
+2. Crear expediente exige contacto de gestión, nombre y descripción.
+3. El contacto mínimo requiere nombre completo y celular.
+4. Un contacto puede estar sin entidad o relacionarse con una o varias empresas o consorcios.
+5. El cliente solo puede ser empresa o consorcio.
+6. Cliente o entidad es opcional al crear expediente y se muestra como pendiente cuando falta.
+7. Antes de registrar una póliza futura, el expediente deberá tener cliente definido.
+8. Un expediente representa un solo proceso asegurador y no mezcla seguros independientes.
+9. Un expediente puede existir, mantenerse en espera, cerrarse o cancelarse sin cotización, seguro, póliza, pago o documento.
+10. No existe asignación obligatoria de expedientes a ejecutivos.
+11. Gerentes y ejecutivos ven y trabajan sobre todos los expedientes en esta maqueta.
+12. Los cambios demo se guardan en `localStorage`; no representan persistencia real ni seguridad de servidor.

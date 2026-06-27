@@ -1,4 +1,4 @@
-/* Notificaciones globales de BROKER SEGUROS */
+/* Notificaciones globales e internas de BROKER SEGUROS */
 .broker-notification-host {
   position: fixed;
   z-index: 9999;
@@ -8,6 +8,14 @@
   display: grid;
   gap: 10px;
   pointer-events: none;
+}
+
+.broker-dialog-notification-host {
+  position: static;
+  z-index: auto;
+  width: 100%;
+  margin: 0 0 16px;
+  gap: 9px;
 }
 
 .broker-notification {
@@ -23,6 +31,11 @@
   box-shadow: 0 14px 32px rgba(16, 42, 67, .18);
   pointer-events: auto;
   animation: broker-notification-enter .18s ease-out;
+}
+
+.broker-dialog-notification-host .broker-notification {
+  width: 100%;
+  box-shadow: none;
 }
 
 .broker-notification.is-leaving {
@@ -71,8 +84,10 @@
   font-weight: 800;
 }
 
-.broker-notification-action:hover {
+.broker-notification-action:hover,
+.broker-notification-action:focus-visible {
   background: #f2f4f7;
+  outline: 0;
 }
 
 .broker-notification-action.is-danger {
@@ -92,9 +107,11 @@
   line-height: 1;
 }
 
-.broker-notification-close:hover {
+.broker-notification-close:hover,
+.broker-notification-close:focus-visible {
   color: #344054;
   background: #f2f4f7;
+  outline: 0;
 }
 
 .broker-notification-success {
@@ -152,5 +169,19 @@
     top: 12px;
     right: 12px;
     width: calc(100vw - 24px);
+  }
+
+  .broker-dialog-notification-host {
+    width: 100%;
+    margin-bottom: 14px;
+  }
+
+  .broker-notification-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .broker-notification-action {
+    width: 100%;
   }
 }

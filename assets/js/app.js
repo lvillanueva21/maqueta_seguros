@@ -2,41 +2,99 @@
   const body = document.body;
   const userId = body.dataset.user || 'anonymous';
   const localActionKey = `broker_seguros_demo_actions_${userId}`;
+  const assetVersion = 'BS-20260627-180106-PET';
 
-  function installNotificationStyles() {
-    if (document.querySelector('link[data-broker-notification-styles]')) {
+  function installStyleFile(relativePath, marker) {
+    if (document.querySelector(`link[${marker}]`)) {
       return;
     }
 
     const scriptUrl = document.currentScript?.src;
-    const href = scriptUrl
-      ? new URL('../css/notifications.css', scriptUrl).href
-      : 'assets/css/notifications.css';
+    const source = scriptUrl
+      ? new URL(relativePath, scriptUrl)
+      : new URL(`assets/${relativePath.replace('../', '')}`, window.location.href);
+
+    source.searchParams.set('v', assetVersion);
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = href;
-    link.dataset.brokerNotificationStyles = 'true';
+    link.href = source.href;
+    link.setAttribute(marker, 'true');
     document.head.appendChild(link);
   }
 
+  function installSharedStyles() {
+    installStyleFile('../css/notifications.css', 'data-broker-notification-styles');
+    installStyleFile('../css/modal-ui.css', 'data-broker-modal-ui-styles');
+  }
+
   function createNotificationSystem() {
-    installNotificationStyles();
+    installSharedStyles();
 
-    let host = null;
+    let globalHost = null;
+    let lastNotificationKey = '';
+    let lastNotificationAt = 0;
 
-    function getHost() {
-      if (host && document.body.contains(host)) {
+    function getGlobalHost() {
+      if (globalHost && document.body.contains(globalHost)) {
+        return globalHost;
+      }
+
+      globalHost = document.createElement('section');
+      globalHost.className = 'broker-notification-host';
+      globalHost.setAttribute('aria-live', 'polite');
+      globalHost.setAttribute('aria-label', 'Mensajes del sistema');
+      document.body.appendChild(globalHost);
+
+      return globalHost;
+    }
+
+    function getActiveDialog() {
+      const dialogs = Array.from(document.querySelectorAll('dialog[open]'))
+        .filter((dialog) => dialog.open && document.body.contains(dialog));
+
+      return dialogs.length ? dialogs[dialogs.length - 1] : null;
+    }
+
+    function getDialogHost(dialog) {
+      const content = dialog.querySelector(':scope > form')
+        || dialog.querySelector(':scope > .expedient-dialog-content')
+        || dialog;
+
+      let host = content.querySelector(':scope > .broker-dialog-notification-host');
+      if (host) {
         return host;
       }
 
       host = document.createElement('section');
-      host.className = 'broker-notification-host';
+      host.className = 'broker-notification-host broker-dialog-notification-host';
       host.setAttribute('aria-live', 'polite');
-      host.setAttribute('aria-label', 'Mensajes del sistema');
-      document.body.appendChild(host);
+      host.setAttribute('aria-label', 'Mensajes del formulario');
+
+      const heading = content.querySelector(':scope > .dialog-head')
+        || content.querySelector(':scope > .catalog-dialog-heading')
+        || content.querySelector(':scope > .expedient-dialog-heading');
+
+      if (heading) {
+        heading.insertAdjacentElement('afterend', host);
+      } else {
+        content.prepend(host);
+      }
+
+      dialog.addEventListener('close', () => {
+        host?.remove();
+      }, { once: true });
 
       return host;
+    }
+
+    function getHost(options = {}) {
+      if (options.placement === 'global') {
+        return getGlobalHost();
+      }
+
+      const dialog = getActiveDialog();
+      return dialog ? getDialogHost(dialog) : getGlobalHost();
     }
 
     function escapeHtml(value) {
@@ -54,9 +112,6 @@
       notification.classList.add('is-leaving');
       window.setTimeout(() => notification.remove(), 180);
     }
-
-    let lastNotificationKey = '';
-    let lastNotificationAt = 0;
 
     function show(type, message, options = {}) {
       const safeType = ['success', 'error', 'warning', 'info'].includes(type) ? type : 'info';
@@ -78,9 +133,9 @@
       lastNotificationAt = now;
 
       const notification = document.createElement('article');
-
       notification.className = `broker-notification broker-notification-${safeType}`;
       notification.setAttribute('role', safeType === 'error' ? 'alert' : 'status');
+
       const actions = Array.isArray(settings.actions) && settings.actions.length
         ? `<div class="broker-notification-actions">${settings.actions.map((action, index) => (
           `<button class="broker-notification-action ${action.kind === 'danger' ? 'is-danger' : ''}" type="button" data-action-index="${index}">${escapeHtml(action.label)}</button>`
@@ -109,7 +164,7 @@
         });
       });
 
-      getHost().appendChild(notification);
+      getHost(settings).appendChild(notification);
 
       if (settings.duration > 0) {
         window.setTimeout(() => removeNotification(notification), settings.duration);
@@ -131,15 +186,24 @@
           resolved = true;
           resolve(value);
         };
+
         const notification = show('warning', message, {
           title: options.title || 'Confirma la acción',
           duration: 0,
+          placement: options.placement,
           actions: [
             { label: options.confirmLabel || 'Confirmar', kind: options.kind || 'danger', callback: () => finish(true) },
             { label: options.cancelLabel || 'Cancelar', callback: () => finish(false) },
           ],
         });
-        notification?.querySelector('.broker-notification-close')?.addEventListener('click', () => finish(false), { once: true });
+
+        if (!notification) {
+          finish(false);
+          return;
+        }
+
+        notification.querySelector('.broker-notification-close')
+          ?.addEventListener('click', () => finish(false), { once: true });
       }),
     };
   }
