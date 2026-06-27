@@ -7,6 +7,13 @@
 3. Los textos de marca deben obtenerse de las constantes `APP_NAME` y `APP_SHORT_NAME` declaradas en `config/bootstrap.php`.
 4. No volver a escribir nombres de marca distintos directamente en pantallas nuevas.
 
+## Versionado y trazabilidad
+
+1. Toda entrega debe actualizar `docs/00_version_actual.md`.
+2. El archivo debe registrar código de versión, fecha, hora y zona `America/Lima`.
+3. Antes de generar una nueva entrega, se debe revisar el código de versión existente en GitHub para confirmar si el repositorio remoto está sincronizado.
+4. El historial de cambios debe incluir la misma fecha y hora de entrega.
+
 ## Rutas y publicación
 
 1. No usar dominios, subdominios ni `BASE_URL` codificados.
@@ -14,7 +21,7 @@
 3. Los recursos estáticos deben mantenerse relativos a la ubicación del archivo.
 4. La aplicación debe funcionar en una subcarpeta como `public_html/maqueta/` sin cambios de código.
 
-## PHP y sesiones
+## PHP, sesiones y permisos
 
 1. Todo archivo PHP debe iniciar con `declare(strict_types=1);`.
 2. La zona horaria oficial es `America/Lima`.
@@ -22,6 +29,8 @@
 4. Toda sesión iniciada debe regenerar su identificador con `session_regenerate_id(true)`.
 5. Las vistas privadas y el cierre de sesión deben enviar cabeceras que eviten mostrar contenido privado desde la caché del navegador.
 6. La cookie de sesión debe limitarse a la carpeta de instalación del proyecto.
+7. Los módulos y sus permisos deben declararse únicamente en `config/modules.php`.
+8. Un módulo debe validar permiso en servidor mediante `requireModuleAccess()`. Ocultar un enlace no es una validación de seguridad.
 
 ## Navegación y usabilidad
 

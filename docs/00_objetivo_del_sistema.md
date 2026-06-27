@@ -10,14 +10,14 @@ La primera etapa es una maqueta funcional sin base de datos. Su propósito es va
 
 ## Objetivo actual
 
-Contar con una base estable de autenticación demo, contexto de usuario y dashboard diferenciado para validar qué información necesita realmente cada perfil.
+Contar con una base estable de autenticación demo, contexto de usuario, dashboard diferenciado y permisos de módulos para validar qué información necesita realmente cada perfil.
 
 El sistema debe poder responder, sin una base de datos todavía:
 
 - quién ingresó;
 - qué rol tiene;
 - si representa a una persona, empresa o consorcio;
-- qué menú y datos puede visualizar;
+- qué módulos puede ver y abrir;
 - qué indicadores y alertas necesita en Inicio;
 - cuándo empezó su sesión.
 
@@ -26,6 +26,8 @@ El sistema debe poder responder, sin una base de datos todavía:
 - Login por DNI, CE o RUC.
 - Perfiles demo: gerente, ejecutivo, empresa cliente y consorcio.
 - Dashboard con indicadores, alertas y tablas demo según el perfil.
+- Catálogo central de módulos y permisos por rol.
+- Rutas protegidas desde PHP y página controlada de acceso no autorizado.
 - Navegación y acciones temporales en sesión y navegador.
 - Sin base de datos ni almacenamiento permanente de negocio.
 

@@ -1,21 +1,14 @@
 (() => {
   const body = document.body;
   const userId = body.dataset.user || 'anonymous';
-  const role = body.dataset.role || 'usuario';
-  const storageKey = `livp_demo_last_section_${userId}`;
-  const localActionKey = `livp_demo_actions_${userId}`;
+  const localActionKey = `broker_seguros_demo_actions_${userId}`;
 
-  const navItems = document.querySelectorAll('.nav-item');
-  const pageTitle = document.getElementById('page-title');
-  const homeView = document.getElementById('home-view');
-  const constructionView = document.getElementById('construction-view');
-  const constructionTitle = document.getElementById('construction-title');
-  const constructionText = document.getElementById('construction-text');
   const cacheList = document.getElementById('cache-list');
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
   const menuToggle = document.getElementById('menu-toggle');
   const sidebarClose = document.getElementById('sidebar-close');
+  const moduleLinks = document.querySelectorAll('[data-module-id]');
 
   function normalizeEntry(entry) {
     return {
@@ -43,14 +36,22 @@
 
   function formatDate(value) {
     if (!value) return 'Ahora';
+
     const date = new Date(value.replace(' ', 'T'));
     if (Number.isNaN(date.getTime())) return value;
+
     return new Intl.DateTimeFormat('es-PE', {
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
     }).format(date);
+  }
+
+  function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value;
+    return div.innerHTML;
   }
 
   function renderActions(serverItems = []) {
@@ -78,43 +79,57 @@
     )).join('');
   }
 
-  function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
-  }
-
   async function loadServerActions() {
+    if (!cacheList) return;
+
     try {
-      const response = await fetch('api/cache_actions.php', { headers: { Accept: 'application/json' } });
+      const response = await fetch('api/cache_actions.php', {
+        headers: { Accept: 'application/json' },
+      });
       const payload = await response.json();
-      if (payload.ok) renderActions(payload.items || []);
+
+      if (payload.ok) {
+        renderActions(payload.items || []);
+        return;
+      }
     } catch (error) {
-      renderActions();
+      // Se usa el historial local como respaldo.
     }
+
+    renderActions();
   }
 
-  async function cacheAction(action, section) {
-    const localEntry = {
+  function sendNavigationAction(action, section) {
+    const entry = {
       action,
       section,
       at: new Date().toISOString(),
     };
 
-    saveLocalAction(localEntry);
-    renderActions();
+    saveLocalAction(entry);
+
+    const encodedData = new URLSearchParams({ action, section }).toString();
 
     try {
-      const formData = new URLSearchParams({ action, section });
-      const response = await fetch('api/cache_action.php', {
+      if (navigator.sendBeacon) {
+        const payload = new Blob([encodedData], {
+          type: 'application/x-www-form-urlencoded;charset=UTF-8',
+        });
+        navigator.sendBeacon('api/cache_action.php', payload);
+        return;
+      }
+
+      fetch('api/cache_action.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', Accept: 'application/json' },
-        body: formData.toString(),
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          Accept: 'application/json',
+        },
+        body: encodedData,
       });
-      const payload = await response.json();
-      if (payload.ok) loadServerActions();
     } catch (error) {
-      // La versión local sigue disponible aunque el guardado de sesión falle.
+      // El historial local queda disponible aunque falle el registro de sesión.
     }
   }
 
@@ -123,28 +138,12 @@
     overlay?.classList.remove('is-visible');
   }
 
-  function openSection(sectionId, label, shouldCache = true) {
-    pageTitle.textContent = label;
-    navItems.forEach((item) => item.classList.toggle('is-active', item.dataset.sectionId === sectionId));
-
-    if (sectionId === 'inicio') {
-      homeView.hidden = false;
-      constructionView.hidden = true;
-    } else {
-      homeView.hidden = true;
-      constructionView.hidden = false;
-      constructionTitle.textContent = label;
-      constructionText.textContent = `${label} está en construcción para el perfil ${role}.`;
-    }
-
-    localStorage.setItem(storageKey, JSON.stringify({ sectionId, label }));
-    if (shouldCache) cacheAction(`Ingresó a ${label}`, sectionId);
-    closeMobileSidebar();
-  }
-
-  navItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      openSection(item.dataset.sectionId || 'inicio', item.dataset.sectionLabel || 'Inicio');
+  moduleLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const moduleId = link.dataset.moduleId || 'inicio';
+      const moduleLabel = link.dataset.moduleLabel || 'Módulo';
+      sendNavigationAction(`Ingresó a ${moduleLabel}`, moduleId);
+      closeMobileSidebar();
     });
   });
 
@@ -152,20 +151,9 @@
     sidebar?.classList.add('is-open');
     overlay?.classList.add('is-visible');
   });
+
   sidebarClose?.addEventListener('click', closeMobileSidebar);
   overlay?.addEventListener('click', closeMobileSidebar);
-
-  try {
-    const cachedSection = JSON.parse(localStorage.getItem(storageKey) || 'null');
-    if (cachedSection?.sectionId && cachedSection.sectionId !== 'inicio') {
-      const matchingItem = [...navItems].find((item) => item.dataset.sectionId === cachedSection.sectionId);
-      if (matchingItem) {
-        openSection(matchingItem.dataset.sectionId, matchingItem.dataset.sectionLabel, false);
-      }
-    }
-  } catch (error) {
-    // Se mantiene Inicio cuando la caché del navegador no es válida.
-  }
 
   loadServerActions();
 })();

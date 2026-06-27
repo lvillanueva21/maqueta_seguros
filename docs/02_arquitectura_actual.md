@@ -11,8 +11,11 @@ config/bootstrap.php
 ├── rutas relativas
 ├── configuración de cookie y sesión
 ├── autenticación y protección de vistas
-├── creación y destrucción de sesión
-└── menú según rol
+├── catálogo y validación de permisos de módulos
+└── creación y destrucción de sesión
+
+config/modules.php
+└── única fuente de módulos, rutas lógicas y roles permitidos
 
 config/demo_users.php
 └── catálogo temporal de cuatro usuarios demo
@@ -20,22 +23,29 @@ config/demo_users.php
 config/demo_dashboard_data.php
 └── indicadores, alertas y tablas demo por usuario
 
+views/partials/
+├── sidebar.php
+│   └── menú generado desde permisos del rol
+└── topbar.php
+    └── barra superior y cierre de sesión
+
 dashboard.php
 ├── requireAuth()
 ├── carga datos demo según usuario
-├── menú por rol
-├── indicadores y alertas de Inicio
-├── tablas de seguimiento
-├── cierre de sesión en la barra superior
-└── vistas temporales de módulos
+├── Inicio permitido para todo perfil autenticado
+└── dashboard personalizado
 
-assets/css/app.css
-├── estilos globales
-├── navegación lateral fija en escritorio
-└── adaptación móvil
+modulo.php
+├── requireModuleAccess()
+└── ruta genérica protegida para módulos en preparación
 
-assets/css/dashboard.css
-└── estilos específicos del Inicio con datos demo
+acceso_denegado.php
+└── respuesta controlada para rutas no permitidas o inexistentes
+
+assets/js/app.js
+├── navegación normal mediante enlaces
+├── registro temporal de navegación
+└── comportamiento del menú móvil
 
 api/
 └── conserva acciones de navegación durante la sesión
@@ -44,23 +54,8 @@ logout.php
 └── destruye la sesión y redirige al login
 ```
 
-## Contexto guardado en sesión
+## Fuente de permisos
 
-La clave `$_SESSION['livp_user']` contiene, como mínimo:
+`config/modules.php` contiene la matriz temporal de permisos. El menú y `requireModuleAccess()` usan esta misma fuente para evitar diferencias entre lo que se ve y lo que se permite abrir.
 
-- identificador del usuario;
-- rol y etiqueta del rol;
-- documento de acceso;
-- nombre y perfil;
-- tipo de cuenta: persona, empresa o consorcio;
-- entidad relacionada;
-- empresas participantes cuando es consorcio;
-- fecha y hora de inicio de sesión.
-
-La clave `$_SESSION['action_cache']` guarda el historial temporal de acciones de la sesión.
-
-## Fuente de dashboard demo
-
-`config/demo_dashboard_data.php` es la única fuente temporal de indicadores y tablas del Inicio. Los datos se indexan por `id` del usuario demo. Esto permite cambiar la información de una vista sin modificar `dashboard.php`.
-
-Cuando se implemente MySQL, esta fuente debe ser reemplazada por consultas o servicios que entreguen la misma estructura: resumen, métricas, alertas, tabla principal y tabla secundaria.
+Cuando se implemente MySQL, esta matriz puede migrar a tablas de roles, permisos y módulos, manteniendo las funciones de acceso como contrato de aplicación.

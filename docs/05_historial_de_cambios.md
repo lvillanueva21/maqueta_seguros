@@ -1,6 +1,30 @@
 # Historial de cambios
 
-## 2026-06-27 — Marca BROKER SEGUROS y cierre de sesión accesible
+## 27/06/2026 12:20:47 (America/Lima) — BS-20260627-1220-PET — Matriz de permisos y rutas controladas
+
+### Implementado
+
+- Archivo central `config/modules.php` con módulos, roles permitidos, etiquetas e íconos.
+- Funciones de permisos en `config/bootstrap.php`: `modulesForRole()`, `canAccessModule()`, `moduleUrl()` y `requireModuleAccess()`.
+- Menú lateral generado desde la misma matriz utilizada para validar permisos.
+- Nuevas rutas `modulo.php` y `acceso_denegado.php`.
+- Validación de acceso realizada por PHP al abrir una URL, no solo al ocultar opciones visuales.
+- Componentes reutilizables `views/partials/sidebar.php` y `views/partials/topbar.php`.
+- JavaScript ajustado para navegar mediante URLs reales y registrar la navegación temporalmente.
+- Archivo `docs/00_version_actual.md` como referencia de sincronización entre entrega y repositorio.
+
+### Decisión técnica
+
+Los módulos se mantienen en una única configuración mientras la maqueta valida el flujo. En una fase posterior, esta matriz podrá migrar a MySQL sin cambiar la forma en que las pantallas consultan permiso.
+
+### Pendiente
+
+- Ejecutar pruebas manuales PERM-01 a PERM-10.
+- Catálogos demo básicos.
+- Expedientes.
+- Persistencia con MySQL.
+
+## 27/06/2026 12:20:47 (America/Lima) — Marca BROKER SEGUROS y cierre de sesión accesible
 
 ### Implementado
 
@@ -11,18 +35,7 @@
 - Ícono y enlace de cierre de sesión agregado a la barra superior.
 - Actualización de documentación y pruebas de humo de marca y navegación.
 
-### Impacto esperado
-
-Después de desplegar este cambio, las sesiones abiertas previamente pueden requerir un nuevo inicio de sesión porque cambia el nombre de la cookie.
-
-### Pendiente
-
-- Matriz de permisos y control de acceso real por módulo.
-- Catálogos demo básicos.
-- Expedientes.
-- Persistencia con MySQL.
-
-## 2026-06-27 — Dashboard con datos demo por perfil
+## 27/06/2026 — Dashboard con datos demo por perfil
 
 ### Implementado
 
@@ -30,21 +43,3 @@ Después de desplegar este cambio, las sesiones abiertas previamente pueden requ
 - Indicadores, alertas y tablas diferentes para gerente, ejecutivo, empresa y consorcio.
 - Resumen consolidado y separado por empresas para el perfil consorcio.
 - Hoja de estilos independiente `assets/css/dashboard.css`.
-- Actualización de documentación, plan y pruebas de humo para el dashboard.
-
-### Decisión técnica
-
-Los datos de Inicio se concentran en un único archivo de configuración para validar la necesidad real de cada indicador antes de crear tablas MySQL.
-
-## 2026-06-27 — Base de sesión y documentación viva
-
-### Implementado
-
-- Contexto de sesión centralizado mediante `createUserSession()`.
-- Regeneración del identificador de sesión al iniciar sesión.
-- Tipo de cuenta explícito: persona, empresa o consorcio.
-- Fecha y hora de inicio de sesión.
-- Cabeceras anti-caché para vistas privadas y cierre de sesión.
-- Función centralizada para destruir sesión.
-- Visualización de tipo de cuenta e inicio de sesión en el dashboard.
-- Estructura inicial de documentación en `docs/`.

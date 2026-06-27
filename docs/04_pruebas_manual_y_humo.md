@@ -8,43 +8,36 @@ Ruta esperada cuando se instala en Hostinger:
 https://cicsount.pe/maqueta/
 ```
 
-## Casos de sesión
+## Control de versión
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| SES-01 | Ingresar como gerente | Dashboard de gerente, menú con Reportes y Usuarios. |
-| SES-02 | Ingresar como ejecutivo | Dashboard de ejecutiva, menú operativo sin Reportes ni Usuarios. |
-| SES-03 | Ingresar como empresa | Dashboard de cliente, tipo de cuenta Empresa. |
-| SES-04 | Ingresar como consorcio | Tipo de cuenta Consorcio y lista de dos empresas participantes. |
-| SES-05 | Abrir `dashboard.php` sin login | Redirección al login. |
-| SES-06 | Cerrar sesión desde la barra superior | Redirección al login y eliminación de sesión. |
-| SES-07 | Cerrar sesión desde el menú lateral | Redirección al login y eliminación de sesión. |
-| SES-08 | Cerrar sesión y usar Atrás | No debe mostrarse el dashboard como contenido vigente; al recargar debe volver al login. |
-| SES-09 | Usar una contraseña incorrecta | Mensaje controlado sin error PHP. |
-| SES-10 | Probar desde la subcarpeta publicada | Login, dashboard, recursos CSS y JavaScript deben cargar correctamente. |
+| VER-01 | Abrir `docs/00_version_actual.md` en GitHub luego del push | Debe aparecer el código de versión de la última entrega aplicada. |
+| VER-02 | Comparar el código de versión con el ZIP recibido | Ambos deben coincidir exactamente. |
 
-## Casos de navegación y marca
+## Casos de permisos y rutas
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| NAV-01 | Abrir un dashboard con mucho contenido y desplazarse hacia abajo | El menú lateral se mantiene visible; el enlace Cerrar sesión queda disponible en la parte inferior de la barra lateral. |
-| NAV-02 | Pulsar el ícono de cierre en la esquina superior derecha | Se cierra la sesión sin requerir bajar por la página. |
-| NAV-03 | Reducir la pantalla a móvil | El botón superior muestra el ícono de salida y el menú lateral se abre como panel. |
-| MAR-01 | Revisar login, menú y barra superior | Debe mostrarse BROKER SEGUROS; no debe aparecer LIVP Seguros en textos visibles. |
+| PERM-01 | Ingresar como gerente | Ve Inicio, Reportes, Usuarios, Clientes, Seguros, Cobranzas, Siniestros y Catálogos. |
+| PERM-02 | Ingresar como ejecutivo | Ve Inicio, Clientes, Seguros, Cobranzas, Siniestros y Catálogos; no ve Reportes ni Usuarios. |
+| PERM-03 | Ingresar como empresa o consorcio | Ve Inicio, Mis Seguros, Mis Pagos, Mis Siniestros y Mi Perfil. |
+| PERM-04 | Como gerente, abrir Reportes desde el menú | Abre `modulo.php?modulo=reportes` y muestra “Acceso habilitado”. |
+| PERM-05 | Como ejecutivo, abrir directamente `modulo.php?modulo=reportes` | Redirige a `acceso_denegado.php`; no muestra contenido del módulo. |
+| PERM-06 | Como cliente, abrir directamente `modulo.php?modulo=clientes` | Redirige a `acceso_denegado.php`; debe listar solo sus módulos permitidos. |
+| PERM-07 | Abrir `modulo.php?modulo=inexistente` con sesión activa | Muestra página controlada de ruta no disponible. |
+| PERM-08 | Abrir `modulo.php?modulo=seguros` sin sesión | Redirige al login. |
+| PERM-09 | Pulsar un módulo permitido y volver al Inicio | La navegación funciona con URL real y el menú marca el módulo activo. |
+| PERM-10 | Revisar Acciones en caché al volver al Inicio | Debe aparecer la navegación registrada de forma temporal. |
 
-## Casos de dashboard demo
+## Casos de sesión y navegación
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| DASH-01 | Ingresar como gerente | Cuatro indicadores globales, alertas gerenciales, cartera por aseguradora y seguimiento ejecutivo. |
-| DASH-02 | Ingresar como ejecutivo | Indicadores de clientes, renovaciones, tareas y cobranza; cartera priorizada y agenda operativa. |
-| DASH-03 | Ingresar como empresa | Pólizas vigentes, pagos, solicitud activa y tabla de acciones disponibles. |
-| DASH-04 | Ingresar como consorcio | Resumen consolidado, tabla de pólizas por empresa, tarjetas de dos participantes y gestiones separadas. |
-| DASH-05 | Comparar empresa y consorcio | No deben mostrar las mismas cifras, tablas ni alertas. |
-| DASH-06 | Recargar el dashboard | Los datos demo del perfil deben mantenerse sin errores PHP ni CSS faltante. |
-| DASH-07 | Reducir la ventana o usar celular | Tarjetas y tablas deben adaptarse; las tablas pueden desplazarse horizontalmente sin romper el diseño. |
-| DASH-08 | Pulsar cualquier opción de menú | El Inicio se oculta, aparece la vista En construcción y se registra la acción temporal. |
-| DASH-09 | Volver a Inicio | Deben reaparecer los indicadores y tablas del perfil autenticado. |
+| SES-01 | Cerrar sesión desde la barra superior | Redirección al login y eliminación de sesión. |
+| SES-02 | Cerrar sesión desde el menú lateral | Redirección al login y eliminación de sesión. |
+| NAV-01 | Abrir un dashboard con mucho contenido y desplazarse hacia abajo | El menú lateral se mantiene visible; el enlace Cerrar sesión queda disponible. |
+| NAV-02 | Reducir la pantalla a móvil | El menú lateral se abre como panel; el botón superior conserva el ícono de salida. |
 
 ## Evidencia mínima
 

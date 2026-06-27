@@ -184,35 +184,100 @@ function requireAuth(): array
     return $_SESSION['livp_user'];
 }
 
+/**
+ * Devuelve el catálogo central de módulos. Se carga una sola vez por solicitud.
+ */
+function modulesCatalog(): array
+{
+    static $modules = null;
+
+    if ($modules === null) {
+        $loadedModules = require __DIR__ . '/modules.php';
+        $modules = is_array($loadedModules) ? $loadedModules : [];
+    }
+
+    return $modules;
+}
+
+function moduleForId(string $moduleId): ?array
+{
+    $modules = modulesCatalog();
+
+    return isset($modules[$moduleId]) && is_array($modules[$moduleId]) ? $modules[$moduleId] : null;
+}
+
+function canAccessModule(string $role, string $moduleId): bool
+{
+    $module = moduleForId($moduleId);
+    $roles = is_array($module['roles'] ?? null) ? $module['roles'] : [];
+
+    return in_array($role, $roles, true);
+}
+
+/**
+ * Devuelve los módulos visibles para un rol. La misma fuente alimenta el menú
+ * y las validaciones de acceso del servidor.
+ */
+function modulesForRole(string $role): array
+{
+    $allowedModules = [];
+
+    foreach (modulesCatalog() as $module) {
+        if (!is_array($module) || !isset($module['id'])) {
+            continue;
+        }
+
+        if (canAccessModule($role, (string) $module['id'])) {
+            $allowedModules[] = $module;
+        }
+    }
+
+    return $allowedModules;
+}
+
+function moduleUrl(string $moduleId): string
+{
+    if ($moduleId === 'inicio') {
+        return appRelativeUrl('dashboard.php');
+    }
+
+    return appRelativeUrl('modulo.php?modulo=' . rawurlencode($moduleId));
+}
+
+/**
+ * Exige sesión y permiso para abrir un módulo real.
+ *
+ * Redirige a una página controlada cuando el módulo no existe o el rol no tiene
+ * autorización. No depende de que el menú haya ocultado la opción.
+ *
+ * @return array{user: array, module: array}
+ */
+function requireModuleAccess(string $moduleId): array
+{
+    $user = requireAuth();
+    $module = moduleForId($moduleId);
+
+    if ($module === null || $moduleId === 'inicio') {
+        header('Location: ' . appRelativeUrl('acceso_denegado.php?modulo=' . rawurlencode($moduleId) . '&motivo=modulo'));
+        exit;
+    }
+
+    if (!canAccessModule((string) $user['role'], $moduleId)) {
+        header('Location: ' . appRelativeUrl('acceso_denegado.php?modulo=' . rawurlencode($moduleId) . '&motivo=permiso'));
+        exit;
+    }
+
+    return [
+        'user' => $user,
+        'module' => $module,
+    ];
+}
+
+/**
+ * Compatibilidad temporal con pantallas anteriores.
+ * Las nuevas pantallas deben usar modulesForRole().
+ */
 function menuForRole(string $role): array
 {
-    $menus = [
-        'cliente' => [
-            ['id' => 'inicio', 'label' => 'Inicio', 'icon' => '⌂'],
-            ['id' => 'mis-seguros', 'label' => 'Mis Seguros', 'icon' => '▣'],
-            ['id' => 'mis-pagos', 'label' => 'Mis Pagos', 'icon' => '◉'],
-            ['id' => 'mis-siniestros', 'label' => 'Mis Siniestros', 'icon' => '⚑'],
-            ['id' => 'mi-perfil', 'label' => 'Mi Perfil', 'icon' => '◌'],
-        ],
-        'ejecutivo' => [
-            ['id' => 'inicio', 'label' => 'Inicio', 'icon' => '⌂'],
-            ['id' => 'clientes', 'label' => 'Clientes', 'icon' => '♙'],
-            ['id' => 'seguros', 'label' => 'Seguros', 'icon' => '▣'],
-            ['id' => 'cobranzas', 'label' => 'Cobranzas', 'icon' => '◉'],
-            ['id' => 'siniestros', 'label' => 'Siniestros', 'icon' => '⚑'],
-            ['id' => 'catalogos', 'label' => 'Catálogos', 'icon' => '▤'],
-        ],
-        'gerente' => [
-            ['id' => 'inicio', 'label' => 'Inicio', 'icon' => '⌂'],
-            ['id' => 'reportes', 'label' => 'Reportes', 'icon' => '▥'],
-            ['id' => 'usuarios', 'label' => 'Usuarios', 'icon' => '♙'],
-            ['id' => 'clientes', 'label' => 'Clientes', 'icon' => '♙'],
-            ['id' => 'seguros', 'label' => 'Seguros', 'icon' => '▣'],
-            ['id' => 'cobranzas', 'label' => 'Cobranzas', 'icon' => '◉'],
-            ['id' => 'siniestros', 'label' => 'Siniestros', 'icon' => '⚑'],
-            ['id' => 'catalogo', 'label' => 'Catálogo', 'icon' => '▤'],
-        ],
-    ];
-
-    return $menus[$role] ?? [];
+    return modulesForRole($role);
 }

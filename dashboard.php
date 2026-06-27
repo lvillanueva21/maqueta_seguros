@@ -4,14 +4,13 @@ declare(strict_types=1);
 require __DIR__ . '/config/bootstrap.php';
 
 $user = requireAuth();
-$menu = menuForRole($user['role']);
+$menu = modulesForRole((string) $user['role']);
+$activeModule = 'inicio';
+$pageTitle = 'Inicio';
+
 $dashboardDataSource = require __DIR__ . '/config/demo_dashboard_data.php';
 $dashboard = $dashboardDataSource[(string) $user['id']] ?? $dashboardDataSource['default'];
 
-$initials = implode('', array_map(
-    static fn (string $part): string => strtoupper(firstChar($part)),
-    array_slice(preg_split('/\s+/', $user['name']) ?: [], 0, 2)
-));
 $today = (new DateTimeImmutable('now', new DateTimeZone('America/Lima')))->format('d/m/Y · H:i');
 $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
 
@@ -29,77 +28,19 @@ $companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['
     <title><?= e(APP_NAME) ?> | <?= e($user['role_label']) ?></title>
     <link rel="stylesheet" href="assets/css/app.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/modules.css">
 </head>
 <body class="app-body" data-role="<?= e($user['role']) ?>" data-user="<?= e((string) $user['id']) ?>">
 <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-top">
-            <a class="sidebar-brand" href="dashboard.php" aria-label="<?= e(APP_NAME) ?>, Inicio">
-                <span class="brand-mini">B</span>
-                <span><?= e(APP_SHORT_NAME) ?> <b>SEGUROS</b></span>
-            </a>
-            <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Cerrar menú">×</button>
-        </div>
-
-        <div class="profile-panel">
-            <div class="profile-avatar" aria-hidden="true"><?= e($initials ?: 'U') ?></div>
-            <div>
-                <p class="profile-name"><?= e($user['name']) ?></p>
-                <p class="profile-role"><?= e($user['profile_title']) ?></p>
-            </div>
-            <div class="profile-meta">
-                <span class="role-badge role-<?= e($user['role']) ?>"><?= e($user['role_label']) ?></span>
-                <span><?= e($user['document_type']) ?> <?= e($user['document']) ?></span>
-            </div>
-        </div>
-
-        <nav class="main-nav" aria-label="Navegación principal">
-            <?php foreach ($menu as $item): ?>
-                <button
-                    type="button"
-                    class="nav-item <?= $item['id'] === 'inicio' ? 'is-active' : '' ?>"
-                    data-section-id="<?= e($item['id']) ?>"
-                    data-section-label="<?= e($item['label']) ?>"
-                >
-                    <span class="nav-icon" aria-hidden="true"><?= e($item['icon']) ?></span>
-                    <span><?= e($item['label']) ?></span>
-                </button>
-            <?php endforeach; ?>
-        </nav>
-
-        <div class="sidebar-footer">
-            <a href="logout.php" class="logout-link">Cerrar sesión <span>→</span></a>
-            <small>Maqueta sin base de datos</small>
-        </div>
-    </aside>
+    <?php require __DIR__ . '/views/partials/sidebar.php'; ?>
 
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <main class="workspace">
-        <header class="topbar">
-            <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menú">☰</button>
-            <div>
-                <p class="topbar-system"><?= e(APP_NAME) ?></p>
-                <h1 id="page-title">Inicio</h1>
-            </div>
-            <div class="topbar-actions">
-                <div class="topbar-session">
-                    <span class="live-dot" aria-hidden="true"></span>
-                    <span>Sesión activa</span>
-                </div>
-                <a href="logout.php" class="topbar-logout" aria-label="Cerrar sesión" title="Cerrar sesión">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M14 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path>
-                        <path d="M10 17l5-5-5-5"></path>
-                        <path d="M15 12H3"></path>
-                    </svg>
-                    <span class="topbar-logout-label">Cerrar sesión</span>
-                </a>
-            </div>
-        </header>
+        <?php require __DIR__ . '/views/partials/topbar.php'; ?>
 
         <section class="workspace-content" id="workspace-content">
-            <div id="home-view" class="page-view">
+            <div class="page-view">
                 <div class="welcome-banner">
                     <div>
                         <p class="eyebrow">PANEL DE <?= e(strtoupper($user['role_label'])) ?></p>
@@ -284,14 +225,6 @@ $companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['
                         </ul>
                     </section>
                 <?php endif; ?>
-            </div>
-
-            <div id="construction-view" class="page-view construction-view" hidden>
-                <div class="construction-mark">⌁</div>
-                <p class="eyebrow">MÓDULO EN PREPARACIÓN</p>
-                <h2 id="construction-title">Módulo</h2>
-                <p id="construction-text">En construcción.</p>
-                <span class="construction-note">La navegación y la acción se guardaron temporalmente en caché.</span>
             </div>
         </section>
     </main>
