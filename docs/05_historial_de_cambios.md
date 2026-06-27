@@ -1,5 +1,13 @@
 # Historial de cambios
 
+## 27/06/2026 13:54:48 (America/Lima) - BS-20260627-135448-PET - Trazabilidad y confirmaciones
+
+### Corregido
+
+- Se actualizo `docs/00_version_actual.md` para registrar que `BS-20260627-133302-PET` ya fue subida a GitHub `main` con el commit `4121efce53e1879ebb5a15ae52446c0507e4ed7b`.
+- Se aclaro que Hostinger debe verificarse por separado.
+- `window.BrokerNotify.confirm()` ahora resuelve `false` cuando el usuario cierra el toast con la `x`, evitando promesas pendientes.
+
 ## 27/06/2026 13:33:02 (America/Lima) - BS-20260627-133302-PET - Auditoria y estabilizacion tecnica
 
 ### Corregido

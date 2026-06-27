@@ -125,14 +125,21 @@
       warning: (message, options = {}) => show('warning', message, options),
       info: (message, options = {}) => show('info', message, options),
       confirm: (message, options = {}) => new Promise((resolve) => {
-        show('warning', message, {
+        let resolved = false;
+        const finish = (value) => {
+          if (resolved) return;
+          resolved = true;
+          resolve(value);
+        };
+        const notification = show('warning', message, {
           title: options.title || 'Confirma la acción',
           duration: 0,
           actions: [
-            { label: options.confirmLabel || 'Confirmar', kind: options.kind || 'danger', callback: () => resolve(true) },
-            { label: options.cancelLabel || 'Cancelar', callback: () => resolve(false) },
+            { label: options.confirmLabel || 'Confirmar', kind: options.kind || 'danger', callback: () => finish(true) },
+            { label: options.cancelLabel || 'Cancelar', callback: () => finish(false) },
           ],
         });
+        notification?.querySelector('.broker-notification-close')?.addEventListener('click', () => finish(false), { once: true });
       }),
     };
   }
