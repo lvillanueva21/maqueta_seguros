@@ -39,6 +39,17 @@ Luego abre:
 http://localhost:8000
 ```
 
+## Documentación del proyecto
+
+La documentación viva se mantiene en [`docs/`](docs/):
+
+- Objetivo y alcance: [`docs/00_objetivo_del_sistema.md`](docs/00_objetivo_del_sistema.md)
+- Reglas técnicas: [`docs/01_reglas_tecnicas.md`](docs/01_reglas_tecnicas.md)
+- Arquitectura actual: [`docs/02_arquitectura_actual.md`](docs/02_arquitectura_actual.md)
+- Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
+- Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
+- Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
+
 ## Estructura
 
 ```text
@@ -54,6 +65,8 @@ http://localhost:8000
 ├── config/
 │   ├── bootstrap.php
 │   └── demo_users.php
+├── docs/
+│   └── funcionalidades/
 ├── dashboard.php
 ├── index.php
 ├── logout.php

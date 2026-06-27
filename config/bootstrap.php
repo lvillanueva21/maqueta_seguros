@@ -64,6 +64,14 @@ session_set_cookie_params([
 ]);
 session_start();
 
+/** Evita mostrar una vista privada desde la caché después de cerrar sesión. */
+function sendNoCacheHeaders(): void
+{
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+}
+
 function e(?string $value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -81,7 +89,17 @@ function sliceText(string $value, int $length): string
 
 function isAuthenticated(): bool
 {
-    return isset($_SESSION['livp_user']) && is_array($_SESSION['livp_user']);
+    if (!isset($_SESSION['livp_user']) || !is_array($_SESSION['livp_user'])) {
+        return false;
+    }
+
+    foreach (['id', 'role', 'role_label', 'name', 'document_type', 'document'] as $requiredKey) {
+        if (!array_key_exists($requiredKey, $_SESSION['livp_user'])) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function currentUser(): ?array
@@ -89,12 +107,76 @@ function currentUser(): ?array
     return isAuthenticated() ? $_SESSION['livp_user'] : null;
 }
 
+/**
+ * Crea el contexto mínimo de la sesión demo. Más adelante esta función podrá
+ * recibir datos desde MySQL sin cambiar los controladores ni las vistas.
+ */
+function createUserSession(array $user): void
+{
+    unset($user['password_hash']);
+
+    $accountType = (string) ($user['account_type'] ?? 'persona');
+    $accountLabels = [
+        'persona' => 'Persona',
+        'empresa' => 'Empresa',
+        'consorcio' => 'Consorcio',
+    ];
+
+    $user['account_type'] = array_key_exists($accountType, $accountLabels) ? $accountType : 'persona';
+    $user['account_type_label'] = $accountLabels[$user['account_type']];
+    $user['session_started_at'] = date('Y-m-d H:i:s');
+
+    session_regenerate_id(true);
+    $_SESSION['livp_user'] = $user;
+    $_SESSION['action_cache'] = [
+        [
+            'action' => 'Inicio de sesión',
+            'section' => 'inicio',
+            'at' => $user['session_started_at'],
+        ],
+    ];
+}
+
+function destroyCurrentSession(): void
+{
+    $_SESSION = [];
+
+    if (ini_get('session.use_cookies')) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
+        );
+    }
+
+    session_destroy();
+}
+
+function formatSessionStartedAt(?string $dateTime): string
+{
+    if ($dateTime === null || trim($dateTime) === '') {
+        return 'No registrado';
+    }
+
+    $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $dateTime, new DateTimeZone('America/Lima'));
+
+    return $date instanceof DateTimeImmutable ? $date->format('d/m/Y · H:i') : 'No registrado';
+}
+
 function requireAuth(): array
 {
     if (!isAuthenticated()) {
+        sendNoCacheHeaders();
         header('Location: ' . appRelativeUrl('index.php'));
         exit;
     }
+
+    sendNoCacheHeaders();
 
     return $_SESSION['livp_user'];
 }

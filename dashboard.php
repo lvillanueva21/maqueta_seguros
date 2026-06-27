@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
+
 require __DIR__ . '/config/bootstrap.php';
 
 $user = requireAuth();
 $menu = menuForRole($user['role']);
 $initials = implode('', array_map(static fn (string $part): string => strtoupper(firstChar($part)), array_slice(preg_split('/\s+/', $user['name']) ?: [], 0, 2)));
 $today = (new DateTimeImmutable('now', new DateTimeZone('America/Lima')))->format('d/m/Y · H:i');
+$sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
 ?>
 <!doctype html>
 <html lang="es">
@@ -120,9 +122,11 @@ $today = (new DateTimeImmutable('now', new DateTimeZone('America/Lima')))->forma
                         </div>
                         <dl class="details-list">
                             <div><dt>Rol</dt><dd><?= e($user['role_label']) ?></dd></div>
+                            <div><dt>Tipo de cuenta</dt><dd><?= e((string) ($user['account_type_label'] ?? 'No registrado')) ?></dd></div>
                             <div><dt>Tipo de entidad</dt><dd><?= e($user['entity_type']) ?></dd></div>
                             <div><dt>Correo de referencia</dt><dd><?= e($user['contact_email']) ?></dd></div>
                             <div><dt>Teléfono de referencia</dt><dd><?= e($user['contact_phone']) ?></dd></div>
+                            <div><dt>Sesión iniciada</dt><dd><?= e($sessionStartedAt) ?></dd></div>
                         </dl>
                     </section>
 

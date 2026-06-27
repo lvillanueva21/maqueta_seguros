@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require __DIR__ . '/config/bootstrap.php';
 
 if (isAuthenticated()) {
@@ -29,15 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($matchedUser !== null && password_verify($password, $matchedUser['password_hash'])) {
-            unset($matchedUser['password_hash']);
-            $_SESSION['livp_user'] = $matchedUser;
-            $_SESSION['action_cache'] = [
-                [
-                    'action' => 'Inicio de sesión',
-                    'section' => 'inicio',
-                    'at' => date('Y-m-d H:i:s'),
-                ],
-            ];
+            createUserSession($matchedUser);
             header('Location: ' . appRelativeUrl('dashboard.php'));
             exit;
         }
