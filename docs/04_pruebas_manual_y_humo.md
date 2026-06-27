@@ -2,51 +2,34 @@
 
 ## Versión
 
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| VER-01 | Abrir `docs/00_version_actual.md` en GitHub luego del push | Debe aparecer `BS-20260627-164101-PET`. |
-| VER-02 | Revisar fecha y hora | Debe indicar 27/06/2026 16:41:01 (America/Lima). |
+- `BS-20260627-173744-PET`
+- 27/06/2026 17:37:44 (America/Lima)
 
-## Contactos y expedientes v3
+## Clientes v1
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| EXP-CONT-01 | Abrir Expedientes en incógnito | Deben mostrarse 5 expedientes demo, incluyendo 1 con cliente pendiente. |
-| EXP-CONT-02 | Abrir Crear expediente | Contacto de gestión, nombre y descripción son obligatorios; cliente es opcional. |
-| EXP-CONT-03 | Crear expediente sin cliente | Se guarda y muestra `Pendiente de definir` como cliente. |
-| EXP-CONT-04 | Intentar crear sin contacto | No se crea y aparece advertencia amigable. |
-| EXP-CONT-05 | Intentar crear sin nombre o descripción | No se crea y aparece advertencia amigable. |
-| EXP-CONT-06 | Registrar contacto rápido | Exige nombre y celular, se guarda localmente y queda seleccionado en el formulario. |
-| EXP-CONT-07 | Registrar contacto rápido vinculado a entidad | El contacto se crea y la entidad vinculada queda en sus datos locales. |
-| EXP-CONT-08 | Crear expediente con cliente | La tabla muestra contacto, cliente, código, situación y 0 cotizaciones. |
-| EXP-CONT-09 | Abrir ficha de un expediente | Muestra contacto, cliente o pendiente, fechas Perú y descripción. |
-| EXP-CONT-10 | Actualizar ficha | Permite cambiar contacto, cliente, situación, nombre y descripción. |
-| EXP-CONT-11 | Actualizar expediente antiguo migrado | Permite asignar contacto sin convertir al antiguo ejecutivo en contacto. |
-| EXP-CONT-12 | Entrar como gerente y luego como ejecutivo | Ambos ven todos los expedientes de la misma caché local. |
-| EXP-CONT-13 | Recargar con F5 después de crear o editar | Los datos siguen visibles en el mismo navegador. |
-| EXP-CONT-14 | Filtrar por Pendiente de definir | Solo muestra expedientes sin cliente. |
-| EXP-CONT-15 | Revisar formulario y ficha | No deben aparecer `Ejecutivo responsable`, `responsible_user_id` ni filtros por ejecutivo. |
-| EXP-CONT-16 | Revisar fechas `YYYY-MM-DD` | No cambian de día al mostrarse. |
-| EXP-CONT-17 | Crear o actualizar | Aparece un solo toast claro por acción. |
+| CLI-01 | Crear empresa solo con razón social | Guarda empresa activa. |
+| CLI-02 | Crear empresa con RUC válido | Guarda solo si tiene 11 dígitos y dígito verificador válido. |
+| CLI-03 | Repetir RUC en empresa o consorcio | Bloquea y muestra error. |
+| CLI-04 | Crear consorcio con RUC propio | Exige denominación, RUC válido y dos empresas. |
+| CLI-05 | Crear consorcio con operador tributario | Exige dos empresas y exactamente un operador. |
+| CLI-06 | Intentar retirar integrante dejando uno | Bloquea la acción. |
+| CLI-07 | Crear contacto sin nombre o celular | Bloquea la acción. |
+| CLI-08 | Crear contacto con dos vínculos | Permite etiquetas distintas y principal por entidad. |
+| CLI-09 | Desactivar empresa, consorcio o contacto | Abre modal rojo y exige motivo. |
+| CLI-10 | Buscar y filtrar por activos/inactivos | Actualiza tabla sin alterar datos. |
 
-## Migración de caché
+## Expedientes integrados
 
 | ID | Prueba | Resultado esperado |
 |---|---|---|
-| MIG-CONT-01 | Abrir Expedientes con caché `broker_seguros_demo_expedients_v2` | Se crea caché v3 sin perder código, cliente, fechas, descripción ni cotizaciones. |
-| MIG-CONT-02 | Revisar campos antiguos de ejecutivo | No se muestran como contacto de gestión. |
-| MIG-CONT-03 | Abrir Expedientes antes que Catálogos | Las situaciones antiguas se normalizan sin depender del orden de navegación. |
+| EXP-ENT-01 | Crear expediente con contacto vinculado a una sola entidad | Sugiere cliente; usuario puede cambiar o limpiar. |
+| EXP-ENT-02 | Crear expediente con contacto de varios vínculos | No selecciona cliente automáticamente. |
+| EXP-ENT-03 | Crear expediente con entidad pendiente | Permite guardar con contacto, nombre y descripción. |
+| EXP-ENT-04 | Desactivar entidad usada en expediente | Conserva nombre histórico en expediente; no la ofrece para nuevas selecciones. |
+| EXP-ENT-05 | Recargar la página después de cambios | Datos permanecen en el mismo navegador. |
 
-## Permisos
+## Límites
 
-| ID | Prueba | Resultado esperado |
-|---|---|---|
-| PERM-CONT-01 | Cliente abre `expedientes.php` | Redirige a acceso no autorizado. |
-| PERM-CONT-02 | Cliente abre `catalogos.php` | Redirige a acceso no autorizado. |
-| PERM-CONT-03 | Cerrar sesión y usar Atrás/recargar | No debe mostrarse contenido privado desde caché. |
-
-## Limitaciones deliberadas
-
-- Incógnito no comparte `localStorage` con el navegador normal.
-- La información demo no se comparte entre equipos.
-- La seguridad real y los filtros por usuario se implementarán con MySQL y backend.
+Incógnito y otro navegador no comparten `localStorage`. No hay MySQL, SUNAT, usuarios cliente ni pólizas en esta versión.

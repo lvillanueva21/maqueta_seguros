@@ -2,47 +2,30 @@
 
 ## Estado actual
 
-- [x] Maqueta visual inicial.
-- [x] Login demo por DNI, CE y RUC.
-- [x] Contexto de sesión centralizado.
-- [x] Dashboard con datos demo por perfil.
-- [x] Matriz inicial de permisos y rutas controladas por servidor.
-- [x] Catálogos demo básicos.
-- [x] Notificaciones globales y mensajes amigables.
-- [x] Migraciones compartidas de caché local.
-- [x] Fechas JavaScript alineadas a America/Lima.
-- [x] Expediente flexible sin flujo obligatorio.
-- [x] Contacto de gestión separado de usuario interno.
-- [x] Cliente opcional al inicio del expediente.
-- [ ] Validación visual completa pendiente en navegador real.
-- [ ] Módulos reales con MySQL.
+- [x] Login, sesión, rutas y perfiles demo.
+- [x] Catálogos demo y notificaciones.
+- [x] Expedientes flexibles con contacto de gestión.
+- [x] Empresas, Consorcios y Contactos de gestión demo.
+- [x] Integración de entidades con Expedientes.
+- [ ] Validación visual completa en navegador real.
+- [ ] MySQL y persistencia real.
 
 ## Siguiente bloque recomendado
 
-### Fase 6: Empresas y Consorcios — base flexible
+### Fase 7: Catálogo operativo de tipos de seguro y aseguradoras
 
-Alcance:
-
-- registrar empresas con datos parciales;
-- registrar consorcios con dos o más empresas;
-- soportar consorcio con RUC propio;
-- soportar consorcio con operador tributario;
-- permitir contactos vinculados a una o varias entidades;
-- reemplazar gradualmente los datos demo de cliente por registros administrables;
-- no implementar todavía pólizas ni requisitos obligatorios.
+- tipos de seguro con nombre, descripción y estado;
+- aseguradoras con datos parciales;
+- sin requisitos, formatos ni ítems configurables todavía;
+- selección opcional desde expediente o póliza futura, sin imponer flujo.
 
 ## Fases posteriores
 
-1. Catálogo completo de tipos de seguro y aseguradoras.
-2. Cotizaciones flexibles y vencimiento por fecha límite.
-3. Registro básico de pólizas con datos opcionales y cliente obligatorio.
-4. Timeline y gestión documental.
-5. Requisitos y formatos reutilizables.
-6. Pagos, vouchers, garantías y siniestros.
-7. Constructor de ítems configurables.
-8. Vista cliente por RUC.
-9. OCR/PDF y QR.
-
-## Regla de avance
-
-No iniciar una fase mientras la anterior tenga fallas funcionales críticas. No agregar campos específicos de seguros a la raíz del expediente.
+1. Cotizaciones flexibles y vencimiento.
+2. Registro básico de pólizas con cliente obligatorio.
+3. Timeline y documentos.
+4. Requisitos y formatos.
+5. Pagos, vouchers, garantías y siniestros.
+6. Constructor de ítems configurables.
+7. Vista cliente por RUC.
+8. OCR/PDF y QR.
