@@ -6,22 +6,27 @@
 - [x] Login demo por DNI, CE y RUC.
 - [x] Contexto de sesión centralizado.
 - [x] Dashboard por perfil.
+- [x] Dashboard con datos demo controlados por perfil.
 - [x] Protección de páginas privadas y cierre de sesión.
 - [x] Documentación viva inicial.
 
 ## Siguiente bloque recomendado
 
-### Fase 2: dashboard con datos demo controlados
+### Fase 3: menú y permisos de módulos
 
-Crear datos demo centralizados para cada perfil y mostrar indicadores útiles, sin implementar todavía base de datos:
+Definir una matriz inicial de permisos y hacer que los módulos en construcción respeten el perfil autenticado desde servidor, no solo ocultando opciones visualmente.
 
-- gerente: resumen global;
-- ejecutivo: cartera y tareas;
-- empresa/consorcio: seguros y acciones disponibles.
+Resultado mínimo esperado:
+
+- gerente ve módulos globales;
+- ejecutivo ve módulos operativos;
+- empresa y consorcio ven únicamente opciones de consulta;
+- acceso directo a un módulo no permitido muestra una página controlada;
+- las reglas quedan centralizadas para reutilizarlas cuando los módulos sean reales.
 
 ## Fases posteriores
 
-1. Menú dinámico por permisos reales.
+1. Catálogos demo básicos.
 2. Módulo mínimo de expedientes.
 3. Creación y listado de expedientes temporales.
 4. Detalle y cambio de estado.

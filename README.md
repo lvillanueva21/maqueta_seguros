@@ -6,7 +6,8 @@ Primer prototipo web en **PHP, JavaScript y CSS**, sin base de datos.
 
 - Login por DNI, CE o RUC.
 - Cuatro accesos de prueba: gerente, ejecutivo, empresa y consorcio.
-- Panel de inicio personalizado por rol.
+- Sesión protegida y cierre de sesión.
+- Dashboard con datos demo distintos para cada perfil.
 - Menú lateral según el perfil mostrado en la maqueta de referencia.
 - Módulos no implementados con vista **“En construcción”**.
 - Caché temporal de navegación con:
@@ -49,6 +50,7 @@ La documentación viva se mantiene en [`docs/`](docs/):
 - Plan incremental: [`docs/03_plan_de_implementacion.md`](docs/03_plan_de_implementacion.md)
 - Pruebas manuales: [`docs/04_pruebas_manual_y_humo.md`](docs/04_pruebas_manual_y_humo.md)
 - Historial: [`docs/05_historial_de_cambios.md`](docs/05_historial_de_cambios.md)
+- Dashboard: [`docs/funcionalidades/dashboard_inicio.md`](docs/funcionalidades/dashboard_inicio.md)
 
 ## Estructura
 
@@ -58,12 +60,15 @@ La documentación viva se mantiene en [`docs/`](docs/):
 │   ├── cache_action.php
 │   └── cache_actions.php
 ├── assets/
-│   ├── css/app.css
+│   ├── css/
+│   │   ├── app.css
+│   │   └── dashboard.css
 │   └── js/
 │       ├── app.js
 │       └── login.js
 ├── config/
 │   ├── bootstrap.php
+│   ├── demo_dashboard_data.php
 │   └── demo_users.php
 ├── docs/
 │   └── funcionalidades/
@@ -76,6 +81,8 @@ La documentación viva se mantiene en [`docs/`](docs/):
 ## Nota
 
 Esta maqueta no almacena información de negocio de forma permanente. Al reiniciar el navegador o cerrar sesión, los datos de sesión se eliminan. La navegación reciente puede mantenerse localmente en el navegador por `localStorage`.
+
+Los indicadores y tablas del Inicio salen de `config/demo_dashboard_data.php`. Son datos de validación visual y funcional; no representan información real ni se guardan en una base de datos.
 
 ## Publicación en Hostinger
 

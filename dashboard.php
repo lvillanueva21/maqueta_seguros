@@ -5,9 +5,21 @@ require __DIR__ . '/config/bootstrap.php';
 
 $user = requireAuth();
 $menu = menuForRole($user['role']);
-$initials = implode('', array_map(static fn (string $part): string => strtoupper(firstChar($part)), array_slice(preg_split('/\s+/', $user['name']) ?: [], 0, 2)));
+$dashboardDataSource = require __DIR__ . '/config/demo_dashboard_data.php';
+$dashboard = $dashboardDataSource[(string) $user['id']] ?? $dashboardDataSource['default'];
+
+$initials = implode('', array_map(
+    static fn (string $part): string => strtoupper(firstChar($part)),
+    array_slice(preg_split('/\s+/', $user['name']) ?: [], 0, 2)
+));
 $today = (new DateTimeImmutable('now', new DateTimeZone('America/Lima')))->format('d/m/Y · H:i');
 $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
+
+$metrics = is_array($dashboard['metrics'] ?? null) ? $dashboard['metrics'] : [];
+$alerts = is_array($dashboard['alerts'] ?? null) ? $dashboard['alerts'] : [];
+$primaryTable = is_array($dashboard['primary_table'] ?? null) ? $dashboard['primary_table'] : [];
+$secondaryTable = is_array($dashboard['secondary_table'] ?? null) ? $dashboard['secondary_table'] : [];
+$companySummary = is_array($dashboard['company_summary'] ?? null) ? $dashboard['company_summary'] : [];
 ?>
 <!doctype html>
 <html lang="es">
@@ -16,6 +28,7 @@ $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LIVP Seguros | <?= e($user['role_label']) ?></title>
     <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
 <body class="app-body" data-role="<?= e($user['role']) ?>" data-user="<?= e((string) $user['id']) ?>">
 <div class="app-shell">
@@ -41,7 +54,7 @@ $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
         </div>
 
         <nav class="main-nav" aria-label="Navegación principal">
-            <?php foreach ($menu as $index => $item): ?>
+            <?php foreach ($menu as $item): ?>
                 <button
                     type="button"
                     class="nav-item <?= $item['id'] === 'inicio' ? 'is-active' : '' ?>"
@@ -81,7 +94,7 @@ $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
                     <div>
                         <p class="eyebrow">PANEL DE <?= e(strtoupper($user['role_label'])) ?></p>
                         <h2>Bienvenido, <?= e($user['name']) ?></h2>
-                        <p>Esta pantalla resume los datos principales del perfil que ingresó al sistema.</p>
+                        <p><?= e((string) ($dashboard['summary'] ?? 'Esta pantalla resume los datos principales del perfil que ingresó al sistema.')) ?></p>
                     </div>
                     <div class="welcome-date">
                         <span>Hora Perú</span>
@@ -89,45 +102,52 @@ $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
                     </div>
                 </div>
 
-                <div class="stats-grid">
-                    <article class="info-card">
-                        <span class="card-icon">◉</span>
-                        <p>Tipo de perfil</p>
-                        <h3><?= e($user['profile_title']) ?></h3>
-                    </article>
-                    <article class="info-card">
-                        <span class="card-icon">#</span>
-                        <p>Documento de acceso</p>
-                        <h3><?= e($user['document_type']) ?> <?= e($user['document']) ?></h3>
-                    </article>
-                    <article class="info-card">
-                        <span class="card-icon">▣</span>
-                        <p>Entidad relacionada</p>
-                        <h3><?= e($user['entity_name']) ?></h3>
-                    </article>
-                    <article class="info-card">
-                        <span class="card-icon">✓</span>
-                        <p>Ámbito de acceso</p>
-                        <h3><?= e($user['scope']) ?></h3>
-                    </article>
+                <div class="dashboard-metrics">
+                    <?php foreach ($metrics as $metric): ?>
+                        <?php
+                        $metricTone = (string) ($metric['tone'] ?? 'primary');
+                        $allowedTones = ['primary', 'warning', 'danger', 'success'];
+                        $metricTone = in_array($metricTone, $allowedTones, true) ? $metricTone : 'primary';
+                        ?>
+                        <article class="dashboard-metric metric-<?= e($metricTone) ?>">
+                            <div class="dashboard-metric-top">
+                                <span class="dashboard-metric-icon" aria-hidden="true"><?= e((string) ($metric['icon'] ?? '•')) ?></span>
+                                <span class="dashboard-metric-status" aria-hidden="true"></span>
+                            </div>
+                            <p><?= e((string) ($metric['label'] ?? 'Indicador')) ?></p>
+                            <h3><?= e((string) ($metric['value'] ?? '—')) ?></h3>
+                            <small><?= e((string) ($metric['note'] ?? '')) ?></small>
+                        </article>
+                    <?php endforeach; ?>
                 </div>
 
-                <div class="details-layout">
-                    <section class="detail-card">
+                <div class="dashboard-main-grid">
+                    <section class="dashboard-panel">
                         <div class="section-heading">
                             <div>
-                                <p class="eyebrow">DATOS DEL PERFIL</p>
-                                <h2>Información registrada</h2>
+                                <p class="eyebrow">ATENCIÓN REQUERIDA</p>
+                                <h2>Alertas principales</h2>
                             </div>
                         </div>
-                        <dl class="details-list">
-                            <div><dt>Rol</dt><dd><?= e($user['role_label']) ?></dd></div>
-                            <div><dt>Tipo de cuenta</dt><dd><?= e((string) ($user['account_type_label'] ?? 'No registrado')) ?></dd></div>
-                            <div><dt>Tipo de entidad</dt><dd><?= e($user['entity_type']) ?></dd></div>
-                            <div><dt>Correo de referencia</dt><dd><?= e($user['contact_email']) ?></dd></div>
-                            <div><dt>Teléfono de referencia</dt><dd><?= e($user['contact_phone']) ?></dd></div>
-                            <div><dt>Sesión iniciada</dt><dd><?= e($sessionStartedAt) ?></dd></div>
-                        </dl>
+
+                        <?php if ($alerts !== []): ?>
+                            <ul class="alert-list">
+                                <?php foreach ($alerts as $alert): ?>
+                                    <?php
+                                    $alertLevel = (string) ($alert['level'] ?? 'primary');
+                                    $allowedLevels = ['primary', 'warning', 'danger', 'success'];
+                                    $alertLevel = in_array($alertLevel, $allowedLevels, true) ? $alertLevel : 'primary';
+                                    ?>
+                                    <li class="alert-item alert-<?= e($alertLevel) ?>">
+                                        <p class="alert-item-title"><?= e((string) ($alert['title'] ?? 'Alerta registrada')) ?></p>
+                                        <p class="alert-item-description"><?= e((string) ($alert['description'] ?? '')) ?></p>
+                                        <span class="alert-item-meta"><?= e((string) ($alert['meta'] ?? '')) ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p class="dashboard-empty">No hay alertas configuradas para este perfil.</p>
+                        <?php endif; ?>
                     </section>
 
                     <section class="detail-card cache-card">
@@ -140,15 +160,111 @@ $sessionStartedAt = formatSessionStartedAt($user['session_started_at'] ?? null);
                         </div>
                         <p>Las acciones de navegación se mantienen durante esta sesión y también en el navegador, sin base de datos.</p>
                         <ul id="cache-list" class="cache-list"><li>Cargando acciones recientes…</li></ul>
+
+                        <dl class="details-list">
+                            <div><dt>Tipo de cuenta</dt><dd><?= e((string) ($user['account_type_label'] ?? 'No registrado')) ?></dd></div>
+                            <div><dt>Sesión iniciada</dt><dd><?= e($sessionStartedAt) ?></dd></div>
+                        </dl>
                     </section>
                 </div>
+
+                <section class="dashboard-panel">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow"><?= e((string) ($primaryTable['eyebrow'] ?? 'INFORMACIÓN')) ?></p>
+                            <h2><?= e((string) ($primaryTable['title'] ?? 'Información principal')) ?></h2>
+                        </div>
+                    </div>
+                    <p class="dashboard-panel-description"><?= e((string) ($primaryTable['description'] ?? '')) ?></p>
+
+                    <?php if (!empty($primaryTable['columns']) && !empty($primaryTable['rows'])): ?>
+                        <div class="dashboard-table-wrap">
+                            <table class="dashboard-table">
+                                <thead>
+                                <tr>
+                                    <?php foreach ($primaryTable['columns'] as $column): ?>
+                                        <th scope="col"><?= e((string) $column) ?></th>
+                                    <?php endforeach; ?>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($primaryTable['rows'] as $row): ?>
+                                    <tr>
+                                        <?php foreach ($row as $cell): ?>
+                                            <td><?= e((string) $cell) ?></td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p class="dashboard-empty">No hay datos disponibles para esta sección.</p>
+                    <?php endif; ?>
+                </section>
+
+                <?php if ($companySummary !== []): ?>
+                    <section class="dashboard-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">EMPRESAS PARTICIPANTES</p>
+                                <h2>Resumen por empresa</h2>
+                            </div>
+                        </div>
+                        <div class="company-summary-grid">
+                            <?php foreach ($companySummary as $company): ?>
+                                <article class="company-summary-card">
+                                    <h3><?= e((string) ($company['name'] ?? 'Empresa')) ?></h3>
+                                    <p><?= e((string) ($company['ruc'] ?? '')) ?></p>
+                                    <p><?= e((string) ($company['policies'] ?? '')) ?></p>
+                                    <p class="company-summary-pending"><?= e((string) ($company['pending'] ?? '')) ?></p>
+                                </article>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endif; ?>
+
+                <section class="dashboard-panel">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow"><?= e((string) ($secondaryTable['eyebrow'] ?? 'SEGUIMIENTO')) ?></p>
+                            <h2><?= e((string) ($secondaryTable['title'] ?? 'Información complementaria')) ?></h2>
+                        </div>
+                    </div>
+                    <p class="dashboard-panel-description"><?= e((string) ($secondaryTable['description'] ?? '')) ?></p>
+
+                    <?php if (!empty($secondaryTable['columns']) && !empty($secondaryTable['rows'])): ?>
+                        <div class="dashboard-table-wrap">
+                            <table class="dashboard-table">
+                                <thead>
+                                <tr>
+                                    <?php foreach ($secondaryTable['columns'] as $column): ?>
+                                        <th scope="col"><?= e((string) $column) ?></th>
+                                    <?php endforeach; ?>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($secondaryTable['rows'] as $row): ?>
+                                    <tr>
+                                        <?php foreach ($row as $cell): ?>
+                                            <td><?= e((string) $cell) ?></td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p class="dashboard-empty">No hay datos disponibles para esta sección.</p>
+                    <?php endif; ?>
+                </section>
 
                 <?php if (!empty($user['consortium_members'])): ?>
                     <section class="detail-card consortium-card">
                         <div class="section-heading">
                             <div>
                                 <p class="eyebrow">CONSORCIO</p>
-                                <h2>Empresas participantes</h2>
+                                <h2>Empresas participantes registradas</h2>
                             </div>
                         </div>
                         <ul class="member-list">

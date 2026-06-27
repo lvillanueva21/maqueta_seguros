@@ -16,11 +16,19 @@ config/bootstrap.php
 config/demo_users.php
 └── catálogo temporal de cuatro usuarios demo
 
+config/demo_dashboard_data.php
+└── indicadores, alertas y tablas demo por usuario
+
 dashboard.php
 ├── requireAuth()
+├── carga datos demo según usuario
 ├── menú por rol
-├── información del contexto de sesión
+├── indicadores y alertas de Inicio
+├── tablas de seguimiento
 └── vistas temporales de módulos
+
+assets/css/dashboard.css
+└── estilos específicos del Inicio con datos demo
 
 api/
 └── conserva acciones de navegación durante la sesión
@@ -43,3 +51,9 @@ La clave `$_SESSION['livp_user']` contiene, como mínimo:
 - fecha y hora de inicio de sesión.
 
 La clave `$_SESSION['action_cache']` guarda el historial temporal de acciones de la sesión.
+
+## Fuente de dashboard demo
+
+`config/demo_dashboard_data.php` es la única fuente temporal de indicadores y tablas del Inicio. Los datos se indexan por `id` del usuario demo. Esto permite cambiar la información de una vista sin modificar `dashboard.php`.
+
+Cuando se implemente MySQL, esta fuente debe ser reemplazada por consultas o servicios que entreguen la misma estructura: resumen, métricas, alertas, tabla principal y tabla secundaria.
