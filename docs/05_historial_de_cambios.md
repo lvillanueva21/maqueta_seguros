@@ -1,13 +1,14 @@
 # Historial de cambios
 
-## 27/06/2026 19:33:19 (America/Lima) — BS-20260627-193319-PET — Recuperación Expedientes y Pólizas
+## 27/06/2026 20:30:11 — BS-20260627-203011-COT
 
-- Se reconstruye `expedientes.php` como archivo incluido en el paquete de recuperación.
-- Se cargan explícitamente `polizas.css` y `polizas.js`.
-- Se elimina la carga dinámica de Pólizas desde migraciones de caché.
-- Se elimina la observación de DOM que podía causar re-render continuo de la sección Pólizas.
-- Se crea integración estable por evento `broker:expedient-detail-rendered`.
-- Se añade API interna `window.BrokerExpedients` para que Pólizas use el expediente abierto de forma confiable.
-- Se añade Cancelar en Actualizar información.
-- Se corrige herencia de negrita en controles de formularios.
-- Se conservan endpoints y almacenamiento protegido para PDF.
+- Nuevo módulo Cotizaciones para Gerente y Ejecutivo.
+- Plantillas genéricas: simple y comparativa.
+- Plantillas editables con símbolo textual, nombre del corredor, título, contacto y pie.
+- Destinatario registrado o informal con copia histórica en cada cotización.
+- Grupos comparativos, alternativas, prima total, cuotas, valor por cuota, moneda y suma asegurada.
+- Selección única de alternativa.
+- Datos y adicionales de texto enriquecido con negrita y listas.
+- Orden con arrastre para datos, grupos, alternativas y bloques.
+- Vista A4 e impresión local a PDF.
+- Logo opcional de aseguradora administrado desde Catálogos por Gerente.

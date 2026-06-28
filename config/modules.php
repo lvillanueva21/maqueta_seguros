@@ -6,6 +6,7 @@ return [
  'usuarios'=>['id'=>'usuarios','label'=>'Usuarios','icon'=>'♙','roles'=>['gerente'],'description'=>'Administración futura de usuarios, roles, accesos y responsables.','scope'=>'Administración'],
  'clientes'=>['id'=>'clientes','label'=>'Clientes','icon'=>'♙','roles'=>['gerente','ejecutivo'],'description'=>'Gestión de empresas, consorcios y contactos de gestión.','scope'=>'Gestión operativa'],
  'expedientes'=>['id'=>'expedientes','label'=>'Expedientes','icon'=>'▧','roles'=>['gerente','ejecutivo'],'description'=>'Registro y seguimiento flexible de un proceso asegurador.','scope'=>'Núcleo operativo'],
+ 'cotizaciones'=>['id'=>'cotizaciones','label'=>'Cotizaciones','icon'=>'▤','roles'=>['gerente','ejecutivo'],'description'=>'Plantillas, propuestas comparativas y vista previa imprimible.','scope'=>'Núcleo comercial'],
  'seguros'=>['id'=>'seguros','label'=>'Seguros','icon'=>'▣','roles'=>['gerente','ejecutivo'],'description'=>'Gestión futura de pólizas, renovaciones y coberturas emitidas.','scope'=>'Gestión operativa'],
  'cobranzas'=>['id'=>'cobranzas','label'=>'Cobranzas','icon'=>'◉','roles'=>['gerente','ejecutivo'],'description'=>'Control futuro de pagos, cuotas, vouchers y cartera pendiente.','scope'=>'Gestión operativa'],
  'siniestros'=>['id'=>'siniestros','label'=>'Siniestros','icon'=>'⚑','roles'=>['gerente','ejecutivo'],'description'=>'Seguimiento futuro de siniestros, solicitudes, documentos y plazos.','scope'=>'Gestión operativa'],
