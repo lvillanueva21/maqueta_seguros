@@ -1,24 +1,14 @@
 # Historial de cambios
 
-## 27/06/2026 18:35:03 (America/Lima) - BS-20260627-183503-PET - Pólizas v1 y PDF opcional
+## 27/06/2026 19:17:18 (America/Lima) - BS-20260627-191718-PET - Corrección Pólizas y toast en modal
 
-### Agregado
+- Se elimina el segundo `<dialog>` para crear, editar o desactivar pólizas.
+- La edición de póliza ocurre dentro de la ficha abierta del expediente.
+- Volver y cancelar restauran la ficha del expediente.
+- Los mensajes se insertan dentro del modal activo y dejan de aparecer debajo.
+- Se agrega mensaje explícito cuando no se identifica el expediente abierto.
+- Se conserva carga de PDF, barra de progreso, reemplazo físico, validación de vigencia y desactivación.
 
-- Sección Pólizas dentro de la ficha de Expediente.
-- Código interno automático `POL-YYYY-NNNN`.
-- Cliente histórico tomado desde el expediente.
-- Validación obligatoria de título, tipo, aseguradora e inicio/fin de vigencia.
-- PDF principal opcional con barra de carga y nombre visible.
-- Endpoints de subir, reemplazar, eliminar y visualizar PDF protegido.
-- Almacenamiento físico organizado bajo `almacen/polizas`.
-- Desactivación con motivo obligatorio.
-- Migración de caché para conservar pólizas dentro de Expedientes.
-- Protección contra pérdida de pólizas cuando se guarda luego información general del expediente.
+## 27/06/2026 18:35:03 (America/Lima) - BS-20260627-183503-PET - Pólizas v1
 
-### Corregido
-
-- Los activos de notificaciones/modales se incluyen para que los mensajes dentro de diálogos sigan siendo visibles al cargar o reemplazar PDF.
-
-## 27/06/2026 18:01:06 (America/Lima) - BS-20260627-180106-PET - Estabilización visual
-
-- Notificaciones contextuales dentro de modales y capa visual común.
+- Pólizas, PDF opcional y almacenamiento organizado.
