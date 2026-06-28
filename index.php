@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="brand-notes">
             <span>PHP + sesiones</span>
             <span>Estado local en caché</span>
-            <span>Diseño responsive</span>
+            <span>Diseño responsive </span>
         </div>
     </section>
 
