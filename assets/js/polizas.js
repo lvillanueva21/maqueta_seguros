@@ -369,6 +369,7 @@
         ends_at: endsAt,
         status: state?.name || 'En emisión',
         observations: $('#policy-observations', content).value.trim(),
+        alerts: Array.isArray(existing?.alerts) ? existing.alerts : [],
         file: fileInfo,
         active: existing?.active !== false,
         deactivation_reason: existing?.deactivation_reason || '',
