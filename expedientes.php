@@ -50,14 +50,17 @@ if ($catalogDataJson === false) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | <?= e($pageTitle) ?></title>
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="stylesheet" href="assets/css/modules.css">
-    <link rel="stylesheet" href="assets/css/expedientes.css">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-193319-PET">
+    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-193319-PET">
+    <link rel="stylesheet" href="assets/css/expedientes.css?v=BS-20260627-193319-PET">
+    <link rel="stylesheet" href="assets/css/modal-ui.css?v=BS-20260627-193319-PET" data-broker-modal-ui-styles="true">
+    <link rel="stylesheet" href="assets/css/notifications.css?v=BS-20260627-193319-PET" data-broker-notification-styles="true">
+    <link rel="stylesheet" href="assets/css/polizas.css?v=BS-20260627-193319-PET">
+    <link rel="stylesheet" href="assets/css/expedientes-recovery.css?v=BS-20260627-193319-PET">
 </head>
 <body class="app-body" data-role="<?= e((string) $user['role']) ?>" data-user="<?= e((string) $user['id']) ?>">
 <div class="app-shell">
     <?php require __DIR__ . '/views/partials/sidebar.php'; ?>
-
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <main class="workspace">
@@ -69,7 +72,7 @@ if ($catalogDataJson === false) {
                 <div>
                     <p class="eyebrow">NÚCLEO OPERATIVO</p>
                     <h2>Expedientes demo</h2>
-                    <p>Un expediente representa un proceso asegurador. Inicia con un contacto de gestión, nombre y descripción; el cliente, tipo de seguro, cotización y póliza pueden definirse después cuando corresponda.</p>
+                    <p>Un expediente inicia con contacto de gestión, nombre y descripción. El cliente, cotización y póliza se definen cuando corresponda.</p>
                 </div>
                 <span class="module-access-badge">Gestión interna compartida</span>
             </article>
@@ -107,7 +110,7 @@ if ($catalogDataJson === false) {
                         <div>
                             <p class="eyebrow">CONTROL DE EXPEDIENTES</p>
                             <h2>Listado de expedientes</h2>
-                            <p id="expedients-context-text">Gerentes y ejecutivos pueden consultar y trabajar sobre todos los expedientes. Los datos demo se guardan únicamente en este navegador.</p>
+                            <p id="expedients-context-text">Gerentes y ejecutivos pueden trabajar sobre todos los expedientes. Los datos demo se guardan únicamente en este navegador.</p>
                         </div>
                         <button id="add-expedient" class="expedient-primary-button" type="button">+ Crear expediente</button>
                     </div>
@@ -117,21 +120,14 @@ if ($catalogDataJson === false) {
                             <span>Buscar</span>
                             <input id="filter-search" type="search" placeholder="Código, contacto, cliente, nombre o detalle">
                         </label>
-
                         <label>
                             <span>Situación</span>
-                            <select id="filter-state">
-                                <option value="">Todas</option>
-                            </select>
+                            <select id="filter-state"><option value="">Todas</option></select>
                         </label>
-
                         <label>
                             <span>Cliente o entidad</span>
-                            <select id="filter-client">
-                                <option value="">Todos</option>
-                            </select>
+                            <select id="filter-client"><option value="">Todos</option></select>
                         </label>
-
                         <button id="clear-expedient-filters" class="expedient-secondary-button" type="button">Limpiar filtros</button>
                     </div>
 
@@ -150,13 +146,10 @@ if ($catalogDataJson === false) {
                             </tr>
                             </thead>
                             <tbody id="expedient-table-body">
-                            <tr>
-                                <td colspan="8">Cargando expedientes…</td>
-                            </tr>
+                            <tr><td colspan="8">Cargando expedientes…</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <p id="expedient-empty" class="expedient-empty" hidden>No existen expedientes que coincidan con los filtros seleccionados.</p>
                 </section>
             </section>
@@ -173,30 +166,25 @@ if ($catalogDataJson === false) {
             </div>
             <button id="expedient-form-close" class="expedient-dialog-close" type="button" aria-label="Cerrar">×</button>
         </div>
-
-        <p class="expedient-form-help">Registra el contacto de gestión, nombre y detalle del proceso. El cliente o entidad puede quedar pendiente hasta que exista información suficiente; será obligatorio antes de registrar una póliza en una fase futura.</p>
+        <p class="expedient-form-help">Registra el contacto de gestión, nombre y detalle del proceso. El cliente o entidad puede quedar pendiente; será obligatorio antes de registrar una póliza.</p>
 
         <div class="expedient-form-grid">
             <label>
                 <span>Contacto de gestión <b aria-hidden="true">*</b></span>
                 <select id="expedient-contact" required></select>
             </label>
-
             <div class="expedient-contact-create">
                 <span>¿No está registrado?</span>
                 <button id="show-quick-contact" class="expedient-link-button" type="button">+ Registrar contacto rápido</button>
             </div>
-
             <label>
                 <span>Cliente o entidad</span>
                 <select id="expedient-client"></select>
             </label>
-
             <label>
                 <span>Situación inicial</span>
                 <select id="expedient-state"></select>
             </label>
-
             <label class="expedient-field-wide">
                 <span>Nombre del expediente <b aria-hidden="true">*</b></span>
                 <input id="expedient-title" type="text" maxlength="140" placeholder="Ejemplo: Protección para obra vial" required>
@@ -211,38 +199,17 @@ if ($catalogDataJson === false) {
                 </div>
                 <button id="cancel-quick-contact" class="expedient-dialog-close" type="button" aria-label="Cerrar registro de contacto">×</button>
             </div>
-
-            <p>Este contacto es una persona natural interesada o relacionada con el proceso. No es un usuario interno ni un cliente por sí mismo.</p>
-
+            <p>Este contacto es una persona natural relacionada con el proceso. No es usuario interno ni cliente por sí mismo.</p>
             <div class="expedient-form-grid">
-                <label>
-                    <span>Nombre completo <b aria-hidden="true">*</b></span>
-                    <input id="quick-contact-name" type="text" maxlength="140" placeholder="Nombres y apellidos">
-                </label>
-
-                <label>
-                    <span>Celular <b aria-hidden="true">*</b></span>
-                    <input id="quick-contact-mobile" type="text" maxlength="30" placeholder="Ejemplo: 999 999 999">
-                </label>
-
-                <label>
-                    <span>Correo</span>
-                    <input id="quick-contact-email" type="email" maxlength="140" placeholder="Opcional">
-                </label>
-
-                <label>
-                    <span>Etiqueta o cargo</span>
-                    <input id="quick-contact-label" type="text" maxlength="80" placeholder="Ejemplo: Secretaria, gerente, solicitante">
-                </label>
-
-                <label>
-                    <span>Entidad vinculada</span>
-                    <select id="quick-contact-entity"></select>
-                </label>
+                <label><span>Nombre completo <b aria-hidden="true">*</b></span><input id="quick-contact-name" type="text" maxlength="140" placeholder="Nombres y apellidos"></label>
+                <label><span>Celular <b aria-hidden="true">*</b></span><input id="quick-contact-mobile" type="text" maxlength="30" placeholder="Ejemplo: 999 999 999"></label>
+                <label><span>Correo</span><input id="quick-contact-email" type="email" maxlength="140" placeholder="Opcional"></label>
+                <label><span>Etiqueta o cargo</span><input id="quick-contact-label" type="text" maxlength="80" placeholder="Ejemplo: secretaria, gerente, solicitante"></label>
+                <label><span>Entidad vinculada</span><select id="quick-contact-entity"></select></label>
             </div>
-
             <div class="quick-contact-actions">
                 <button id="save-quick-contact" class="expedient-secondary-button" type="button">Guardar y seleccionar contacto</button>
+                <button id="cancel-quick-contact-secondary" class="expedient-secondary-button" type="button">Cancelar</button>
             </div>
         </section>
 
@@ -250,9 +217,7 @@ if ($catalogDataJson === false) {
             <span>Descripción o detalle <b aria-hidden="true">*</b></span>
             <textarea id="expedient-description" rows="4" maxlength="800" placeholder="Registra el contexto inicial disponible." required></textarea>
         </label>
-
         <p class="expedient-code-note">El código y la fecha/hora Perú se generan automáticamente. No se exigirá cliente, cotización, seguro, póliza, pago ni documento para crear el expediente.</p>
-
         <div class="expedient-dialog-actions">
             <button id="expedient-form-cancel" class="expedient-secondary-button" type="button">Cancelar</button>
             <button class="expedient-primary-button" type="submit">Crear expediente demo</button>
@@ -269,15 +234,15 @@ if ($catalogDataJson === false) {
             </div>
             <button id="expedient-detail-close" class="expedient-dialog-close" type="button" aria-label="Cerrar">×</button>
         </div>
-
         <div id="expedient-detail-content"></div>
     </div>
 </dialog>
 
 <script id="expedient-default-data" type="application/json"><?= $expedientDataJson ?></script>
 <script id="expedient-catalog-data" type="application/json"><?= $catalogDataJson ?></script>
-<script src="assets/js/cache-migrations.js"></script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/expedientes.js"></script>
+<script src="assets/js/cache-migrations.js?v=BS-20260627-193319-PET"></script>
+<script src="assets/js/app.js?v=BS-20260627-193319-PET"></script>
+<script src="assets/js/expedientes.js?v=BS-20260627-193319-PET"></script>
+<script src="assets/js/polizas.js?v=BS-20260627-193319-PET"></script>
 </body>
 </html>

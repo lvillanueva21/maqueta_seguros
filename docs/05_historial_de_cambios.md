@@ -1,14 +1,13 @@
 # Historial de cambios
 
-## 27/06/2026 19:17:18 (America/Lima) - BS-20260627-191718-PET - Corrección Pólizas y toast en modal
+## 27/06/2026 19:33:19 (America/Lima) — BS-20260627-193319-PET — Recuperación Expedientes y Pólizas
 
-- Se elimina el segundo `<dialog>` para crear, editar o desactivar pólizas.
-- La edición de póliza ocurre dentro de la ficha abierta del expediente.
-- Volver y cancelar restauran la ficha del expediente.
-- Los mensajes se insertan dentro del modal activo y dejan de aparecer debajo.
-- Se agrega mensaje explícito cuando no se identifica el expediente abierto.
-- Se conserva carga de PDF, barra de progreso, reemplazo físico, validación de vigencia y desactivación.
-
-## 27/06/2026 18:35:03 (America/Lima) - BS-20260627-183503-PET - Pólizas v1
-
-- Pólizas, PDF opcional y almacenamiento organizado.
+- Se reconstruye `expedientes.php` como archivo incluido en el paquete de recuperación.
+- Se cargan explícitamente `polizas.css` y `polizas.js`.
+- Se elimina la carga dinámica de Pólizas desde migraciones de caché.
+- Se elimina la observación de DOM que podía causar re-render continuo de la sección Pólizas.
+- Se crea integración estable por evento `broker:expedient-detail-rendered`.
+- Se añade API interna `window.BrokerExpedients` para que Pólizas use el expediente abierto de forma confiable.
+- Se añade Cancelar en Actualizar información.
+- Se corrige herencia de negrita en controles de formularios.
+- Se conservan endpoints y almacenamiento protegido para PDF.

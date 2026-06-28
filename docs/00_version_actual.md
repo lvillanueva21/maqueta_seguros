@@ -1,22 +1,24 @@
 # Versión actual entregada
 
-- **Código de versión:** `BS-20260627-191718-PET`
-- **Fecha y hora de entrega:** 27/06/2026 19:17:18 (America/Lima)
+- **Código de versión:** `BS-20260627-193319-PET`
+- **Fecha y hora de entrega:** 27/06/2026 19:33:19 (America/Lima)
 - **Zona horaria:** Perú - America/Lima
-- **Bloque funcional:** Corrección de notificaciones dentro de modal y apertura de Pólizas v1 dentro de la ficha de Expediente.
-- **Estado de esta versión:** Paquete preparado localmente para subir manualmente a Hostinger y luego a GitHub `main`.
+- **Bloque:** Recuperación estable de Expedientes y Pólizas v1 para despliegue manual.
+- **Estado:** Paquete preparado localmente para reemplazar manualmente los archivos indicados en `public_html/maqueta/`.
 
 ## Base revisada
 
-- Versión base: `BS-20260627-183503-PET`.
-- La revisión detectó que la primera versión abría la edición de póliza como un segundo `<dialog>` y que los toast podían crearse fuera del diálogo activo.
+- Versión base en GitHub: `BS-20260627-191718-PET`.
+- Se sustituyen cargadores dinámicos frágiles por enlaces directos desde `expedientes.php`.
+- Se reemplaza el observador de cambios que podía re-renderizar la ficha repetidamente.
 
-## Correcciones
+## Correcciones principales
 
-1. Las notificaciones ahora se insertan como hijo directo del modal abierto.
-2. Un toast dentro de un modal no depende de `z-index` global ni queda detrás de la capa `<dialog>`.
-3. Registrar póliza ya no abre un segundo modal.
-4. El formulario de póliza reemplaza temporalmente el contenido de la ficha de Expediente.
-5. Volver o cancelar reconstruye la ficha del mismo expediente.
-6. Ante cualquier expediente no identificado se muestra un error claro, nunca una acción silenciosa.
-7. Se conserva la carga y reemplazo de PDF, la validación de vigencia y la desactivación con motivo.
+1. `expedientes.php` se incluye de nuevo en el paquete para evitar su ausencia en Hostinger.
+2. CSS y JavaScript de Pólizas se enlazan de forma directa y versionada.
+3. Registrar póliza usa una vista interna de la ficha, no un segundo modal.
+4. La ficha emite un evento explícito al renderizarse; Pólizas no usa bucles de observación del DOM.
+5. Toast dentro de modal se inserta en el modal abierto.
+6. Valores de inputs, selects y textarea vuelven a peso normal.
+7. Se agrega Cancelar en Actualizar información.
+8. Se incluyen nuevamente `api/` y `almacen/` para no depender de paquetes anteriores.
