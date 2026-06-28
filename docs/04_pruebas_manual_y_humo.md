@@ -1,19 +1,17 @@
-# Pruebas manuales — Alertas de pólizas v1
+# Pruebas manuales y humo — Mejoras clave V2
 
-**Versión:** `BS-20260627-211508-ALR`  
-**Fecha Perú:** 27/06/2026 21:15:08 (America/Lima)
+**Versión:** `BS-20260627-213052-HUBV2`  
+**Fecha Perú:** 27/06/2026 21:30:52 (America/Lima)
 
-1. Abrir un expediente con póliza que tenga fecha fin.
-2. Usar **Alertas y mensajes** en la tarjeta de póliza.
-3. Crear varias alertas de tipo “Faltan X días”.
-4. Crear alerta mensual con día 31: en febrero debe considerar el último día del mes.
-5. Usar contacto del expediente, modo manual y modo ambos.
-6. Insertar variables y abrir la vista previa.
-7. Revisar WhatsApp y correo con fecha fin, moneda y monto reales.
-8. Marcar una alerta pendiente como gestionada; debe dejar de aparecer pendiente para esa programación.
-9. Ir a Inicio: debe mostrar las alertas pendientes.
-10. Editar la póliza y guardar: las alertas ya registradas deben mantenerse.
-
-## Límite conocido
-
-La maqueta calcula alertas cuando se abre el sistema. No ejecuta tareas de fondo ni envía mensajes reales.
+| ID | Acción | Resultado esperado |
+|---|---|---|
+| HUB-01 | Abrir ficha de expediente | Aparecen pestañas Resumen, Cotizaciones, Pólizas, Alertas, Documentos e Historial. |
+| HUB-02 | Abrir Cotizaciones | Se muestran solo cotizaciones cuyo expediente padre coincide con la ficha. |
+| HUB-03 | Crear cotización desde ficha | Abre Cotizaciones con expediente preseleccionado; la cotización no se vincula a pólizas. |
+| HUB-04 | Filtrar pólizas | Se pueden ver activas, desactivadas, próximas o vencidas. |
+| HUB-05 | Abrir Alertas | Se muestran alertas de pólizas y se puede ir a Gestionar. |
+| HUB-06 | Adjuntar PDF o imagen | El archivo se guarda en `almacen/expedientes/...` y aparece en Documentos. |
+| HUB-07 | Abrir documento | Solo Gerente/Ejecutivo puede abrirlo desde la ficha. |
+| HUB-08 | Desactivar documento | Se quita de la lista activa y queda el evento en Historial. |
+| COT-12 | Duplicar cotización | Crea una copia con código nuevo y estado En preparación. |
+| COT-13 | Duplicar plantilla | Crea una plantilla nueva sin alterar la original. |

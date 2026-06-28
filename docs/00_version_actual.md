@@ -1,13 +1,7 @@
 # Versión actual entregada
 
-- **Código:** `BS-20260627-211508-ALR`
-- **Fecha y hora Perú:** 27/06/2026 21:15:08 (America/Lima)
-- **Bloque:** Alertas de póliza v1 — preparación de WhatsApp y correo.
-
-## Alcance
-
-- Varias alertas por póliza.
-- Aviso X días antes del fin y alerta recurrente mensual.
-- Mensajes personalizados con variables reales y vista previa.
-- Gestión manual y panel de pendientes en Inicio.
-- No hay envío automático todavía; el modelo queda listo para integrar Twilio y Zoho Mail.
+- **Código de versión:** `BS-20260627-213052-HUBV2`
+- **Fecha y hora de entrega:** 27/06/2026 21:30:52 (America/Lima)
+- **Zona horaria:** Perú — America/Lima
+- **Bloque funcional:** Mejoras clave V2 para la maqueta: ficha de Expediente por secciones, cotizaciones internas independientes, consulta de alertas, documentos generales y duplicación de cotizaciones/plantillas.
+- **Estado:** Paquete de sobreescritura para maqueta basada en caché local.

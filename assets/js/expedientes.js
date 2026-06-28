@@ -97,8 +97,9 @@
 
   function saveExpedients(next = expedients) {
     try {
-      localStorage.setItem(window.BrokerDemo?.keys?.expedients || 'broker_seguros_demo_expedients_v3', JSON.stringify(next));
-      expedients = next;
+      const prepared = window.BrokerTimeline?.prepareExpedientsSave?.(next) || next;
+      localStorage.setItem(window.BrokerDemo?.keys?.expedients || 'broker_seguros_demo_expedients_v3', JSON.stringify(prepared));
+      expedients = prepared;
       return true;
     } catch {
       note('error', 'No se pudo guardar el expediente en este navegador.', { title: 'Error de almacenamiento', duration: 0 });
@@ -462,4 +463,9 @@
   };
 
   render();
+
+  const requestedExpedient = new URLSearchParams(window.location.search).get('expediente');
+  if (requestedExpedient) {
+    window.setTimeout(() => openDetail(requestedExpedient), 0);
+  }
 })();
