@@ -36,7 +36,7 @@
   }
   function corePolicy(policy) {
     const copy = clone(policy || {});
-    delete copy.alerts; delete copy.updated_at; delete copy.created_at; delete copy.file;
+    delete copy.alerts; delete copy.payments; delete copy.claims; delete copy.updated_at; delete copy.created_at; delete copy.file;
     return copy;
   }
   function simple(value) { return JSON.stringify(value ?? null); }

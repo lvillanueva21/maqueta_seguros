@@ -370,6 +370,8 @@
         status: state?.name || 'En emisión',
         observations: $('#policy-observations', content).value.trim(),
         alerts: Array.isArray(existing?.alerts) ? existing.alerts : [],
+        payments: Array.isArray(existing?.payments) ? existing.payments : [],
+        claims: Array.isArray(existing?.claims) ? existing.claims : [],
         file: fileInfo,
         active: existing?.active !== false,
         deactivation_reason: existing?.deactivation_reason || '',
