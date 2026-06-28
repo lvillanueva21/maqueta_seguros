@@ -1,15 +1,15 @@
-# Pruebas manuales y humo — Portal Cliente V1
+# Pruebas manuales y humo — Siniestros Cliente V1
 
-**Versión:** `BS-20260627-215413-CLIENTV1`  
-**Fecha Perú:** 27/06/2026 21:54:13 (America/Lima)
+**Versión:** `BS-20260627-223842-CLAIMCLIENTV1`  
+**Fecha Perú:** 27/06/2026 22:38:42 (America/Lima)
 
 | ID | Acción | Resultado esperado |
 |---|---|---|
-| CLI-01 | Iniciar sesión como empresa cliente | El menú abre `Mis Seguros` sin acceso a Expedientes internos. |
-| CLI-02 | Abrir Mis Seguros | Muestra métricas de pólizas, vencimientos y gestiones asociadas. |
-| CLI-03 | Ver Mis pólizas | Solo muestra pólizas activas asociadas por entidad, nombre o documento del cliente. |
-| CLI-04 | Filtrar Vigentes / Próximas / Vencidas | Las tarjetas cambian según la vigencia real de cada póliza. |
-| CLI-05 | Ver detalle de póliza | Muestra datos públicos: código, aseguradora, vigencia, suma asegurada y gestión relacionada. |
-| CLI-06 | Ver Mis gestiones | Muestra código, título, estado público y fechas, sin exponer notas ni cotizaciones internas. |
-| CLI-07 | Ver detalle de gestión | No se muestran alertas, documentos, historial, contactos ni observaciones internas. |
-| CLI-08 | Intentar abrir Expedientes por URL | El servidor debe negar acceso al perfil Cliente. |
+| SIN-01 | Iniciar sesión como Cliente | El menú **Mis Siniestros** abre una pantalla funcional. |
+| SIN-02 | Seleccionar póliza | Solo aparecen pólizas disponibles para la entidad autenticada. |
+| SIN-03 | Registrar reporte con datos obligatorios | Se crea un código `SIN-YYYY-NNNN` y se muestra como **Reportado**. |
+| SIN-04 | Intentar fecha futura | El sistema bloquea el registro. |
+| SIN-05 | Abrir detalle del reporte | El Cliente ve únicamente sus datos de reporte inicial. |
+| SIN-06 | Iniciar sesión como Gerente/Ejecutivo en el mismo navegador | La Línea de tiempo del expediente muestra **Siniestro reportado por cliente**. |
+| SIN-07 | Revisar detalle interno | El timeline incluye código, póliza y tipo de reporte, sin exponerlo a otros clientes. |
+| SIN-08 | Intentar abrir `mis_siniestros.php` como no Cliente | El acceso queda denegado por el servidor. |
