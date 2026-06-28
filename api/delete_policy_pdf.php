@@ -40,5 +40,8 @@ if ($storageRoot === false || $target === false || !str_starts_with($target, $st
 if (!is_file($target) || !unlink($target)) {
     deletePolicyJson(500, ['ok' => false, 'message' => 'No se pudo eliminar el PDF anterior. Se mantuvo el registro sin cambios.']);
 }
+if (is_file($target . '.meta')) {
+    @unlink($target . '.meta');
+}
 
 deletePolicyJson(200, ['ok' => true, 'message' => 'PDF anterior eliminado correctamente.']);

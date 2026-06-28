@@ -228,7 +228,7 @@
     $('#policy-title', content)?.focus();
   }
 
-  function uploadPdf(file, code, insuranceType) {
+  function uploadPdf(file, code, insuranceType, clientDocument = '') {
     return new Promise((resolve, reject) => {
       const content = $('#expedient-detail-content');
       const progressBox = $('#policy-progress-wrap', content);
@@ -240,6 +240,7 @@
       data.append('pdf', file);
       data.append('policy_code', code);
       data.append('insurance_type', insuranceType);
+      data.append('client_document', clientDocument);
 
       progressBox.hidden = false;
       progress.value = 0;
@@ -331,7 +332,7 @@
 
     try {
       if (file) {
-        const uploaded = await uploadPdf(file, code, insuranceType.name);
+        const uploaded = await uploadPdf(file, code, insuranceType.name, String(expedient.client_document || ''));
         if (existing?.file?.relative_path) {
           try {
             await deletePdf(existing.file.relative_path);

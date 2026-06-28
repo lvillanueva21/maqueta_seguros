@@ -50,17 +50,17 @@ if ($catalogDataJson === false) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | <?= e($pageTitle) ?></title>
-    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/expedientes.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/modal-ui.css?v=BS-20260627-222604-PAYCLIENTV1" data-broker-modal-ui-styles="true">
-    <link rel="stylesheet" href="assets/css/notifications.css?v=BS-20260627-222604-PAYCLIENTV1" data-broker-notification-styles="true">
-    <link rel="stylesheet" href="assets/css/polizas.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/policy-alerts.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/activity-timeline.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/expedientes-recovery.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/expediente-hub-v2.css?v=BS-20260627-222604-PAYCLIENTV1">
-    <link rel="stylesheet" href="assets/css/policy-payments.css?v=BS-20260627-222604-PAYCLIENTV1">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/expedientes.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/modal-ui.css?v=BS-20260627-231256-PREDEMO" data-broker-modal-ui-styles="true">
+    <link rel="stylesheet" href="assets/css/notifications.css?v=BS-20260627-231256-PREDEMO" data-broker-notification-styles="true">
+    <link rel="stylesheet" href="assets/css/polizas.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/policy-alerts.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/activity-timeline.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/expedientes-recovery.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/expediente-hub-v2.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/policy-payments.css?v=BS-20260627-231256-PREDEMO">
 </head>
 <body class="app-body" data-role="<?= e((string) $user['role']) ?>" data-user="<?= e((string) $user['id']) ?>">
 <div class="app-shell">
@@ -244,13 +244,13 @@ if ($catalogDataJson === false) {
 
 <script id="expedient-default-data" type="application/json"><?= $expedientDataJson ?></script>
 <script id="expedient-catalog-data" type="application/json"><?= $catalogDataJson ?></script>
-<script src="assets/js/cache-migrations.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/app.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/expedientes.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/polizas.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/policy-alerts.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/activity-timeline.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/expediente-hub-v2.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
-<script src="assets/js/policy-payments.js?v=BS-20260627-222604-PAYCLIENTV1"></script>
+<script src="assets/js/cache-migrations.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/app.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/expedientes.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/polizas.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/policy-alerts.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/activity-timeline.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/expediente-hub-v2.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/policy-payments.js?v=BS-20260627-231256-PREDEMO"></script>
 </body>
 </html>

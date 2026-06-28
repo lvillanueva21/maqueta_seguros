@@ -200,6 +200,11 @@
           <div><dt>Suma asegurada</dt><dd>${esc(amount)}</dd></div>
           <div><dt>Gestión vinculada</dt><dd>${esc(policy.expedient_code || 'No registrada')}</dd></div>
         </div>
+        <div class="client-policy-document">
+          ${policy.file?.relative_path
+            ? `<a class="client-policy-pdf-button" target="_blank" rel="noopener" href="api/view_policy_pdf.php?path=${encodeURIComponent(policy.file.relative_path)}">Ver PDF autorizado</a>`
+            : '<span class="client-policy-pdf-pending">PDF autorizado pendiente</span>'}
+        </div>
         <p class="client-detail-note">Esta es una vista de consulta. Los documentos, observaciones, alertas y actividades internas son gestionados exclusivamente por la corredora.</p>`);
     }));
 

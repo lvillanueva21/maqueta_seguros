@@ -2,8 +2,7 @@
 declare(strict_types=1);
 
 /**
- * Usuarios de demostración para la maqueta.
- * No usar estas credenciales ni esta estructura en producción.
+ * Usuarios de demostración. No usar estas credenciales ni esta estructura en producción.
  */
 return [
     [
@@ -71,7 +70,7 @@ return [
         'contact_phone' => '949 579 580',
         'consortium_members' => [
             'Constructora Norte S.A.C. — RUC 20123456789',
-            'Ingeniería Andina S.A.C. — RUC 20456789123',
+            'Ingeniería Andina S.A.C. — RUC 20456789120',
         ],
     ],
 ];

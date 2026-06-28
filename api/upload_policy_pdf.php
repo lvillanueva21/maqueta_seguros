@@ -149,6 +149,7 @@ if (!in_array($mime, ['application/pdf', 'application/x-pdf', 'application/octet
 
 $policyCode = policySafeCode((string) ($_POST['policy_code'] ?? ''));
 $typeFolder = policySafeFolder((string) ($_POST['insurance_type'] ?? ''));
+$clientDocument = preg_replace('/\D+/', '', (string) ($_POST['client_document'] ?? '')) ?: '';
 $now = new DateTimeImmutable('now', new DateTimeZone('America/Lima'));
 
 $relativeDirectory = sprintf(
@@ -186,6 +187,22 @@ if (!move_uploaded_file($tmpName, $absolutePath)) {
 }
 
 @chmod($absolutePath, 0640);
+
+// El archivo auxiliar permite dar acceso al PDF al Cliente correcto sin exponerlo por URL directa.
+// Si no hay documento asociado, el PDF queda disponible únicamente para Gerente/Ejecutivo.
+$meta = implode("\n", [
+    'client_document=' . $clientDocument,
+    'published_for_client=' . ($clientDocument !== '' ? '1' : '0'),
+    'uploaded_at=' . $now->format('Y-m-d H:i:s'),
+]) . "\n";
+
+if (file_put_contents($absolutePath . '.meta', $meta, LOCK_EX) === false) {
+    @unlink($absolutePath);
+    policyJson(500, [
+        'ok' => false,
+        'message' => 'No se pudo registrar el permiso del documento. El PDF no fue conservado.',
+    ]);
+}
 
 policyJson(201, [
     'ok' => true,

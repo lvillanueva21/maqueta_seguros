@@ -37,9 +37,9 @@ function clientPortalJson(mixed $value): string {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | <?= e($pageTitle) ?></title>
-    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-215413-CLIENTV1">
-    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-215413-CLIENTV1">
-    <link rel="stylesheet" href="assets/css/client-portal.css?v=BS-20260627-215413-CLIENTV1">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/client-portal.css?v=BS-20260627-231256-PREDEMO">
 </head>
 <body
     class="app-body"
@@ -75,7 +75,7 @@ function clientPortalJson(mixed $value): string {
                         <h3><?= e((string) ($user['entity_name'] ?? $user['name'])) ?></h3>
                         <p><?= e((string) ($user['entity_type'] ?? $user['account_type_label'] ?? 'Cliente')) ?> · Documento <?= e((string) $user['document']) ?></p>
                     </div>
-                    <span class="client-portal-local-badge">Maqueta local</span>
+                    <span class="client-portal-local-badge">Ambiente de demostración</span>
                 </div>
 
                 <div class="client-metrics-grid">
@@ -139,7 +139,7 @@ function clientPortalJson(mixed $value): string {
 
                 <div class="client-portal-info">
                     <strong>Sobre esta maqueta:</strong>
-                    <span>La información se obtiene de la caché guardada en este navegador. No permite editar, crear ni visualizar datos internos de la corredora.</span>
+                    <span>La información corresponde a un entorno de demostración y está disponible solo para consulta. La gestión interna permanece restringida a la corredora.</span>
                 </div>
             </section>
         </section>
@@ -161,8 +161,8 @@ function clientPortalJson(mixed $value): string {
 
 <script id="client-default-expedients" type="application/json"><?= clientPortalJson($expedients) ?></script>
 <script id="client-default-clients" type="application/json"><?= clientPortalJson($clients) ?></script>
-<script src="assets/js/cache-migrations.js?v=BS-20260627-215413-CLIENTV1"></script>
-<script src="assets/js/app.js?v=BS-20260627-215413-CLIENTV1"></script>
-<script src="assets/js/client-portal.js?v=BS-20260627-215413-CLIENTV1"></script>
+<script src="assets/js/cache-migrations.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/app.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/client-portal.js?v=BS-20260627-231256-PREDEMO"></script>
 </body>
 </html>
