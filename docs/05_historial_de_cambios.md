@@ -1,11 +1,8 @@
 # Historial de cambios
 
-## 27/06/2026 23:12:56 (America/Lima) — BS-20260627-231256-PREDEMO — Estabilización Pre-Demo V1
+## 27/06/2026 22:32:40 (America/Lima) — BS-20260627-223240-PRINTFIX — Corrección PDF de Cotizaciones
 
-- Se consolidaron rutas Cliente: Mis Seguros, Mis Pagos y Mis Siniestros.
-- Se corrigieron los RUC demo de Empresa y Consorcio para que coincidan con sus accesos.
-- Se añadieron expedientes, pólizas, pagos y siniestros de muestra desde una caché limpia.
-- Se añadió botón de Gerente para restablecer el escenario de presentación.
-- Se agregaron PDF demostrativos autorizados por documento de Cliente.
-- Los PDFs nuevos de póliza guardan una autorización de Cliente mediante archivo auxiliar protegido.
-- El Cliente puede ver únicamente PDF publicado para su documento de cuenta.
+- Se corrigió la regla de impresión que ocultaba `.app-shell`, contenedor padre de la hoja A4.
+- Se mantuvo visible únicamente la hoja de cotización y se ocultan menú, topbar, formularios y controles.
+- Se agregó espera de renderizado antes de abrir el diálogo de impresión.
+- Se actualizó el versionado del CSS y JavaScript para evitar que el navegador conserve el archivo defectuoso en caché.

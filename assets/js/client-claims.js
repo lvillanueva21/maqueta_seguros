@@ -26,12 +26,15 @@
   const key = window.BrokerDemo?.keys?.expedients || 'broker_seguros_demo_expedients_v3';
 
   function getExpedients() {
+    const remote = window.BrokerClientPortalData?.state;
+    if (Array.isArray(remote?.expedients)) return remote.expedients;
     const loaded = window.BrokerDemo?.loadExpedients?.(defaults.expedients);
     return Array.isArray(loaded?.items) ? loaded.items : Array.isArray(defaults.expedients?.items) ? defaults.expedients.items : [];
   }
 
   function getEntities() {
-    const loaded = window.BrokerDemo?.loadEntities?.(defaults.clients);
+    const remote = window.BrokerClientPortalData?.state?.entities;
+    const loaded = remote ? { entities: remote } : window.BrokerDemo?.loadEntities?.(defaults.clients);
     const records = loaded?.entities || defaults.clients;
     return [...(records.companies || []), ...(records.consortia || [])];
   }
@@ -188,7 +191,7 @@
     expedient.timeline = timeline.slice(0, 160);
   }
 
-  $('#client-claim-form').addEventListener('submit', (event) => {
+  $('#client-claim-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const policyId = $('#claim-policy').value;
@@ -207,46 +210,41 @@
       return;
     }
 
-    const all = getExpedients();
-    const available = collectPolicies().find((row) => String(row.policy.id) === String(policyId));
-    if (!available) {
-      window.BrokerNotify?.error?.('No se pudo identificar la póliza seleccionada. Recarga la página e inténtalo nuevamente.', { title: 'Póliza no disponible', duration: 0 });
-      return;
+    const button = $('#client-claim-form button[type="submit"]');
+    button.disabled = true;
+    button.textContent = 'Registrando…';
+
+    try {
+      const data = new URLSearchParams({
+        action: 'report_claim',
+        policy_id: policyId,
+        event_date: eventDate,
+        category,
+        location,
+        contact_phone: contactPhone,
+        description,
+      });
+
+      const response = await fetch('api/client_portal_action.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', Accept: 'application/json' },
+        body: data.toString(),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.ok) throw new Error(payload.message || 'No se pudo registrar el reporte.');
+
+      await window.BrokerClientPortalData?.refresh?.();
+      $('#client-claim-form').reset();
+      $('#claim-event-date').value = today();
+      $('#claim-phone').value = account.phone;
+      render();
+      window.BrokerNotify?.success?.(`${payload.claim?.code || 'El reporte'} fue registrado y será revisado por la corredora.`, { title: 'Reporte enviado' });
+    } catch (error) {
+      window.BrokerNotify?.error?.(error.message || 'No se pudo registrar el reporte.', { title: 'Reporte no guardado', duration: 0 });
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Registrar reporte';
     }
-
-    const expedient = all.find((item) => String(item.id) === String(available.expedient.id));
-    const policy = (expedient?.policies || []).find((item) => String(item.id) === String(policyId));
-    if (!expedient || !policy) {
-      window.BrokerNotify?.error?.('La póliza cambió antes de guardar el reporte. Recarga la página.', { title: 'Reporte no guardado', duration: 0 });
-      return;
-    }
-
-    const allClaims = collectClaims();
-    const claim = {
-      id: `claim-${Date.now()}-${Math.random().toString(16).slice(2, 7)}`,
-      code: nextCode(allClaims),
-      category,
-      event_date: eventDate,
-      location,
-      description,
-      contact_phone: contactPhone,
-      status: 'Reportado',
-      reported_at: now(),
-      updated_at: now(),
-    };
-
-    if (!Array.isArray(policy.claims)) policy.claims = [];
-    policy.claims.push(claim);
-    policy.updated_at = now();
-    expedient.updated_at = now();
-    addTimeline(expedient, claim, policy);
-    saveExpedients(all);
-
-    $('#client-claim-form').reset();
-    $('#claim-event-date').value = today();
-    $('#claim-phone').value = account.phone;
-    render();
-    window.BrokerNotify?.success?.(`${claim.code} fue registrado y será revisado por la corredora.`, { title: 'Reporte enviado' });
   });
 
   $('#client-claim-detail-close').addEventListener('click', () => $('#client-claim-detail-dialog').close());
@@ -257,4 +255,5 @@
   $('#claim-event-date').value = today();
   $('#claim-phone').value = account.phone;
   render();
+  window.addEventListener('broker:client-portal-data-ready', render);
 })();

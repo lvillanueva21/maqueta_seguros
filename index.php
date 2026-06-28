@@ -2,13 +2,14 @@
 declare(strict_types=1);
 
 require __DIR__ . '/config/bootstrap.php';
+require __DIR__ . '/config/client_accounts.php';
 
 if (isAuthenticated()) {
     header('Location: ' . appRelativeUrl('dashboard.php'));
     exit;
 }
 
-$users = require __DIR__ . '/config/demo_users.php';
+$users = loginUsers();
 $error = '';
 $documentType = $_POST['document_type'] ?? 'DNI';
 $document = trim((string) ($_POST['document'] ?? ''));
@@ -16,6 +17,7 @@ $document = trim((string) ($_POST['document'] ?? ''));
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = (string) ($_POST['password'] ?? '');
     $documentType = strtoupper(trim((string) $documentType));
+    $document = $documentType === 'RUC' ? clientNormalizeDocument($document) : $document;
 
     $allowedTypes = ['DNI', 'CE', 'RUC'];
     if (!in_array($documentType, $allowedTypes, true) || $document === '' || $password === '') {
@@ -23,19 +25,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $matchedUser = null;
         foreach ($users as $user) {
-            if ($user['document_type'] === $documentType && $user['document'] === $document) {
+            if (!is_array($user)) {
+                continue;
+            }
+
+            $candidateType = strtoupper(trim((string) ($user['document_type'] ?? '')));
+            $candidateDocument = $candidateType === 'RUC'
+                ? clientNormalizeDocument((string) ($user['document'] ?? ''))
+                : (string) ($user['document'] ?? '');
+
+            if ($candidateType === $documentType && $candidateDocument === $document) {
                 $matchedUser = $user;
                 break;
             }
         }
 
-        if ($matchedUser !== null && password_verify($password, $matchedUser['password_hash'])) {
+        if ($matchedUser !== null && (($matchedUser['active'] ?? true) !== false) && password_verify($password, (string) ($matchedUser['password_hash'] ?? ''))) {
             createUserSession($matchedUser);
             header('Location: ' . appRelativeUrl('dashboard.php'));
             exit;
         }
 
-        $error = 'Las credenciales no coinciden con los accesos de demostración.';
+        $error = 'Las credenciales no coinciden, la cuenta está inactiva o todavía no fue creada.';
     }
 }
 ?>
@@ -45,19 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | Maqueta funcional</title>
-    <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
 </head>
 <body class="login-body">
 <main class="login-shell">
     <section class="login-branding">
         <div class="brand-mark">B</div>
-        <p class="eyebrow">MAQUETA FUNCIONAL · SIN BASE DE DATOS</p>
+        <p class="eyebrow">MAQUETA FUNCIONAL · ENTORNO DE DEMOSTRACIÓN</p>
         <h1>BROKER<br>SEGUROS</h1>
-        <p class="brand-description">Primer prototipo para validar el acceso, las vistas por rol y la navegación del sistema.</p>
+        <p class="brand-description">Prototipo para validar expedientes, pólizas, pagos, siniestros y el portal de consulta del cliente.</p>
         <div class="brand-notes">
             <span>PHP + sesiones</span>
-            <span>Estado local en caché</span>
-            <span>Diseño responsive </span>
+            <span>Accesos Cliente protegidos</span>
+            <span>Diseño responsive</span>
         </div>
     </section>
 
@@ -65,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="panel-header">
             <p class="eyebrow">ACCESO AL SISTEMA</p>
             <h2 id="login-title">Iniciar sesión</h2>
-            <p>Usa uno de los perfiles de prueba para explorar la maqueta.</p>
+            <p>Las empresas y consorcios pueden ingresar con el acceso creado por Gerencia.</p>
         </div>
 
         <?php if ($error !== ''): ?>
@@ -99,30 +110,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="demo-grid">
                 <button type="button" class="demo-card" data-doc-type="DNI" data-document="12345678" data-password="Gerente2026!">
-                    <strong>Gerente</strong>
-                    <span>DNI 12345678</span>
-                    <small>Clave: Gerente2026!</small>
+                    <strong>Gerente</strong><span>DNI 12345678</span><small>Clave: Gerente2026!</small>
                 </button>
                 <button type="button" class="demo-card" data-doc-type="DNI" data-document="87654321" data-password="Ejecutivo2026!">
-                    <strong>Ejecutivo</strong>
-                    <span>DNI 87654321</span>
-                    <small>Clave: Ejecutivo2026!</small>
+                    <strong>Ejecutivo</strong><span>DNI 87654321</span><small>Clave: Ejecutivo2026!</small>
                 </button>
                 <button type="button" class="demo-card" data-doc-type="RUC" data-document="20123456789" data-password="Empresa2026!">
-                    <strong>Empresa cliente</strong>
-                    <span>RUC 20123456789</span>
-                    <small>Clave: Empresa2026!</small>
+                    <strong>Empresa demo</strong><span>RUC 20123456789</span><small>Clave: Empresa2026!</small>
                 </button>
                 <button type="button" class="demo-card" data-doc-type="RUC" data-document="20698765432" data-password="Consorcio2026!">
-                    <strong>Consorcio</strong>
-                    <span>RUC 20698765432</span>
-                    <small>Clave: Consorcio2026!</small>
+                    <strong>Consorcio demo</strong><span>RUC 20698765432</span><small>Clave: Consorcio2026!</small>
                 </button>
             </div>
-            <p class="demo-detail">El consorcio de prueba representa a Constructora Norte S.A.C. e Ingeniería Andina S.A.C.</p>
+            <p class="demo-detail">Los accesos creados en Usuarios no aparecen aquí: se usan directamente con su RUC y contraseña asignada.</p>
         </section>
     </section>
 </main>
-<script src="assets/js/login.js"></script>
+<script src="assets/js/login.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
 </body>
 </html>

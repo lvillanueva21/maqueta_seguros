@@ -21,12 +21,15 @@
   };
 
   function getExpedients() {
+    const remote = window.BrokerClientPortalData?.state;
+    if (Array.isArray(remote?.expedients)) return remote.expedients;
     const loaded = window.BrokerDemo?.loadExpedients?.(defaultExpedients);
     return Array.isArray(loaded?.items) ? loaded.items : Array.isArray(defaultExpedients?.items) ? defaultExpedients.items : [];
   }
 
   function getEntities() {
-    const loaded = window.BrokerDemo?.loadEntities?.(defaultClients);
+    const remote = window.BrokerClientPortalData?.state?.entities;
+    const loaded = remote ? { entities: remote } : window.BrokerDemo?.loadEntities?.(defaultClients);
     const entities = loaded?.entities || defaultClients;
     const companies = Array.isArray(entities?.companies) ? entities.companies : [];
     const consortia = Array.isArray(entities?.consortia) ? entities.consortia : [];
@@ -239,4 +242,5 @@
   });
 
   render();
+  window.addEventListener('broker:client-portal-data-ready', render);
 })();

@@ -37,9 +37,9 @@ function claimPortalJson(mixed $value): string {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | <?= e($pageTitle) ?></title>
-    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-231256-PREDEMO">
-    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-231256-PREDEMO">
-    <link rel="stylesheet" href="assets/css/client-claims.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
+    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
+    <link rel="stylesheet" href="assets/css/client-claims.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
 </head>
 <body
     class="app-body"
@@ -175,8 +175,8 @@ function claimPortalJson(mixed $value): string {
 
 <script id="claim-default-expedients" type="application/json"><?= claimPortalJson($expedients) ?></script>
 <script id="claim-default-clients" type="application/json"><?= claimPortalJson($clients) ?></script>
-<script src="assets/js/cache-migrations.js?v=BS-20260627-231256-PREDEMO"></script>
-<script src="assets/js/app.js?v=BS-20260627-231256-PREDEMO"></script>
-<script src="assets/js/client-claims.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/cache-migrations.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
+<script src="assets/js/app.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
+<script src="assets/js/client-portal-data.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script><script src="assets/js/client-claims.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
 </body>
 </html>

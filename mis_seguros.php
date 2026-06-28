@@ -37,9 +37,9 @@ function clientPortalJson(mixed $value): string {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(APP_NAME) ?> | <?= e($pageTitle) ?></title>
-    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-231256-PREDEMO">
-    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-231256-PREDEMO">
-    <link rel="stylesheet" href="assets/css/client-portal.css?v=BS-20260627-231256-PREDEMO">
+    <link rel="stylesheet" href="assets/css/app.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
+    <link rel="stylesheet" href="assets/css/modules.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
+    <link rel="stylesheet" href="assets/css/client-portal.css?v=BS-20260627-234916-CLIENTACCOUNTSV1">
 </head>
 <body
     class="app-body"
@@ -161,8 +161,8 @@ function clientPortalJson(mixed $value): string {
 
 <script id="client-default-expedients" type="application/json"><?= clientPortalJson($expedients) ?></script>
 <script id="client-default-clients" type="application/json"><?= clientPortalJson($clients) ?></script>
-<script src="assets/js/cache-migrations.js?v=BS-20260627-231256-PREDEMO"></script>
-<script src="assets/js/app.js?v=BS-20260627-231256-PREDEMO"></script>
-<script src="assets/js/client-portal.js?v=BS-20260627-231256-PREDEMO"></script>
+<script src="assets/js/cache-migrations.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
+<script src="assets/js/app.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
+<script src="assets/js/client-portal-data.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script><script src="assets/js/client-portal.js?v=BS-20260627-234916-CLIENTACCOUNTSV1"></script>
 </body>
 </html>
