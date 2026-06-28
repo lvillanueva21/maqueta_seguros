@@ -1,7 +1,7 @@
-# Corrección puntual de Cotizaciones
+# Versión actual entregada
 
-- **Código de versión:** `BS-20260627-214418-COTFIX`
-- **Fecha y hora:** 27/06/2026 21:44:18 (America/Lima)
+- **Código de versión:** `BS-20260627-215413-CLIENTV1`
+- **Fecha y hora de entrega:** 27/06/2026 21:54:13 (America/Lima)
 - **Zona horaria:** Perú — America/Lima
-- **Alcance:** Corrección del expediente padre preseleccionado al crear una cotización desde la ficha de Expediente.
-- **Archivo reemplazado:** `assets/js/cotizaciones-v2-enhancements.js`
+- **Bloque funcional:** Portal Cliente V1 — Mis Seguros y Mis Gestiones públicas.
+- **Estado:** Maqueta funcional de solo consulta, basada en la caché local del navegador.
